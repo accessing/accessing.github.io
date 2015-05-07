@@ -1,1 +1,219 @@
-<html><body>ok</body></html>
+﻿<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <title>Idea</title>
+    <link rel="shortcut icon" type="image/jpeg" href="/mr/res/methane.jpg" media="screen" />
+    <link type="text/css" href="/mr/css/reset.css" rel="stylesheet" />
+    <link type="text/css" href="/mr/css/layout.css" rel="stylesheet" />
+    <link type="text/css" href="/mr/css/scene.css" rel="stylesheet" />
+    <link type="text/css" href="/mr/css/mindroute.css" rel="stylesheet" />
+    <link type="text/css" href="/mr/css/toastr.css" rel="stylesheet" />
+    <script type="text/javascript" src="/mr/js/debug.js"></script>
+    <script type="text/javascript" src="/joy/js/Common.js"></script>
+    <script type="text/javascript" src="/joy/js/joy.js"></script>
+    <!-- Modified jquery, cannot be replaced directly -->
+    <script type="text/javascript" src="/joy/js/jQuery/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="/joy/js/joy.dom.js"></script>
+    <script type="text/javascript" src="/mr/js/build.js"></script>
+    <script type="text/javascript" src="/mr/js/cursor.js"></script>
+    <script type="text/javascript" src="/joy/js/dydiv/dydiv.js"></script>
+    <script type="text/javascript" src="/mr/js/scene.js"></script>
+    <script type="text/javascript" src="/mr/js/sceneditors.js"></script>
+    <script type="text/javascript" src="/mr/js/scenebehaviors.js"></script>
+    <script type="text/javascript" src="/mr/js/scenegroup.js"></script>
+    <script type="text/javascript" src="/mr/js/toastr.js"></script>
+    <style type="text/css">
+        .toolbar {
+            position: absolute;
+            border: 0px;
+            width: 32px;
+            top: 40%;
+            bottom: 0;
+            z-index: 10010;
+        }
+
+            .toolbar.left {
+                left: 0;
+            }
+
+            .toolbar.right {
+                right: 0;
+            }
+
+            .toolbar .btn, .toolbar .btn:hover {
+                overflow: hidden;
+                text-align: center;
+                border: 0px;
+                background-color: silver;
+                border-bottom: solid 1px gray;
+                cursor: default;
+                font: 12px arial;
+                width: 32px;
+                height: 32px;
+                line-height: 32px;
+            }
+
+                .toolbar .btn:hover {
+                    background-color: gray;
+                }
+
+                .toolbar .btn.activated {
+                    color: blue;
+                }
+    </style>
+
+    <script type="text/javascript">
+        window.scene = null;
+        function switchstatus(mode, modes) {
+            if (modes[mode]) {
+                window.scene[0].cancelEdit();
+                for (var i in modes) {
+                    $('#b' + i).removeClass('activated');
+                }
+                modes[mode].call(this, true);
+                $('#b' + mode).addClass('activated');
+            }
+        }
+        function toolbtnclick(mode) {
+            var modes = {
+                concept: function (activated) {
+                    scene[0].mode('concept');
+                }, line: function (activated) {
+                    scene[0].mode('line');
+                }, readonly: function (activated) {
+                    scene[0].mode('readonly');
+                }, group: function (activated) {
+                    scene[0].mode('group');
+                }
+            };
+            var scn = scene[0];
+            var grp = scn.cache.groups;
+            if (mode == 'group') {
+                for (var i in grp) {
+                    scn.$elayer.insertBefore(grp[i], scn.$svg);
+                }
+            } else {
+                for (var i in grp) {
+                    scn.$bglayer.appendChild(grp[i]);
+                }
+            }
+            switchstatus(mode, modes);
+            var modes2 = {
+                load: function (activated) {
+                    //var json = '{"concepts":{"_2015_1_22-3_42_39_510_3":{"uid":"_2015_1_22-3_42_39_510_3","pos":{"height":32,"width":64,"left":368,"bottom":221,"right":432,"top":189},"text":"Concept"},"_2015_1_22-3_42_41_185_13":{"uid":"_2015_1_22-3_42_41_185_13","pos":{"height":32,"width":64,"left":537,"bottom":509,"right":601,"top":477},"text":"Concept"},"_2015_1_22-3_42_42_923_16":{"uid":"_2015_1_22-3_42_42_923_16","pos":{"height":32,"width":64,"left":325,"bottom":607,"right":389,"top":575},"text":"Concept"},"_2015_1_22-3_43_21_519_32":{"uid":"_2015_1_22-3_43_21_519_32","pos":{"height":32,"width":64,"left":105,"bottom":124,"right":169,"top":92},"text":"Concept"},"_2015_1_22-3_43_24_25_35":{"uid":"_2015_1_22-3_43_24_25_35","pos":{"height":32,"width":64,"left":400,"bottom":454,"right":464,"top":422},"text":"Concept"}},"links":{"_2015_1_22-6_12_1_808_11":{"uid":"_2015_1_22-6_12_1_808_11","pos":{"height":386,"width":43,"left":357,"bottom":591,"right":400,"top":205},"text":" l0","fromid":"_2015_1_22-3_42_39_510_3","toid":"_2015_1_22-3_42_42_923_16"},"_2015_1_22-6_12_1_808_12":{"uid":"_2015_1_22-6_12_1_808_12","pos":{"height":98,"width":212,"left":357,"bottom":591,"right":569,"top":493},"text":" l2","fromid":"_2015_1_22-3_42_42_923_16","toid":"_2015_1_22-3_42_41_185_13"},"_2015_1_22-6_12_1_808_13":{"uid":"_2015_1_22-6_12_1_808_13","pos":{"height":288,"width":169,"left":400,"bottom":493,"right":569,"top":205},"text":" l1","fromid":"_2015_1_22-3_42_41_185_13","toid":"_2015_1_22-3_42_39_510_3"},"_2015_1_22-6_12_1_808_14":{"uid":"_2015_1_22-6_12_1_808_14","pos":{"height":153,"width":75,"left":357,"bottom":591,"right":432,"top":438},"text":" ","fromid":"_2015_1_22-3_42_42_923_16","toid":"_2015_1_22-3_43_24_25_35"},"_2015_1_22-6_12_1_808_15":{"uid":"_2015_1_22-6_12_1_808_15","pos":{"height":233,"width":32,"left":400,"bottom":438,"right":432,"top":205},"text":" ","fromid":"_2015_1_22-3_43_24_25_35","toid":"_2015_1_22-3_42_39_510_3"},"_2015_1_22-6_12_1_808_16":{"uid":"_2015_1_22-6_12_1_808_16","pos":{"height":55,"width":137,"left":432,"bottom":493,"right":569,"top":438},"text":" ","fromid":"_2015_1_22-3_42_41_185_13","toid":"_2015_1_22-3_43_24_25_35"},"_2015_1_22-6_12_10_163_18":{"uid":"_2015_1_22-6_12_10_163_18","pos":{"height":98,"width":264,"left":137,"bottom":206,"right":401,"top":108},"text":" test","fromid":"_2015_1_22-3_43_21_519_32","toid":"_2015_1_22-3_42_39_510_3"}}}';
+                    loadidea($('[alias=ideaname]')[0].value);
+                }, save: function (activated) {
+                    var idea = scene[0].getData();
+                    $.post('/mr/savemind', { idea: idea, iname: $('[alias=ideaname]')[0].value }, function (data) {
+                        toastr.info(data);
+                        console.log(data);
+                    });
+                }
+            };
+            switchstatus(mode, modes2);
+        }
+        function loadidea(name) {
+            var u = "/mr/loadmind/" + escape(name);
+            document.title = name;
+            $.ajax({
+                url: u,
+                type: "get"
+            }).done(function (data) {
+                console.log(data);
+                scene[0].setData(data);
+                toolbtnclick('readonly');
+            });
+        }
+        $(function () {
+            $('[alias=ideaname]')[0].onblur = function () {
+                document.title = this.value;
+            }
+            var r = document.body.getBoundingClientRect();
+            var w = r.right - r.left;
+            var h = r.bottom - r.top;
+            var spos = {};
+
+            //$('.bgph')[0].style.width = w + 'px';
+            //$('.bgph')[0].style.height = h + 'px';
+            window.scene = $('#scene').inject(scenecfg);
+            scene[0].onedit = function () {
+                $('#iname').fadeOut(200);
+            };
+            scene[0].onedithide = function () {
+                $('#iname').hide().fadeIn(200);
+            }
+            cursors.regist({
+                el: scene[0], h: [{
+                    touched: function (mevt) {
+                        var el = mevt.o.el;
+                        //d('touched');
+                        //debugger;
+                        el.singleTouch(mevt);
+                    }, dragstart: function (mevt) {
+                        var scene = mevt.o.el;
+                        spos = scene.$layers.getBoundingClientRect();
+                        spos.rx = mevt.cx;
+                        spos.ry = mevt.cy;
+                        //console.log('dragstart');
+                    }, dragging: function (mevt) {
+                        var scene = mevt.o.el;
+                        var rect = scene.getBoundingClientRect();
+                        var cpos = scene.$layers.getBoundingClientRect();
+                        var sx = spos.left;
+                        var sy = spos.top;
+                        var cx = mevt.cx;
+                        var cy = mevt.cy;
+                        var ox = cx - spos.rx;
+                        var oy = cy - spos.ry;
+                        scene.$layers.style.left = sx + ox - rect.left + 'px';
+                        scene.$layers.style.top = sy + oy - rect.top + 'px';
+                        //console.log('dragging');
+                    }, dragend: function (mevt) {
+                        //console.log('dragend');
+                    }
+                }]
+            });
+            var list = location.href.split('#');
+            if (list.length > 1) {
+                var name = list[1];
+                $('[alias=ideaname]')[0].value = name;
+                loadidea(name);
+            }
+        });
+    </script>
+</head>
+<body>
+    <!--<div class="bgph">
+    </div>-->
+    <div class="toolbar left">
+        <div id="breadonly" class="btn" onclick="toolbtnclick.call(this, 'readonly')">R</div>
+        <div id="bconcept" class="btn" onclick="toolbtnclick.call(this, 'concept')">C</div>
+        <div id="bline" class="btn" onclick="toolbtnclick.call(this, 'line')">L</div>
+        <div id="bgroup" class="btn" onclick="toolbtnclick.call(this, 'group')">G</div>
+        <div id="bsave" class="btn" onclick="toolbtnclick.call(this, 'save')">S</div>
+        <div id="bload" class="btn" onclick="toolbtnclick.call(this, 'load')">O</div>
+    </div>
+    <!--<div class="toolbar right">
+    </div>-->
+    <div class="bgbanner noselect">
+        <span class="caption noselect">Mind Express</span><br /><br />
+        <span class="subcaption noselect">v1.0 beta</span><br /><br />
+        <span class="subcaption noselect">(C) Copyright 2015 mindexpress.cn</span><br />
+    </div>
+    <div id="scene" control="scene" unit="true" class="scene">
+        <input id="iname" alias="ideaname" class="ideaname" value="Idea Name" />
+        <div alias="layers" class="layergroup">
+            <div alias="bglayer" class="bg layer">
+            </div>
+            <div alias="elayer" class="el layer">
+                <svg alias="svg">
+                    <!--<path d="M 50 12 L 150 112" fill="none" stroke="blue" stroke-width="3" />
+                    <path d="M 150 112 L 350 22" fill="none" stroke="blue" stroke-width="3" />-->
+                </svg>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
