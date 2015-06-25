@@ -147,7 +147,7 @@ if (!window.scenebag.editors) {
                 ischanged: false,
                 isdirty: false,
                 getData: function (json) {
-                    var rect = this.getBoundingClientRect();
+                    var rect = rc(this);
                     var s = window.getComputedStyle ? window.getComputedStyle(this) : this.currentStyle;
                     rect.w = parseInt(s.width);
                     rect.h = parseInt(s.height);
@@ -326,7 +326,7 @@ if (!window.scenebag.editors) {
                 }
             });
             path.getData = function (json) {
-                var rect = this.getBoundingClientRect();
+                var rect = rc(this);
                 var r = { uid: this.$uid, pos: rect, text: this.$label.innerText || this.$label.textContent, fromid: ea.$uid, toid: eb.$uid, labelid: this.$label.$uid };
                 return json ? r : JSON.stringify(r);
             };

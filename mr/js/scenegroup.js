@@ -89,7 +89,7 @@
             isgroup:true,
             isdirty: false,
             getData: function (json) {
-                var rect = this.getBoundingClientRect();
+                var rect = rc(this);
                 var s = window.getComputedStyle ? window.getComputedStyle(this) : this.currentStyle;
                 rect.w = parseInt(s.width);
                 rect.h = parseInt(s.height);

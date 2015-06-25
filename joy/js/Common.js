@@ -92,4 +92,16 @@ function attr(el, name, val) {
 }
 
 
-
+function rc(o) {
+    if (!o) {
+        console.log('Null reference (rect)');
+        return {};
+    }
+    if (o.getBoundingClientRect) {
+        var r = o.getBoundingClientRect();
+        var rr = { top: r.top, left: r.left, bottom: r.bottom, right: r.right, width: r.right - r.left, height: r.bottom - r.top };
+        return rr;
+    }
+    console.log('getBoundingClientRect missing');
+    return {};
+}
