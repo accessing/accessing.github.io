@@ -65,6 +65,7 @@
     </style>
 
     <script type="text/javascript">
+        var domain = 'http://www.mindexpress.cn';
         window.scene = null;
         function switchstatus(mode, modes) {
             if (modes[mode]) {
@@ -106,7 +107,7 @@
                     loadidea($('[alias=ideaname]')[0].value);
                 }, save: function (activated) {
                     var idea = scene[0].getData();
-                    $.post('/mr/savemind', { idea: idea, iname: $('[alias=ideaname]')[0].value }, function (data) {
+                    $.post(domain + '/mr/savemind', { idea: idea, iname: $('[alias=ideaname]')[0].value }, function (data) {
                         toastr.info(data);
                         console.log(data);
                     });
@@ -115,7 +116,7 @@
             switchstatus(mode, modes2);
         }
         function loadidea(name) {
-            var u = "/mr/loadmind/" + escape(name);
+            var u = domain + "/mr/loadmind/" + escape(name);
             document.title = name;
             $.ajax({
                 url: u,
