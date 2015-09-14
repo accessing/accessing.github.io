@@ -10,6 +10,8 @@
     <link type="text/css" href="/mr/css/scene.css" rel="stylesheet" />
     <link type="text/css" href="/mr/css/mindroute.css" rel="stylesheet" />
     <link type="text/css" href="/mr/css/toastr.css" rel="stylesheet" />
+    <link type="text/css" href="/icons/icons.css" rel="stylesheet" />
+
     <script type="text/javascript" src="/mr/js/debug.js"></script>
     <script type="text/javascript" src="/joy/js/Common.js"></script>
     <script type="text/javascript" src="/joy/js/joy.js"></script>
@@ -49,10 +51,11 @@
                 background-color: silver;
                 border-bottom: solid 1px gray;
                 cursor: default;
-                font: 12px arial;
+                font-size:14px;
                 width: 32px;
                 height: 32px;
                 line-height: 32px;
+                padding-left:6px;
             }
 
                 .toolbar .btn:hover {
@@ -190,12 +193,12 @@
     <!--<div class="bgph">
     </div>-->
     <div class="toolbar left">
-        <div id="breadonly" class="btn" onclick="toolbtnclick.call(this, 'readonly')">R</div>
-        <div id="bconcept" class="btn" onclick="toolbtnclick.call(this, 'concept')">C</div>
-        <div id="bline" class="btn" onclick="toolbtnclick.call(this, 'line')">L</div>
-        <div id="bgroup" class="btn" onclick="toolbtnclick.call(this, 'group')">G</div>
-        <div id="bsave" class="btn" onclick="toolbtnclick.call(this, 'save')">S</div>
-        <div id="bload" class="btn" onclick="toolbtnclick.call(this, 'load')">O</div>
+        <div id="breadonly" class="icon-enlarge btn" onclick="toolbtnclick.call(this, 'readonly')">&nbsp;</div>
+        <div id="bconcept" class="icon-libreoffice btn" onclick="toolbtnclick.call(this, 'concept')">&nbsp;</div>
+        <div id="bline" class="icon-share2 btn" onclick="toolbtnclick.call(this, 'line')">&nbsp;</div>
+        <div id="bgroup" class="icon-stack btn" onclick="toolbtnclick.call(this, 'group')">&nbsp;</div>
+        <div id="bsave" class="icon-floppy-disk btn" onclick="toolbtnclick.call(this, 'save')">&nbsp;</div>
+        <div id="bload" class="icon-folder-open btn" onclick="toolbtnclick.call(this, 'load')">&nbsp;</div>
     </div>
     <!--<div class="toolbar right">
     </div>-->

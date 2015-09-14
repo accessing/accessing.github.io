@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -77,6 +78,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="icons\icomoon.svg" />
+    <Content Include="icons\icons.css" />
     <Content Include="index.html" />
     <Content Include="joy\css\joy.datesilver.css" />
     <Content Include="joy\css\joy.debug.css" />
@@ -150,6 +153,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="icons\icomoon.eot" />
+    <Content Include="icons\icomoon.ttf" />
+    <Content Include="icons\icomoon.woff" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
