@@ -1,0 +1,24 @@
+﻿/* Overlay ***************************************************************************************************/
+.overlay{
+    position:fixed;
+    top:0px;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    opacity:0.3;
+    background-color:black;
+}
+.overlaybox{
+    position:fixed;
+    max-height:600px;
+    border-left:solid 2px silver;
+    border-top:solid 2px silver;
+    border-right:solid 2px gray;
+    border-bottom:solid 2px gray;
+    border-radius:12px;
+    background:#E5E8ED;
+    overflow-x:hidden;
+    overflow-y:auto;
+    padding:0;
+    margin:0;
+}
