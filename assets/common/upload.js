@@ -39,6 +39,11 @@
 		});
 	}
 	function ajax(method, url, args, successcb, errorcb, undef) {
+		if (url.indexOf('://') == 0){
+			var n = location.href.indexOf('://');
+			var schema = location.href.substr(0, n);
+			url = schema + url;
+		}
 		$.ajax({
 			url: url,
 			method: method,
