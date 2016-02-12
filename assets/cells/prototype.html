@@ -774,7 +774,7 @@ div.boxer .box.highlight {
 		        if (event.keyCode == 13) {
 		        	if (this.value) {
 				        console.log(this.value);
-				        get('https://mindexpress.cn/cs/load/' + this.value, null, function (r) {
+				        get('://mindexpress.cn/cs/load/' + this.value, null, function (r) {
 					        console.log(r);
 				        	var o =fromJson(r);
 				        	if (o) {
@@ -797,7 +797,7 @@ div.boxer .box.highlight {
 				var name = $('#tname').val();
 				if (name) {
 					console.log(name + ':\t' + json);
-					post('https://mindexpress.cn/cs/save/' + name, { json: json, action:'save' }, function(r) {
+					post('://mindexpress.cn/cs/save/' + name, { json: json, action:'save' }, function(r) {
 						alert('Success'); //console.log(r);
 					}, function(e) {
 						alert('Error: ' + e.errormsg);
