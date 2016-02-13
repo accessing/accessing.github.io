@@ -3,6 +3,8 @@
 <head>
 	<title>Cells</title>
 	<meta charset="utf-8" />
+	<link rel="shortcut icon" type="image/jpeg" href="/assets/icons/methane.jpg" media="screen"/>
+	<link rel="stylesheet" href="/assets/common/reset.css" type="text/css"/>
 	<style>
 * {
 	padding: 0;
@@ -13,8 +15,13 @@
 	color: #ccc;
 }
 
-input {
-	color: black;
+input[type=text] {
+	color: #ccc;
+	border-bottom: solid 1px #aaa;
+}
+#bqqlogin{
+	float: right;
+	padding: 4px 12px 4px 12px;
 }
 
 body {
@@ -27,9 +34,11 @@ button {
 	background-color: #222;
 }
 
-	button:hover {
-		background-color: #444;
-	}
+button:hover {
+	background-color: #444;
+}
+
+
 
 .fill {
 	width: 100%;
@@ -114,10 +123,11 @@ div.boxer .box.highlight {
 }
 </style>
 
+	<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101288663" data-redirecturi="http://mindexpress.cn/qqlogin" charset="utf-8"></script>
 	<script src="/assets/common/common.js"></script>
-	<script src="/joy/js/joy.js"></script>
-	<script src="/joy/js/jQuery/jq1102.js"></script>
-	<script src="/joy/js/joy.dom.js"></script>
+	<script src="/assets/joy/joy.js"></script>
+	<script src="/assets/common/jquery.js"></script>
+	<script src="/assets/joy/joy.dom.js"></script>
 	<script src="/assets/common/upload.js"></script>
 
 	<script>
@@ -807,23 +817,33 @@ div.boxer .box.highlight {
 
 	        $('#btest').click(function() {
 	        });
+	        QC.Login({
+	        	btnId: "bqqlogin"
+	        });
         });
 	</script>
 </head>
 <body>
-<div id="toolbar">
+
+<div class="fixed align-right right-top">
+	<div id="bqqlogin"></div>
+</div>
+
+<div id="toolbar" class="fixed left-top">
 	<input id="tname" type="text" value="Draft 1"/>
 	<button id="bsave">Save</button>
+	<input type="text" id="editor" />
 	<button id="babove">+ Row Above</button>
 	<button id="babelow">+ Row Below</button>
 	<button id="baleft">+ Col Left</button>
 	<button id="baright">+ Col Right</button>
-	<input type="text" id="editor"/>
 	<button id="btest">Test</button>
 	<button id="bspawn">Spawn</button>
 	<button id="brow">- Row</button>
 	<button id="brcol">- Col</button>
 </div>
-	<div id="scene"></div>
+
+<div id="scene"></div>
+
 </body>
 </html>

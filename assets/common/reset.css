@@ -10,6 +10,7 @@
 	border: none;
 	background-color: transparent;
 	background: none;
+	outline-width: 0;
 }
 .z-bg {
 	z-index: 1;
@@ -25,6 +26,20 @@
 }
 .fixed {
 	position: fixed;
+}
+.right-top, .top-right {
+	right: 0;
+	top: 0;
+}
+.left-top, .top-left {
+	left: 0;
+	top: 0;
+}
+.float-right {
+	float: right;
+}
+.align-right {
+	text-align: right;
 }
 .clearboth {
 	clear: both;
@@ -70,3 +85,4 @@
     -ms-user-select: none;
     user-select: none;
 }
+
