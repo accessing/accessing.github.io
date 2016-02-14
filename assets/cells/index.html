@@ -123,7 +123,8 @@ div.boxer .box.highlight {
 }
 </style>
 
-	<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101288663" data-redirecturi="http://mindexpress.cn/qqlogin" charset="utf-8"></script>
+	<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc.js"></script>
+	<!--<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101288663" data-redirecturi="http://mindexpress.cn/qqlogin" charset="utf-8"></script>-->
 	<script src="/assets/common/common.js"></script>
 	<script src="/assets/joy/joy.js"></script>
 	<script src="/assets/common/jquery.js"></script>
@@ -817,8 +818,22 @@ div.boxer .box.highlight {
 
 	        $('#btest').click(function() {
 	        });
-	        QC.Login({
-	        	btnId: "bqqlogin"
+
+        	//QC.Login({
+	        //	btnId: "bqqlogin"
+        	//});
+
+	        QC.Login.insertButton({
+	        	btnId: 'bqqlogin',//插入按钮的html标签id
+	        	size: 'A_M',//按钮样式，A、B、C为三种样式， 
+	        	//S、M、L、XL为同一种样式的不同尺寸，支持如下 : 
+	        	//A_S, A_M, A_L, A_XL; 
+	        	//B_S, B_M, B_L; 
+	        	//C_S;
+
+	        	clientId: '101288663',//appId
+	        	scope: '',//授权范围，可选
+	        	'btnMode': 'showUserAfterLogin'
 	        });
         });
 	</script>
@@ -841,6 +856,9 @@ div.boxer .box.highlight {
 	<button id="bspawn">Spawn</button>
 	<button id="brow">- Row</button>
 	<button id="brcol">- Col</button>
+	<a id="bqqsignin" href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101288663&redirect_uri=http://mindexpress.cn/qqlogin&scope=get_user_info" target="_blank">
+		<img src="/assets/account/img/Connect_logo_7.png" />
+	</a>
 </div>
 
 <div id="scene"></div>
