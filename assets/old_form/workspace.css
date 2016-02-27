@@ -1,0 +1,59 @@
+﻿.workspace *{
+    line-height:24px;
+    margin:0px;
+    padding:0px;
+}
+
+.workspace .title{
+    font-weight:bolder;
+    font:24px arial;
+}
+
+.workspace {
+    border: solid 0px blue;
+    position: relative;
+    display: block;
+    margin: 16px;
+}
+
+table.workspace {
+    display:table;
+    margin: 0px;
+}
+
+.workspace .opt{
+    margin:2px 12px 2px 12px;
+}
+
+.workspace textarea{
+    width:100%;
+    height:200px;
+}
+
+.workspace input{
+    line-height:12px;
+}
+
+.workspace table{
+    border:solid 1px silver;
+}
+
+.workspace tr{
+    height:32px;
+}
+
+.workspace td{
+    border:solid 1px silver;
+    padding:4px;
+    height:32px;
+}
+
+.workspace td.col{
+    color:white;
+    line-height:24px;
+    background:#5C87B2;
+    min-width:100px;
+}
+input[type=button]{
+    padding:4px;
+}

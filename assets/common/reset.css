@@ -12,6 +12,9 @@
 	background: none;
 	outline-width: 0;
 }
+img {
+	border: none;
+}
 .z-bg {
 	z-index: 1;
 }

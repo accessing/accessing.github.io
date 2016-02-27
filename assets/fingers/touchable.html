@@ -1,0 +1,71 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<title>Testing</title>
+
+	<link rel="stylesheet" href="http://cdn.mindexpress.cn/assets/common/reset.css" type="text/css" />
+
+	<style>
+		* {
+			border: none;
+		}
+
+		#raw, #rec {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 50%;
+			border: solid 1px white;
+		}
+
+		#rec {
+			left: 50%;
+		}
+
+		#target {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			width: 100px;
+			height: 100px;
+			background: red;
+		}
+
+		div.item {
+			border-bottom: solid 1px darkolivegreen;
+		}
+	</style>
+
+	<script src="http://cdn.mindexpress.cn/assets/common/common.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/common/debug.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/common/jquery.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/joy/joy.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/transform/recognizer.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/transform/rotator.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/fingers/touch.parsers.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/fingers/touch.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/fingers/touchable.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/fingers/touch.debug.js"></script>
+	<script>
+		$(function () {
+			document.oncontextmenu = function() {
+				return false;
+			};
+			touchable($('#target')[0]);
+		});
+	</script>
+</head>
+<body>
+	<div id="target"></div>
+	<div id="raw"></div>
+	<div id="rec"></div>
+	<button style="display: none;" onmouseover="console.log('test');window.test = true;">Test</button>
+
+	<!--<div class="z-topmost crop noborder noselect transparent fill-fixed" sstyle="background-color: silver;">
+	</div>-->
+
+</body>
+</html>

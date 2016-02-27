@@ -1,0 +1,125 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<title>Testing</title>
+
+	<link rel="stylesheet" href="http://mindexpress.cn/assets/common/reset.css" type="text/css" />
+
+	<style>
+		#target, #origin {
+			position: absolute;
+			display: block;
+			left: 200px;
+			top: 200px;
+			width: 100px;
+			height: 100px;
+			text-align: center;
+			vert-align: middle;
+			background: lightblue;
+		}
+
+		#origin {
+			background: none;
+			border: solid 1px gray;
+		}
+	</style>
+
+	<script src="http://cdn.mindexpress.cn/assets/common/common.js"></script>
+	<script src="/assets/transform/animation.js"></script>
+	<script src="/assets/transform/rotator.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/common/jquery.js"></script>
+	<script src="http://cdn.mindexpress.cn/assets/joy/joy.js"></script>
+	<script src="/assets/common/debug.js"></script>
+	<script>
+		$(function () {
+			document.oncontextmenu = function() {
+				return false;
+			};
+			var target = $('#target')[0];
+			target.style.left = '200px';
+			target.style.top = '200px';
+			var rot = Rotator(target);
+			//rot.rotate2({ angle: 45, center: [100, 100], scale: 1, pos: [0, 0] });
+			//rot.commitStatus();
+			//rot.rotate2({ angle: 45, center: [100, 100], scale: 1, pos: [0, 0] });
+			//rot.commitStatus();
+			//rot.rotate2({ angle: 45, center: [50, 50], scale: 1.414, pos: [0, 0] });
+			//rot.commitStatus();
+			//rot.rotate2({ angle: 45, center: [50, 50], scale: 1.414, pos: [0, 0] });
+			//rot.commitStatus();
+			//rot.rotate2({ angle: 90, center: [100, 100], scale: 0.5, pos: [0, 0] });
+			//rot.commitStatus();
+
+			animate({
+				n: 0,
+				run: function (time) {
+					var n = this.n;
+				    rot.rotate2({ angle: n+1, center: [100, 100], scale: 1, pos: [n, 0] });
+					this.n++;
+					if (this.n >= 90) {
+						this.done = true;
+					} else {
+						this.done = false;
+					}
+				}
+			});
+			animate({
+			    n: 0,
+			    run: function (time) {
+			        rot.commitStatus();
+			        this.done = true;
+			    }
+			});
+
+		    animate({
+				n: 0,
+				run: function (time) {
+				    var n = this.n;
+				    rot.rotate2({ angle: n+1, center: [50, 50], scale: 1 + n/90, pos: [0, n] });
+				    this.n++;
+					if (this.n >= 90) {
+						this.done = true;
+					} else {
+						this.done = false;
+					}
+				}
+			});
+		    animate({
+		        n: 0,
+		        run: function (time) {
+		            rot.commitStatus();
+		            this.done = true;
+		        }
+		    });
+
+			animate({
+				n: 0,
+				run: function(time) {
+					var n = this.n;
+					rot.rotate2({ angle: n+1, center: [100, 0], scale: 1 - (n/270), pos: [-n, -n] });
+				    this.n++;
+					if (this.n >= 180) {
+						this.done = true;
+					} else {
+						this.done = false;
+					}
+				}
+			});
+			animate({
+			    n: 0,
+			    run: function (time) {
+			        rot.commitStatus();
+			        this.done = true;
+			    }
+			});
+		});
+	</script>
+</head>
+<body>
+	<div id="target">Target</div>
+	<div id="origin">Origin</div>
+</body>
+</html>

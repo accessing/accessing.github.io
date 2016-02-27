@@ -1,0 +1,68 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<title>Testing</title>
+
+	<link rel="stylesheet" href="/assets/common/reset.css" type="text/css" />
+	<link rel="stylesheet" href="debug.css" type="text/css" />
+
+	<style>
+		.triangle {
+			position: absolute;
+			width: 0;
+			height: 0;
+			border-left: 50px solid transparent;
+			border-right: 50px solid transparent;
+			border-bottom: 100px solid red;
+		}
+
+	</style>
+
+	<script src="/assets/common/common.js"></script>
+	<script src="/assets/common/jquery.js"></script>
+	<script src="/assets/joy/joy.js"></script>
+	<script src="/assets/joy/joy.dom.js"></script>
+	<script src="recognizer.js"></script>
+	<script src="touch.parsers.js"></script>
+	<script src="touch.js"></script>
+	<script src="touchable.js"></script>
+	<script src="touch.rotate.js"></script>
+	<script src="touch.debug.js"></script>
+	<script>
+		var centerpt = [0, 0];
+
+		$(function () {
+			document.oncontextmenu = function() {
+				return false;
+			};
+			var tg = $('.triangle')[0];
+			touch({
+				target: document,
+				rel: document.body
+			}).on({
+				touched:function(it) {
+					centerpt = it.rpos;
+					showpt(centerpt);
+					tg.center(point2el(centerpt, tg));
+				}
+			});
+			rotatable(tg);
+			//touchable($('.triangle')[0]);
+		});
+	</script>
+</head>
+<body>
+
+	<div class="triangle" style="left: 200px; top: 200px;"></div>
+
+	<div id="raw"></div>
+	<div id="rec"></div>
+
+	<!--<div class="z-topmost crop noborder noselect transparent fill-fixed" sstyle="background-color: silver;">
+	</div>-->
+
+</body>
+</html>

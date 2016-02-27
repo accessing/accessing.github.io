@@ -1,0 +1,78 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Testing</title>
+
+	<link rel="stylesheet" href="/assets/common/reset.css" type="text/css" />
+	<link rel="stylesheet" href="/assets/common/gridlayout.css" type="text/css" />
+	<link rel="stylesheet" href="/assets/common/overlay.css" type="text/css" />
+	<link rel="stylesheet" href="/assets/forms/formeditor.css" type="text/css" />
+	<link rel="stylesheet" href="/assets/forms/formeditor.default.css" type="text/css" />
+
+	<script src="/assets/common/common.js"></script>
+	<script src="/assets/common/jquery.js"></script>
+
+	<script src="/assets/joy/joy.js"></script>
+	<script src="/assets/joy/joy.dom.js"></script>
+
+	<script src="/assets/common/upload.js"></script>
+	<script src="/assets/forms/formeditor.creator.js"></script>
+	<script src="/assets/forms/formeditor.validator.js"></script>
+	<script src="/assets/forms/formeditor.js"></script>
+
+	<script>
+		$(function () {
+			var config = {
+				title: 'Product Info',
+				target: 'bgform',
+				editor: {
+					tprice: { validators: [floatvalidator, requiredvalidator], err: ['Please enter valid price', 'Price is required'] },
+					tname: { validators: [requiredvalidator], err:['Name is required'] },
+					tdesc: { validators: [requiredvalidator], err:['Description is required'] },
+					timg: { creator: imgupcreator, validators: [requiredvalidator], err:['Image is required'] },
+					tpath: { creator: imgupcreator, validators: [requiredvalidator], err:['Path is required'] }
+				},
+				fields: {
+					id: { style: { display: 'none' } },
+					tname: { childNodes: [{ innerHTML: 'Name' }] },
+					tdesc: { childNodes: [{ innerHTML: 'Description' }] },
+					tprice: { onkeypress: floatvalidator, childNodes: [{ innerHTML: 'Price' }] },
+					timg: { childNodes: [{ innerHTML: 'Image' }] },
+					tpath: { childNodes: [{ innerHTML: 'Ticket' }] },
+					accountid: { style: { display: 'none' } },
+					categoryid: { style: { display: 'none' } },
+					channelid: { style: { display: 'none' } },
+					ctime: { style: { display: 'none' } },
+					utime: { style: { display: 'none' } },
+					isdeleted: { style: { display: 'none' } }
+				},
+				save: function(url, o) {
+					//var s = JSON.stringify(o);
+					post(url, o, function(data) {
+						console.log(data);
+					}, function (err) {
+						console.log(err);
+						debugger;
+					});
+				}
+				, submit: function (row) {
+					var s = '/test/formsubmit';
+					return s;
+				},
+				cancel: function () {
+					overlay({ hide: true });
+				}
+			};
+			get('/test/gettabledata', null, function (data) {
+				var el = formeditor(data, config);
+				el.show({ style: { width: '800px' } });
+			});
+		});
+	</script>
+</head>
+<body class="enable3d nofill noborder fill crop">
+	<iframe name="bgform" src="about:blank" class="hidden"></iframe>
+</body>
+</html>

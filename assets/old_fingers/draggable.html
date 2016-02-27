@@ -1,0 +1,163 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Testing</title>
+    <link rel="stylesheet" href="/assets/common/reset.css" type="text/css" />
+    <link rel="stylesheet" href="/assets/common/gridlayout.css" type="text/css" />
+    <style>
+        .caption,.resizer{
+            cursor:pointer;
+        }
+        .region .rect{
+            position:absolute;
+            border:solid 1px red;
+            background:silver;
+            width:100px;
+            height:100px;
+            padding:6px;
+        }
+        .region .rect .caption{
+            background-color:yellow;
+            border:solid 1px gray;
+        }
+        .region .rect .rb{
+            right:0px;
+            bottom:0px;
+        }
+        .region .rect .lt{
+            left:0px;
+            top:0px;
+        }
+        .region .rect .resizer{
+            border:solid 1px gray;
+            background-color:yellow;
+            position:absolute;
+            width:12px;
+            height:12px;
+        }
+        .region .targeta{
+            left:100px;
+            top:100px;
+        }
+        .region .targetb{
+            left:120px;
+            top:120px;
+        }
+        .region {
+            position: absolute;
+            border: solid 1px blue;
+            top: 300px;
+            left: 200px;
+            right: 200px;
+            bottom: 50px;
+			overflow:hidden;
+        }
+
+        .leftpanel, .rightpanel {
+            height:200px;
+        }
+
+        #bottom{
+            position:fixed;
+            left:0px;
+            right:0px;
+            bottom:0px;
+            height:24px;
+            text-align:center;
+        }
+
+        #cmd{
+            position:absolute;
+            z-index:99999;
+            right:0px;
+            top:50%;
+        }
+    </style>
+    <script src="/assets/common/common.js"></script>
+    <script src="/assets/common/jquery.js"></script>
+    <script src="/assets/fingers/test.js"></script>
+    <script src="/assets/joy/joy.js"></script>
+    <script src="/assets/joy/joy.dom.js"></script>
+	<script src="fingerparsers.js"></script>
+    <script src="finger.js"></script>
+    <script src="draggable.js"></script>
+    <script>
+		$(function () {
+            //depth($('.region')[0]);
+            var fg = finger.setup({
+            	target: document
+				, rel: document.body
+				, global: false
+            });
+
+            var ta = {
+                tag: 'div'
+                , className: 'rect targeta'
+                , $: [
+                    { tag: 'div', alias: 'caption', className: 'caption', $: 'Title' }
+                    , { tag: 'div', className: 'body', $: 'Body' }
+                ]
+            };
+
+            var tb = {
+                tag: 'div'
+                , className: 'rect targetb'
+                , $: [
+                    { tag: 'div', className: 'body', $: 'Rect' }
+                ]
+            };
+
+            var ea = joy.jbuilder(ta);
+            var eb = joy.jbuilder(tb);
+            $('.region').append(ea).append(eb);
+            $('#bottom').html(agent().text());
+
+            draggable({
+                handler: ea.$caption
+                , target: ea
+                , rel: $('.region')[0]
+                , behavior: 'dragger'
+				, finger: fg
+            });
+
+            draggable({
+            	handler: eb
+                , target: eb
+                , rel: $('.region')[0]
+                , behavior: 'dragger'
+				, finger: fg
+            });
+            
+            var rg = $('.region')[0];
+            finger.on(rg, 'touched', function (q) {
+            	console.log('Region ontouched success');
+			});
+
+            var ra = resizable(ea, $('.region')[0], fg);
+            var rb = resizable(eb, $('.region')[0], fg);
+            //ra.dispose();
+        });
+        
+    </script>
+</head>
+<body class="enable3d nofill noborder fill crop">
+    <div class="container">
+        <div class="row">
+            <div class="col-1 leftpanel">
+
+            </div>
+            <div class="col-2 offset rightpanel">
+
+            </div>
+        </div>
+    </div>
+    <div class="region noselect">
+
+    </div>
+    <div id="cmd">
+    </div>
+    <div id="bottom"></div>
+</body>
+</html>

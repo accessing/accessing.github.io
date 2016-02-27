@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+    <title>Test Coding</title>
+    <link rel="stylesheet" href="codemirror.css">
+    <link type="text/css" rel="stylesheet" href="addon/hint/show-hint.css" />
+    
+    <script src="/assets/common/jquery.js"></script>
+    <script src="codemirror.js"></script>
+    <script src="addon/selection/selection-pointer.js"></script>
+    <script src="mode/xml.js"></script>
+    <script src="mode/javascript.js"></script>
+    <script src="mode/css.js"></script>
+    <script src="mode/vbscript.js"></script>
+    <script src="mode/htmlmixed.js"></script>
+
+    <script type="text/javascript" src="addon/hint/show-hint.js"></script>
+    <script type="text/javascript" src="addon/hint/css-hint.js"></script>
+    <script type="text/javascript" src="addon/hint/html-hint.js"></script>
+    <script type="text/javascript" src="addon/hint/javascript-hint.js"></script>
+    <script type="text/javascript" src="addon/hint/xml-hint.js"></script>
+
+    <style>
+        *{
+            padding:0;
+            margin:0;
+        }
+        input[type=text]{
+            border:solid 0px silver;
+            border-bottom:solid 1px silver;
+            margin:6px;
+        }
+        button{
+            padding:2px 12px 2px 12px;
+        }
+        .CodeMirror.cm-s-default {
+            border: solid 1px silver;
+            position:fixed;
+            top:32px;
+            right:0px;
+            bottom:0px;
+            left:0px;
+            height:unset;
+        }
+    </style>
+    <script>
+        $(function () {
+            var mixedMode = {
+                name: "htmlmixed",
+                scriptTypes: [{
+                    matches: /\/x-handlebars-template|\/x-mustache/i,
+                    mode: null
+                },
+                {
+                    matches: /(text|application)\/(x-)?vb(a|script)/i,
+                    mode: "vbscript"
+                }]
+            };
+
+            var editor = CodeMirror.fromTextArea(document.getElementById("fcontent"), {
+                mode: mixedMode,
+                lineNumbers: true,
+                selectionPointer: true
+            });
+
+            document.onkeyup = function (event) {
+                if (event.keyCode == 46 || event.keyCode >= 48 && event.keyCode <= 57 || event.keyCode >= 65 && event.keyCode <= 90 || event.keyCode >= 97 && event.keyCode <= 122) {
+                    editor.showHint();
+                }
+            };
+
+            function loadfile() {
+            	var t = $('#fname').val();
+            	$.ajax({
+            		type: 'GET'
+                    , url: '/fl/load/' + t
+            	}).done(function (data) {
+            		editor.setValue(data);
+            	}).error(function (ex) {
+            		alert(ex);
+            	});
+            }
+            $('#bload').click(function () {
+            	loadfile();
+            });
+
+            $('#bsave').click(function () {
+                $.ajax({
+                    type: 'POST'
+                    , url: '/fl/save'
+                    , data: {
+                        fname: $('#fname').val()
+                        , text: editor.getValue('\r\n')
+                    }
+                }).done(function (data) {
+                    alert(data);
+                }).error(function (ex) {
+                    alert(ex);
+                });
+            });
+
+            $('#fname').keyup(function (event) {
+            	if (event.keyCode == 13) {
+            		loadfile();
+            		event.preventDefault();
+            	}
+            });
+        });
+    </script>
+</head>
+<body>
+    <form id="frm" method="post" action="/fl/save">
+    <div>
+        <input class="fname" name="fname" id="fname" type="text" value="" />
+        <button id="bsave" type="button">Save</button>
+        <button id="bload" type="button">Load</button>
+    </div>
+    <textarea name="text" id="fcontent" class="editor"></textarea>
+    </form>
+</body>
+</html>

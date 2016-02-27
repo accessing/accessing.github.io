@@ -1,0 +1,97 @@
+﻿<!doctype html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Testing</title>
+	
+	<link rel="stylesheet" href="/assets/common/reset.css" type="text/css" />
+	<link rel="stylesheet" href="/assets/common/gridlayout.css" type="text/css"/>
+	<link rel="stylesheet" href="/assets/common/overlay.css" type="text/css" />
+	<link rel="stylesheet" href="/assets/form/formeditor.css" type="text/css" />
+	<link rel="stylesheet" href="/assets/form/formeditor.default.css" type="text/css" />
+	
+	<script src="/assets/common/common.js"></script>
+	<script src="/assets/common/jquery.js"></script>
+
+    <script src="/assets/joy/joy.js"></script>
+	<script src="/assets/joy/joy.dom.js"></script>
+
+	<script src="/assets/form/upload.js"></script>
+	<script src="/assets/form/formeditor.creator.js"></script>
+	<script src="/assets/form/formeditor.js"></script>
+	<script src="/assets/form/grid.js"></script>
+	<script src="/assets/form/tower.js"></script>
+
+	<script>
+		function roweditcfg(cfg) {
+			if (!cfg) {
+				cfg = {};
+			}
+			var c = {
+				title: 'Product Info',
+				editor: {
+					position: { creator: inputbtncreator, validators: [intvalidator, requiredvalidator], btntext: 'Test' },
+					promotionprice: { validators: [floatvalidator, requiredvalidator] },
+					promotionnum: { validators: [intvalidator, requiredvalidator] },
+					state: { creator: imgupcreator, validators: [intvalidator, requiredvalidator], url: '/test/upload' },
+					pid: { validators: [requiredvalidator] }
+				},
+				fields: {
+					rownum: { style: { display: 'none' } },
+					advertiseid: { style: { display: 'none' } },
+					createdatetime: { style: { display: 'none' } },
+					lastupdatedatetime: { style: { display: 'none' } },
+					new_modelid: { style: { display: 'none' } },
+					pid: { childNodes: [{ innerHTML: 'Product Type' }] },
+					position: { childNodes: [{ innerHTML: 'Position' }] },
+					state: { onkeypress: intvalidator, childNodes: [{ innerHTML: 'Status' }] },
+					promotionprice: { childNodes: [{ innerHTML: 'Price' }] },
+					promotionnum: { childNodes: [{ innerHTML: 'Quantity' }] }
+				},
+				submit: function(row) {
+					var s = '/test/url';
+					return s;
+				},
+				cancel: function() {
+					overlay({ hide: true });
+				}
+			};
+			return c;
+		}
+
+		$(function() {
+			var el = formeditor({
+				pid: '',
+				advertiseid: 'testadvertiseid',
+				new_modelid: 'testnew_modelid',
+				position: 'testposition',
+				state: '',
+				promotionprice: 'testpromotionprice',
+				promotionnum: 'testpromotionnum'
+			}, roweditcfg({ action: 'testaction' }));
+			el.show({ style: { width: '800px' } });
+
+			$('#testupload').on('change', function() {
+				var el = this;
+				upload(el, '/ajax/upload', function(json) {
+					debugger;
+				});
+			});
+		});
+	</script>
+	<style>
+		.test {
+			border: solid 1px silver;
+			position: absolute;
+			left: 100px;
+			top: 100px;
+			width: 400px;
+			line-height: 24px;
+		}
+	</style>
+</head>
+<body class="enable3d nofill noborder fill crop">
+	<input id="testupload" type="file" multiple="true"/>
+</body>
+</html>

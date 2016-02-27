@@ -1,0 +1,63 @@
+﻿/* Common */
+.formeditor *.disabled, .formeditor *.disabled:hover {
+	color: gray;
+}
+
+/* Title & toolbar */
+.formeditor .title {
+	background:#313131;
+}
+.formeditor .title .content {
+	color:white;
+}
+.formeditor .title .toolbar a, .formeditor .title .toolbar a.disabled, .formeditor .title .toolbar a.disabled:hover {
+	background: #313131;
+	border: solid 1px #4C4C4C;
+}
+.formeditor .title .toolbar a {
+    color:white;
+}
+.formeditor .title .toolbar a:hover {
+	background:#4C4C4C;
+    border-top: solid 1px gray;
+	border-left: solid 1px gray;
+    border-right: solid 1px black;
+	border-bottom: solid 1px black;
+}
+
+/* Editors */
+.formeditor .editors table input, .formeditor .editors table button {
+	border:solid 1px gray;
+}
+
+
+.formeditor .editors table input {
+	background-color: transparent;
+}
+
+.formeditor .editors table .hint {
+	color:darkred;
+}
+
+.formeditor .editors table .error {
+	border:solid 1px red;
+}
+
+.formeditor .editors table button, .formeditor .editors table .button {
+	background: #E5E5E5;
+}
+
+.formeditor .editors table button:hover, .formeditor .editors table .button:hover {
+	background-color: #ccc;
+}
+
+.formeditor .editors table .imgupcreator .file {
+	border: solid 1px gray;
+}
+
+/* Command area */
+.formeditor .cmd a {
+    color:black;
+    border:solid 1px gray;
+    background:silver;
+}

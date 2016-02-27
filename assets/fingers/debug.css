@@ -1,0 +1,13 @@
+﻿#raw, #rec {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 50%;
+	border: solid 1px white;
+}
+#rec {
+	left: 50%;
+}
+div.item {
+	border-bottom: solid 1px darkolivegreen;
+}

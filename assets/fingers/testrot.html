@@ -1,0 +1,102 @@
+﻿<!doctype html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<title>Testing</title>
+
+	<link rel="stylesheet" href="/assets/common/reset.css" type="text/css" />
+
+	<style>
+		#target, #origin {
+			position: absolute;
+			display: block;
+			left: 200px;
+			top: 200px;
+			width: 100px;
+			height: 100px;
+			text-align: center;
+			vert-align: middle;
+			background: lightblue;
+		}
+		#origin {
+			background: silver;
+		}
+	</style>
+
+	<script src="/assets/common/common.js"></script>
+	<script src="/assets/transform/animation.js"></script>
+	<script src="/assets/transform/rotator.js"></script>
+	<script src="/assets/common/jquery.js"></script>
+	<script src="/assets/joy/joy.js"></script>
+	<script src="/assets/common/debug.js"></script>
+	<script>
+		$(function () {
+			document.oncontextmenu = function() {
+				return false;
+			};
+			var target = $('#target')[0];
+			target.style.left = '200px';
+			target.style.top = '200px';
+			var rot = Rotator(target);
+
+			animate({
+				n: 0,
+				run: function(time) {
+					rot.rotate({ angle: 1, center: [100, 100], scale: 1, offset:[1,0] });
+					this.n++;
+					if (this.n >= 90) {
+						this.done = true;
+					} else {
+						this.done = false;
+					}
+				}
+			});
+
+			animate({
+				n: 0,
+				run: function(time) {
+					rot.rotate({ angle: 1, center: [0, 0], scale: 1 / 90 * (this.n + 1) + 1, offset: [0, 1] })
+					this.n++;
+					if (this.n >= 90) {
+						this.done = true;
+					} else {
+						this.done = false;
+					}
+				}
+			});
+
+			animate({
+				n: 0,
+				run: function(time) {
+					rot.rotate({ angle: 1, center: [100, 0], scale: 2 - 1.5 / 180 * (this.n), offset: [-1, -1] })
+					this.n++;
+					if (this.n >= 180) {
+						this.done = true;
+					} else {
+						this.done = false;
+					}
+				}
+			});
+
+			//animate({
+			//	n: 0,
+			//	run: function (time) {
+			//		rot.rotate({ offset: [1, 0] })
+			//		this.n++;
+			//		if (this.n >= 100) {
+			//			this.done = true;
+			//		} else {
+			//			this.done = false;
+			//		}
+			//	}
+			//});
+		});
+	</script>
+</head>
+<body>
+	<div id="origin">Origin</div>
+	<div id="target">Target</div>
+</body>
+</html>

@@ -1,0 +1,174 @@
+﻿/* Form Editor ***************************************************************************************************/
+.formeditor, .formeditor form, .formeditor form .formbody, .formeditor form .formcontent {
+	width: 100%;
+    margin:0;
+    padding:0;
+}
+.formeditor form .formcontent {
+	margin-bottom: 24px;
+}
+.formeditor{
+    position:relative;
+}
+
+.formeditor .title{
+    font-weight:bolder;
+    margin-bottom:12px;
+    border:solid 0px blue;
+    width:100%;
+}
+.formeditor .title .content{
+    font:20px arial;
+    font-weight:bold;
+    line-height:40px;
+    margin-left:12px;
+}
+.formeditor .title .toolbar{
+    float:right;
+    border:solid 0px red;
+    padding:0;
+    margin:0;
+    line-height:40px;
+}
+.formeditor .title .toolbar a{
+    padding:6px 12px;
+    font:12px arial;
+    line-height:24px;
+    margin:0px 6px 0px 2px;
+	text-decoration: none;
+    border-radius:6px;
+}
+
+
+.formeditor .formrow {
+	clear: both;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+.formeditor .formrow .labelcontainer, .formeditor .formrow .editorcontainer {
+	border: none;
+	padding: 0;
+	margin: 0;
+	position: relative;
+}
+
+.formeditor .formrow .labelcontainer {
+	width: 20%;
+}
+
+.formeditor .formrow .editorcontainer {
+	width: 80%;
+	border: solid 0px red;
+}
+
+.formeditor .formrow .labelcontainer, .formeditor .formrow .editorcontainer .editor {
+	line-height: 1em;
+	/*padding: .25em .5em .25em .5em;*/
+	padding: 0;
+	margin-right: 2em;
+	padding-right: 1em;
+}
+
+/* Leave spaces between form rows */
+.formeditor .formrow .labelcontainer, .formeditor .formrow .editorcontainer {
+	line-height: 2.5em;
+}
+
+.formeditor .formrow .labelcontainer {
+	text-align: right;
+}
+
+.formeditor .formrow .editorcontainer .editor {
+	border: solid 1px gray;
+}
+
+.formeditor .formrow .editorcontainer .editor input {
+	border: none;
+	outline: none;
+	outline-width: 0;
+	border: solid 0px red;
+}
+.formeditor .formrow .editorcontainer .editor .floaterr {
+	color: red;
+	position: absolute;
+	right: 32px;
+	top: 10px;
+	border: none;
+}
+/* Default editor */
+.formeditor .formrow .editorcontainer .default.editor input {
+	width: 100%;
+	height: 100%;
+}
+
+.formeditor .formrow .editorcontainer .default.editor input, 
+.formeditor .formrow .editorcontainer .inputbtncreator input, 
+.formeditor .formrow .editorcontainer .inputbtncreator button, 
+.formeditor .formrow .editorcontainer .imgupcreator .url, 
+.formeditor .formrow .editorcontainer .imgupcreator .button {
+	padding: .4em .5em .25em .5em;
+}
+
+/* Input button editor */
+.formeditor .formrow .editorcontainer .inputbtncreator.editor .floaterr {
+	right: 100px;
+}
+.formeditor .formrow .editorcontainer .inputbtncreator {
+	border: none;
+}
+
+.formeditor .formrow .editorcontainer .inputbtncreator input {
+	width: 80%;
+}
+.formeditor .formrow .editorcontainer .inputbtncreator button {
+	width: 18%;
+}
+
+.formeditor .editors table .imgupcreator .url,
+.formeditor .formrow .editorcontainer .inputbtncreator input {
+	float: left;
+}
+.formeditor .formrow .editorcontainer .imgupcreator .button,
+.formeditor .formrow .editorcontainer .inputbtncreator button {
+	float: right;
+}
+
+/* Img upload editor */
+.formeditor .formrow .editorcontainer .imgupcreator.editor .floaterr {
+	right: 80px;
+}
+.formeditor .editors table .imgupcreator .url {
+	float: left;
+	width: 95%;
+}
+.formeditor .formrow .editorcontainer .imgupcreator .button {
+	width: 4%;
+}
+
+.formeditor .formrow .editorcontainer .imgupcreator {
+	border: none;
+}
+.formeditor .formrow .editorcontainer .imgupcreator .preview {
+	clear: both;
+	max-width: 200px;
+	max-height: 200px;
+}
+
+.formeditor .editors .imgupcreator .file {
+	overflow: hidden;
+	text-align: center;
+	position: relative;
+}
+
+.formeditor .editors .imgupcreator .file input[type=file] {
+	opacity: 0;
+	filter: alpha(opacity=0);
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+}
+
