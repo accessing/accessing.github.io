@@ -1,14 +1,7 @@
 ﻿function rpoint(event) {
 	var pt = [0, 0];
-	if (isFirefox) {
-		console.log('layerpos');
-		pt[0] = event.originalEvent.layerX;
-		pt[1] = event.originalEvent.layerY;
-	} else {
-		console.log('offsetpos');
-		pt[0] = event.offsetX;
-		pt[1] = event.offsetY;
-	}
+	pt[0] = event.offsetX;
+	pt[1] = event.offsetY;
 	return pt;
 }
 function rectbound(rect, rel) {
