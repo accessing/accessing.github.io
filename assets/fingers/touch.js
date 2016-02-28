@@ -163,16 +163,19 @@
 			var ths = getouches(event);
 			var q = touchevt('touchstart', ths, { rel: rel });
 			rg.parse(q);
+			event.preventDefault();
 		};
 		nel.ontouchmove = function (event) {
 			var ths = getouches(event);
 			var q = touchevt('touchmove', ths, { rel: rel });
 			rg.parse(q);
+			event.preventDefault();
 		};
 		nel.ontouchend = function (event) {
 			var ths = getouches(event);
 			var q = touchevt('touchend', ths, { rel: rel });
 			rg.parse(q);
+			event.preventDefault();
 		};
 	}
 	return {
