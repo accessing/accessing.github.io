@@ -92,6 +92,24 @@
 		return element;
 	}
 
+	function log(msg, id) {
+		if (!id) {
+			id = 'dftlog';
+		}
+		var div = document.body[id] || document.createElement('div');
+		if (!document.body[id]) {
+			document.body[id] = div;
+			div.style.position = 'fixed';
+			div.style.right = '24px';
+			div.style.top = '24px';
+			div.style.bottom = '24px';
+			div.style.width = '200px';
+			div.style.overflow = 'auto';
+			document.body.appendChild(div);
+		}
+		div.innerHTML += msg + '<br />';
+	}
+
 	function extend(destination, source) {
 		for (var property in source)
 			destination[property] = source[property];
@@ -119,6 +137,7 @@
 		bound: showBound,
 		astyle: actualStyle,
 		point: showPoint,
-		sim: simulate
+		sim: simulate,
+		log: log
 	};
 })();

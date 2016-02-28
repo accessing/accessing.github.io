@@ -2,6 +2,8 @@
 	var pt = [0, 0];
 	pt[0] = event.offsetX;
 	pt[1] = event.offsetY;
+	var tmp = event.originalEvent || event;
+	d.log('op:' + event.offsetX + ',' + event.offsetY + ' lp:' + tmp.layerX + ',' + tmp.layerY);
 	return pt;
 }
 function rectbound(rect, rel) {
