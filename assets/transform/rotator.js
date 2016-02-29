@@ -1,8 +1,8 @@
 ﻿function Rotator(target, options) {
 	function process(target, options) {
 		var rc = target.getBoundingClientRect();
-		target.style.left = d.astyle(target, ['left']);
-		target.style.top = d.astyle(target, ['top']);
+		target.style.left = target.astyle(['left']);
+		target.style.top = target.astyle(['top']);
 		target.$rot$ = {
 			origin: { center: [rc.width / 2, rc.height / 2], angle: 0, scale: [1, 1], pos: [parseFloat(target.style.left), parseFloat(target.style.top)] },
 			cmt:{ center: [rc.width / 2, rc.height / 2], angle: 0, scale: [1, 1], pos: [parseFloat(target.style.left), parseFloat(target.style.top)] },

@@ -9,34 +9,34 @@
 	<link rel="stylesheet" href="http://cdn.mindexpress.cn/assets/common/reset.css" type="text/css" />
 
 	<style>
-		* {
-			border: none;
-		}
-
-		#raw, #rec {
-			position: absolute;
-			top: 0;
-			left: 0;
-			width: 50%;
-			border: solid 1px white;
-		}
-
-		#rec {
-			left: 50%;
+		body {
+			overflow: hidden;
 		}
 
 		#target {
+			position: fixed;
+			background: none;
+			border: solid 1px silver;
+			background: none;
+		}
+
+		#item {
 			position: absolute;
-			left: 50%;
-			top: 50%;
+			left: 50500px;
+			top: 50500px;
 			width: 100px;
 			height: 100px;
 			background: red;
 		}
-
-		div.item {
-			border-bottom: solid 1px darkolivegreen;
+		#item2 {
+			position: absolute;
+			left: 50200px;
+			top: 50200px;
+			width: 100px;
+			height: 100px;
+			background: blue;
 		}
+
 	</style>
 
 	<script src="/assets/common/common.js"></script>
@@ -52,18 +52,19 @@
 			document.oncontextmenu = function() {
 				return false;
 			};
-			touchable($('#target')[0]);
+			var target = $('#target')[0];
+			target.style.width = '100000px';
+			target.style.height = '100000px';
+			target.style.left = '-50000px';
+			target.style.top = '-50000px';
+			touchable(target);
 		});
 	</script>
 </head>
 <body>
-	<div id="target"></div>
-	<div id="raw"></div>
-	<div id="rec"></div>
-	<button style="display: none;" onmouseover="console.log('test');window.test = true;">Test</button>
-
-	<!--<div class="z-topmost crop noborder noselect transparent fill-fixed" sstyle="background-color: silver;">
-	</div>-->
-
+<div id="target">
+	<div id="item"></div>
+	<div id="item2"></div>
+</div>
 </body>
 </html>

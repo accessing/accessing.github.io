@@ -120,14 +120,12 @@ function touchable(target, cfg) {
 			center = [origin.pos[0] - rc.left, origin.pos[1] - rc.top];
 			target.ondblclick = function(event) {
 				center = rpoint(event);
-				//console.log(center);
 			}
 			simulate(target, 'dblclick', origin.pos);
 		}, zooming: function (it) {
 			if (origin) {
 				var d = { rpos: [it.rpos[0] - origin.rpos[0], it.rpos[1] - origin.rpos[1]], len: it.len / origin.len, angle: it.angle - origin.angle };
 				target.rotate2({ angle: d.angle, pos: d.rpos, scale: [d.len, d.len], center: center });
-				showbound(target);
 			}
 		}, zoomend: function (it) {
 			target.commitStatus();

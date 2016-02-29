@@ -1,4 +1,48 @@
 ﻿function touch(cfg) {
+	function showTouches(target, q) {
+		function showTouch(target, t) {
+			if (t.act.indexOf('touch') >= 0) {
+				var r = 14;
+				var div = document.createElement('div');
+				div.style.position = 'absolute';
+				div.style.left = t.rpos[0] - r + 'px';
+				div.style.top = t.rpos[1] - r + 'px';
+				div.style.width = r * 2 + 'px';
+				div.style.height = r * 2 + 'px';
+				div.style.borderRadius = r + 'px';
+				div.style.border = 'solid 3px silver';
+				target.appendChild(div);
+			}
+		}
+		var d = null;
+		if (!target.$touches$) {
+			d = document.createElement('div');
+			target.$touches$ = d;
+			target.appendChild(d);
+		} else {
+			d = target.$touches$;
+			d.innerHTML = '';
+		}
+		if (!q) {
+			return;
+		}
+		if (q instanceof Array) {
+			for (var i = 0; i < q.length; i++) {
+				var list = q[i];
+				if (list instanceof Array) {
+					for (var j = 0; j < list.length; j++) {
+						var item = list[j];
+						showTouch(d, item);
+					}
+				} else {
+					showTouch(d, list);
+				}
+			}
+		} else {
+			showTouch(d, q);
+		}
+	}
+
 	var handlers = {};
 
 	function pointdiff() {
@@ -105,6 +149,7 @@
 			qel.zooming = true;
 			if (event.button == 1) {
 				qel.of = true;
+				event.preventDefault();
 			} else {
 				qel.of = false;
 			}

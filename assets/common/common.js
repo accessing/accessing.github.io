@@ -86,6 +86,19 @@ Date.prototype.pattern = function (fmt) {
 	}
 	return fmt;
 };
+
+Element.prototype.astyle = function actualStyle(props) {
+	var el = this;
+	var compStyle = window.getComputedStyle(el, null);
+	for (var i = 0; i < props.length; i++) {
+		var style = compStyle[props[i]];
+		if (style != null) {
+			return style;
+		}
+	}
+	return null;
+};
+
 Date.prototype.diff = function (d) {
 	var t = d || new Date();
 	var s = this;

@@ -1,6 +1,9 @@
 ﻿(function () {
 
 	function showBound(rect, id, color) {
+		if (rect.tagName) {
+			rect = rect.getBoundingClientRect();
+		}
 		if (!color) {
 			color = 'red';
 		}
@@ -19,17 +22,6 @@
 		div.style.height = parseFloat(rect.height) + 'px';
 		div.style.border = 'solid 1px ' + color;
 		return div;
-	}
-
-	function actualStyle(el, props) {
-		var compStyle = window.getComputedStyle(el, null);
-		for (var i = 0; i < props.length; i++) {
-			var style = compStyle[props[i]];
-			if (style != null) {
-				return style;
-			}
-		}
-		return null;
 	}
 
 	function showPoint(pt, id, color, parent) {
@@ -135,7 +127,6 @@
 
 	window.d = {
 		bound: showBound,
-		astyle: actualStyle,
 		point: showPoint,
 		sim: simulate,
 		log: log
