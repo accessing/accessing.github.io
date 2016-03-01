@@ -12,6 +12,9 @@
 			url: url,
 			data: fd,
 			type: 'POST',
+			xhrFields: {
+				withCredentials: true
+			},
 			processData: false,
 			contentType: false,
 			success: function (data) {
