@@ -52,13 +52,20 @@
 			method: method,
 			data: args,
 			success: function (data) {
+				console.log('AjaxResponse: ' + data);
 				if (successcb) {
-					var rlt = fromJson(data);
-					if ((rlt.error || rlt.IsNoException === false) && errorcb) {
-						errorcb(rlt);
-					} else {
-						successcb(rlt.result);
-					}
+					var t = typeof (data);
+					var rlt = t == 'string' ? fromJson(data) : data;
+					successcb(rlt);
+					//if ((rlt.error || rlt.IsNoException === false) && errorcb) {
+					//	errorcb(rlt);
+					//} else {
+					//	if (rlt.success === true) {
+					//		successcb(rlt.result);
+					//	} else {
+					//		successcb(rlt);
+					//	}
+					//}
 				}
 			},
 			error: function(data) {

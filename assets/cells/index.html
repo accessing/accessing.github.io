@@ -4,7 +4,8 @@
 	<title>Cells</title>
 	<meta charset="utf-8" />
 	<link rel="shortcut icon" type="image/jpeg" href="/assets/icons/methane.jpg" media="screen"/>
-	<link rel="stylesheet" href="/assets/common/reset.css" type="text/css"/>
+	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/reset.css" type="text/css"/>
+	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/toastr.css" type="text/css" />
 	<style>
 * {
 	padding: 0;
@@ -126,14 +127,14 @@ div.login {
 }
 </style>
 
-	<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc.js"></script>
-	<script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101288663" data-redirecturi="http://mindexpress.cn/qqlogin" charset="utf-8"></script>
+	<script type="text/javascript" src="//qzonestyle.gtimg.cn/qzone/openapi/qc.js"></script>
 	<script src="/assets/common/common.js"></script>
 	<script src="/assets/joy/joy.js"></script>
 	<script src="/assets/common/jquery.js"></script>
 	<script src="/assets/joy/joy.dom.js"></script>
 	<script src="/assets/common/upload.js"></script>
 	<script src="/assets/cells/cells.js"></script>
+	<script src="/assets/common/toastr.js"></script>
 
 	<script>
 		//function checklogin() {
@@ -150,93 +151,127 @@ div.login {
 		//	}, 1000);
 		//}
 		$(function () {
-	        var settings = { activetb: null, editor: $('#editor')[0], scene:$('#scene') };
-	        var vtb = newtable(settings);
+			var settings = { activetb: null, editor: $('#editor')[0], scene: $('#scene') };
+			var vtb = newtable(settings);
 
-	        $('#babove').click(function() {
-		        settings.activetb.addabove();
-	        });
+			$('#babove').click(function () {
+				settings.activetb.addabove();
+			});
 
-	        $('#babelow').click(function() {
-		        settings.activetb.addbelow();
-	        });
+			$('#babelow').click(function () {
+				settings.activetb.addbelow();
+			});
 
-	        $('#baleft').click(function() {
-		        settings.activetb.addleft();
-	        });
+			$('#baleft').click(function () {
+				settings.activetb.addleft();
+			});
 
-	        $('#baright').click(function() {
-		        settings.activetb.addright();
-	        });
+			$('#baright').click(function () {
+				settings.activetb.addright();
+			});
 
-	        $('#bspawn').click(function() {
-		        var cell = settings.activetb.select();
-		        var tbl = cell.spawn();
-		        settings.activetb = tbl;
-	        });
+			$('#bspawn').click(function () {
+				var cell = settings.activetb.select();
+				var tbl = cell.spawn();
+				settings.activetb = tbl;
+			});
 
-	        $('#brow').click(function() {
-		        settings.activetb.delrow();
-	        });
+			$('#brow').click(function () {
+				settings.activetb.delrow();
+			});
 
-	        $('#brcol').click(function() {
-		        settings.activetb.delcol();
-	        });
+			$('#brcol').click(function () {
+				settings.activetb.delcol();
+			});
 
-	        $('#tname')[0].onkeyup = function(event) {
-		        if (event.keyCode == 13) {
-		        	if (this.value) {
-				        console.log(this.value);
-				        get('://mindexpress.cn/cs/load/' + this.value, null, function (r) {
-					        console.log(r);
-				        	var o =fromJson(r);
-				        	if (o) {
-						        console.log(o);
-						        vtb.dispose();
-						        vtb = newtable(settings, o);
-					        }
-				        });
-			        }
-		        }
-	        };
+			$('#tname')[0].onkeyup = function (event) {
+				if (event.keyCode == 13) {
+					if (this.value) {
+						console.log(this.value);
+						get('://mindexpress.cn/cs/load/' + this.value, null, function (o) {
+							if (o) {
+								if (o.success === false) {
+									toastr.error(o.errormsg);
+								} else {
+									//console.log(o);
+									vtb.dispose();
+									vtb = newtable(settings, o);
+								}
+							}
+						}, function (e) {
+							vtb.dispose();
+						});
+					}
+				}
+			};
 
-			if (typeof(Storage) !== 'undefined') {
-				$('#bsave').css('background-color', 'forestgreen').css('color','white');
+			if (typeof (Storage) !== 'undefined') {
+				$('#bsave').css('background-color', 'forestgreen').css('color', 'white');
 			}
 
-	        $('#bsave').click(function() {
+			$('#bsave').click(function () {
 				var dt = vtb.getdata();
 				var json = JSON.stringify(dt);
 				var name = $('#tname').val();
 				if (name) {
 					console.log(name + ':\t' + json);
-					post('://mindexpress.cn/cs/save/' + name, { json: json, action:'save' }, function(r) {
-						alert('Success'); //console.log(r);
-					}, function(e) {
-						alert('Error: ' + e.errormsg);
+					post('://mindexpress.cn/cs/save', { text: json, fname: name, action: 'save' }, function (r) {
+						if (r.success === false) {
+							toastr.error(r.errormsg);
+						} else {
+							toastr.success('Save accomplished');
+						}
+					}, function (e) {
+						toastr.error(e.errormsg);
 					});
 				}
-	        });
+			});
 
-	        $('#btest').click(function() {
-	        });
+			$('#btest').click(function () {
+			});
+
+			checklogin();
+		});
 
 
-	        $('#bqqsignin').click(function () {
-		        get('://mindexpress.cn/qqlogin/wait', null, function(o) {
-			        console.log(o);
-		        });
-	        	$('#bqqsignin').hide();
-	        });
-        });
+		function checklogin() {
+			function setinfo(o) {
+				$('#qqinfo').show();
+				$('#qquid').html(o.result.name);
+			}
+			$('#bqqsignin').click(function () {
+				get('://mindexpress.cn/qqlogin/verify', null, function (o) {
+					if (o.success) {
+						setinfo(o);
+					} else {
+						$('#bqqsignin').show();
+					}
+				});
+				$('#bqqsignin').hide();
+			});
+			$('#bqqsignout').click(function () {
+				get('://mindexpress.cn/qqlogin/signout', null, function (o) {
+					$('#qqinfo').hide();
+					$('#bqqsignin').show();
+				});
+			});
+			get('://mindexpress.cn/qqlogin/check', null, function (o) {
+				if (o.success) {
+					setinfo(o);
+				} else {
+					$('#bqqsignin').show();
+				}
+			});
+		}
 	</script>
 </head>
 <body>
 
 <div class="login fixed align-right right-top">
-	<a id="bqqsignin" href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101288663&redirect_uri=http://mindexpress.cn/qqlogin&scope=get_user_info" target="_blank">
+	<a id="bqqsignin" style="display: none;" href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101288663&redirect_uri=http://mindexpress.cn/qqlogin&scope=get_user_info" target="_blank">
 		<img src="https://cdn.mindexpress.cn/assets/account/img/Connect_logo_7.png" />
 	</a>
+	<div id="qqinfo" style="display:none;">Welcome&nbsp;<span id="qquid"></span>&nbsp;&nbsp;<a id="bqqsignout" href="#">Sign Out</a></div>
 </div>
 
 <div id="toolbar" class="fixed left-top">
