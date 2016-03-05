@@ -32,9 +32,9 @@
   color: #000000;
   text-decoration: none;
   cursor: pointer;
-  opacity: 0.4;
-  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
-  filter: alpha(opacity=40);
+  opacity: 0.8;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  filter: alpha(opacity=80);
 }
 /*Additional properties for button version
  iOS requires the button element instead of an anchor tag.
@@ -146,17 +146,17 @@ button.toast-close-button {
 .toast {
   background-color: #030303;
 }
+.toast-success, .toast-error, .toast-info, .toast-warning, .toast-success *, .toast-error *, .toast-info *, .toast-warning *{
+	color:#fff !important;
+}
 .toast-success {
   background-color: #51a351;
-  color:fff;
 }
 .toast-error {
   background-color: #bd362f;
-  color:#fff;
 }
 .toast-info {
   background-color: #000000;
-  color:#fff;
 }
 .toast-warning {
   background-color: #f89406;
@@ -167,9 +167,9 @@ button.toast-close-button {
   bottom: 0;
   height: 4px;
   background-color: #000000;
-  opacity: 0.4;
-  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=40);
-  filter: alpha(opacity=40);
+  opacity: 0.8;
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+  filter: alpha(opacity=80);
 }
 /*Responsive Design*/
 @media all and (max-width: 240px) {
