@@ -11,6 +11,8 @@
 				div.style.height = r * 2 + 'px';
 				div.style.borderRadius = r + 'px';
 				div.style.border = 'solid 3px silver';
+				div.style.background = 'none';
+				div.$evtignore$ = true;
 				target.appendChild(div);
 			}
 		}
@@ -88,7 +90,9 @@
 		capture: {
 			region: rel.getBoundingClientRect(),
 			parse: function (q) {
-				showTouches(document.body, q);
+				if (cfg.showtouch) {
+					showTouches(document.body, q);
+				}
 			},
 			qchanged: function (q) {
 				//logq('raw', q);
@@ -121,10 +125,10 @@
 			}
 		}, parser: [zoomParser, dblTouchedParser, dragParser, singleTouchedParser]
 	});
-	var qel = $(target);
+	var qel = $(target)[0];
 	qel.md = false;
 	qel.zooming = false;
-	qel.mousemove(function (event) {
+	qel.onmousemove = function (event) {
 		if (!qel.zooming) {
 			if (qel.md) {
 				rg.parse([{ act: 'touchmove', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
@@ -138,9 +142,9 @@
 				{ act: 'touchmove', pos: pd.fpos, rpos: pd.fpos, time: new Date() }
 			]);
 		}
-	});
+	};
 
-	qel.mousedown(function (event) {
+	qel.onmousedown = function (event) {
 		qel.md = true;
 		if (event.button == 0) {
 			qel.zooming = false;
@@ -161,14 +165,14 @@
 				{ act: 'touchstart', pos: pd.fpos, rpos: pd.fpos, time: new Date() }
 			]);
 		}
-	});
+	};
 
-	qel.mouseup(function (event) {
+	qel.onmouseup = function (event) {
 		qel.md = false;
 		qel.zooming = false;
 		qel.of = false;
 		rg.parse([{ act: 'touchend', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
-	});
+	};
 
 	// Get native touches
 	function getouches(event) {

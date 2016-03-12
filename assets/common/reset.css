@@ -88,4 +88,15 @@ img {
     -ms-user-select: none;
     user-select: none;
 }
-
+.transparent-25 {
+	opacity: 0.25;
+}
+.transparent-35 {
+	opacity: 0.35;
+}
+.transparent-50 {
+	opacity: 0.5;
+}
+.transparent-75 {
+	opacity: 0.75;
+}

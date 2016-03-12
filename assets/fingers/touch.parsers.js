@@ -171,7 +171,6 @@ function dblTouchedParser() {
 				if (!q || q.length < 1) {
 					return false;
 				}
-				//debugger;
 				if (!end) {
 					end = q.length - 1;
 				}
@@ -182,11 +181,9 @@ function dblTouchedParser() {
 				var ta = st.time;
 				var te = ea.time;
 				var d = te.diff(ta);
-				//debugger;
-				if (d < 350 && acts(st.act, 'touched') && acts(ea.act, 'touched')) {
+				if (d < 400 && acts(st.act, 'touched') && acts(ea.act, 'touched')) {
 					return { act: 'dbltouched', pos: ea.pos, rpos: ea.rpos, time: new Date() };
 				}
-				//debugger;
 				return false;
 			}
 		}

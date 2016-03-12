@@ -3,10 +3,12 @@
 		var rc = target.getBoundingClientRect();
 		target.style.left = target.astyle(['left']);
 		target.style.top = target.astyle(['top']);
+		target.style.width = target.astyle(['width']);
+		target.style.height = target.astyle(['height']);
 		target.$rot$ = {
-			origin: { center: [rc.width / 2, rc.height / 2], angle: 0, scale: [1, 1], pos: [parseFloat(target.style.left), parseFloat(target.style.top)] },
-			cmt:{ center: [rc.width / 2, rc.height / 2], angle: 0, scale: [1, 1], pos: [parseFloat(target.style.left), parseFloat(target.style.top)] },
-			cache: { center: [rc.width / 2, rc.height / 2], angle: 0, scale: [1, 1], pos: [parseFloat(target.style.left), parseFloat(target.style.top)] },
+			origin: { center: [rc.width / 2, rc.height / 2], angle: 0, scale: [1, 1], pos: [parseFloat(target.style.left), parseFloat(target.style.top)], sz: [parseFloat(target.style.width), parseFloat(target.style.height)] },
+			cmt: { center: [rc.width / 2, rc.height / 2], angle: 0, scale: [1, 1], pos: [parseFloat(target.style.left), parseFloat(target.style.top)], sz: [parseFloat(target.style.width), parseFloat(target.style.height)] },
+			cache: { center: [rc.width / 2, rc.height / 2], angle: 0, scale: [1, 1], pos: [parseFloat(target.style.left), parseFloat(target.style.top)], sz: [parseFloat(target.style.width), parseFloat(target.style.height)] },
 			status: []
 		};
 
@@ -60,7 +62,8 @@
 			var rot = this.$rot$;
 			rot.cmt = this.$rot$.cache;
 			rot.cmt.pos = [parseFloat(this.style.left), parseFloat(this.style.top)];
-			rot.cache = { angle: 0, scale: [1, 1], pos: [0, 0] };
+			rot.cmt.sz = [parseFloat(this.style.width), parseFloat(this.style.height)];
+			rot.cache = { angle: 0, scale: [1, 1], pos: [0, 0], sz:[0, 0] };
 			rot.offset = [0, 0];
 		};
 		target.rotate2 = function (arg, undef) {
@@ -71,7 +74,7 @@
 			var cache = this.$rot$.cache;
 			var origin = this.$rot$.cmt;
 			var offset = this.$rot$.offset;
-			var angle = arg.angle, center = arg.center, scale = arg.scale, pos = arg.pos;
+			var angle = arg.angle, center = arg.center, scale = arg.scale, pos = arg.pos, resize = arg.resize;
 
 			if (!offset) {
 				offset = [0, 0];
@@ -86,6 +89,17 @@
 			if (angle || angle === 0) {
 				cache.angle = origin.angle + angle;
 				cache.angle = cache.angle % 360;
+				//console.log(cache.angle);
+			}
+
+			if (resize) {
+				cache.sz = [origin.sz[0] + resize[0], origin.sz[1] + resize[1]];
+				if (cache.sz[0] < 10) {
+					cache.sz[0] = 10;
+				}
+				if (cache.sz[1] < 10) {
+					cache.sz[1] = 10;
+				}
 			}
 
 			if (scale) {
@@ -105,6 +119,10 @@
 			this.style.transform = 'rotateZ(' + cache.angle + 'deg) scale(' + cache.scale[0] + ',' + cache.scale[1] + ')';
 			this.style.left = cache.pos[0] + 'px';
 			this.style.top = cache.pos[1] + 'px';
+			if (resize) {
+				this.style.width = cache.sz[0] + 'px';
+				this.style.height = cache.sz[1] + 'px';
+			}
 
 			this.pushStatus();
 
@@ -157,8 +175,11 @@
 		if (!target.$center$) {
 			var center = document.createElement('div');
 			center.style.position = 'absolute';
-			center.style.left = target.$rot$.origin.center[0] + 'px';
-			center.style.top = target.$rot$.origin.center[1] + 'px';
+			//center.style.left = target.$rot$.origin.center[0] + 'px';
+			//center.style.top = target.$rot$.origin.center[1] + 'px';
+			center.style.left = '50%';
+			center.style.top = '50%';
+
 			center.style.width = '0px';
 			center.style.height = '0px';
 			center.style.border = 'solid 0px blue';
