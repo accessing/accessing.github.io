@@ -13,6 +13,47 @@ var isChrome = !!window.chrome && !!window.chrome.webstore;
 // Blink engine detection
 var isBlink = (isChrome || isOpera) && !!window.CSS;
 
+var isMobile = {
+	Android: function () {
+		var r = navigator.userAgent.match(/Android/i);
+		if (r) {
+			console.log('match Android');
+		}
+		return r;
+	},
+	BlackBerry: function () {
+		var r = navigator.userAgent.match(/BlackBerry/i);
+		if (r) {
+			console.log('match Android');
+		}
+		return r;
+	},
+	iOS: function () {
+		var r = navigator.userAgent.match(/iPhone|iPad|iPod/i);
+		if (r) {
+			console.log('match Android');
+		}
+		return r;
+	},
+	Opera: function () {
+		var r = navigator.userAgent.match(/Opera Mini/i);
+		if (r) {
+			console.log('match Android');
+		}
+		return r;
+	},
+	Windows: function () {
+		var r = navigator.userAgent.match(/IEMobile/i);
+		if (r) {
+			console.log('match Android');
+		}
+		return r;
+	},
+	any: function () {
+		return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
+	}
+};
+
 String.prototype.format = function () {
 	var args = arguments;
 	var s = this;

@@ -96,6 +96,7 @@
 			},
 			qchanged: function (q) {
 				//logq('raw', q);
+				//d.logq(q)
 				var rq = {};
 				for (var j = 0; j < q.length; j++) {
 					var it = q[j];
@@ -128,56 +129,66 @@
 	var qel = $(target)[0];
 	qel.md = false;
 	qel.zooming = false;
-	qel.onmousemove = function (event) {
-		if (!qel.zooming) {
-			if (qel.md) {
-				rg.parse([{ act: 'touchmove', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
+	if (!isMobile.any()) {
+		qel.onmousemove = function(event) {
+			if (!qel.zooming) {
+				if (qel.md) {
+					rg.parse([{ act: 'touchmove', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
+				} else {
+					rg.parse([{ act: 'mousemove', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
+				}
 			} else {
-				rg.parse([{ act: 'mousemove', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
+				pd.update([event.clientX, event.clientY], qel.of);
+				rg.parse([
+					{ act: 'touchmove', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() },
+					{ act: 'touchmove', pos: pd.fpos, rpos: pd.fpos, time: new Date() }
+				]);
 			}
-		} else {
-			pd.update([event.clientX, event.clientY], qel.of);
-			rg.parse([
-				{ act: 'touchmove', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() },
-				{ act: 'touchmove', pos: pd.fpos, rpos: pd.fpos, time: new Date() }
-			]);
-		}
-	};
+		};
 
-	qel.onmousedown = function (event) {
-		qel.md = true;
-		if (event.button == 0) {
+		qel.onmousedown = function(event) {
+			qel.md = true;
+			if (event.button == 0) {
+				qel.zooming = false;
+				rg.parse([{ act: 'touchstart', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
+			} else {
+				qel.zooming = true;
+				if (event.button == 1) {
+					qel.of = true;
+					event.preventDefault();
+				} else {
+					qel.of = false;
+				}
+				var dr = document.body.getBoundingClientRect();
+				pd.origin([dr.width / 2, dr.height / 2]);
+				pd.update([event.clientX, event.clientY]);
+				rg.parse([
+					{ act: 'touchstart', pos: pd.pos, rpos: pd.pos, time: new Date() },
+					{ act: 'touchstart', pos: pd.fpos, rpos: pd.fpos, time: new Date() }
+				]);
+			}
+		};
+
+		qel.onmouseup = function(event) {
+			qel.md = false;
 			qel.zooming = false;
-			rg.parse([{ act: 'touchstart', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
-		} else {
-			qel.zooming = true;
-			if (event.button == 1) {
-				qel.of = true;
-				event.preventDefault();
-			} else {
-				qel.of = false;
-			}
-			var dr = document.body.getBoundingClientRect();
-			pd.origin([dr.width / 2, dr.height / 2]);
-			pd.update([event.clientX, event.clientY]);
-			rg.parse([
-				{ act: 'touchstart', pos: pd.pos, rpos: pd.pos, time: new Date() },
-				{ act: 'touchstart', pos: pd.fpos, rpos: pd.fpos, time: new Date() }
-			]);
-		}
-	};
-
-	qel.onmouseup = function (event) {
-		qel.md = false;
-		qel.zooming = false;
-		qel.of = false;
-		rg.parse([{ act: 'touchend', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
-	};
+			qel.of = false;
+			rg.parse([{ act: 'touchend', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
+		};
+	} else {
+		//alert('Mobile');
+	}
 
 	// Get native touches
 	function getouches(event) {
 		try {
-			var r = event.touches || event.targetTouches;
+			var r = event.touches;
+			if (!r || r.length == 0) {
+				r = event.targetTouches;
+			}
+			if (!r || r.length == 0) {
+				r = event.changedTouches;
+			}
 			return r;
 		} catch (e) {
 			alert(e);
@@ -186,8 +197,9 @@
 	}
 
 	// Construct logic event
-	function touchevt(name, touches, c) {
+	function mtouchevt(name, touches, c) {
 		var rr = [];
+
 		for (var i = 0; i < touches.length; i++) {
 			var e = touches[i];
 			var x = e.clientX;
@@ -206,27 +218,40 @@
 		return rr;
 	}
 
-	for (var i = 0; i < qel.length; i++) {
-		var nel = qel[i];
+	//for (var i = 0; i < qel.length; i++) {
+	//	var nel = qel[i];
+	var nel = qel;
 		nel.ontouchstart = function (event) {
 			var ths = getouches(event);
-			var q = touchevt('touchstart', ths, { rel: rel });
+			var q = mtouchevt('touchstart', ths, { rel: rel });
 			rg.parse(q);
-			event.preventDefault();
+			//event.preventDefault();
+			event.stopPropagation();
+			if (isSafari) {
+				event.preventDefault();
+			}
 		};
 		nel.ontouchmove = function (event) {
 			var ths = getouches(event);
-			var q = touchevt('touchmove', ths, { rel: rel });
+			var q = mtouchevt('touchmove', ths, { rel: rel });
 			rg.parse(q);
-			event.preventDefault();
+			//event.preventDefault();
+			event.stopPropagation();
+			if (isSafari) {
+				event.preventDefault();
+			}
 		};
 		nel.ontouchend = function (event) {
 			var ths = getouches(event);
-			var q = touchevt('touchend', ths, { rel: rel });
+			var q = mtouchevt('touchend', ths, { rel: rel });
 			rg.parse(q);
-			event.preventDefault();
+			//event.preventDefault();
+			event.stopPropagation();
+			if (isSafari) {
+				event.preventDefault();
+			}
 		};
-	}
+	//}
 	return {
 		on:function(c) {
 			for (var i in c) {

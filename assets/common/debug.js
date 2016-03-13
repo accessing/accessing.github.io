@@ -83,7 +83,20 @@
 		}
 		return element;
 	}
+	function logq(q) {
+		for (var i = 0; i < q.length; i++) {
+			var it = q[i];
+			if (!it.processed) {
+				var html = '<div class="logitem" style="border:solid 1px red;">'
+				for (var j = 0; j < it.length; j++) {
+					html += it[j].act + ';';
+				}
+				html += '</div>';
+				log(html);
+			}
+		}
 
+	}
 	function log(msg, id) {
 		if (!id) {
 			id = 'dftlog';
@@ -95,11 +108,13 @@
 			div.style.right = '24px';
 			div.style.top = '24px';
 			div.style.bottom = '24px';
+			//div.style.height = '200px';
 			div.style.width = '200px';
+			div.style.border = 'solid 1px blue';
 			div.style.overflow = 'auto';
 			document.body.appendChild(div);
 		}
-		div.innerHTML += msg + '<br />';
+		div.innerHTML = msg + '<br />' + div.innerHTML;
 	}
 
 	function extend(destination, source) {
@@ -129,6 +144,7 @@
 		bound: showBound,
 		point: showPoint,
 		sim: simulate,
-		log: log
+		log: log,
+		logq: logq
 	};
 })();
