@@ -133,13 +133,14 @@
 			var origin = target.$og$;
 			var center = target.$cpt$;
 			if (origin) {
-				var d = { pos: [it.pos[0] - origin.pos[0], it.pos[1] - origin.pos[1]], len: it.len - origin.len, angle: 0 };
-				var resize = [d.len, d.len];
-				if ((it.angle > -30 && it.angle < 30) || it.angle > 150 || it.angle < -150 ) {
-					resize[1] = 0;
-				} else if ((it.angle > 60 && it.angle < 120) || (it.angle < -60 && it.angle > -120)) {
-					resize[0] = 1;
-				} 
+				var d = { pos: [it.pos[0] - origin.pos[0], it.pos[1] - origin.pos[1]], len: it.len - origin.len, angle: 0, xlen: it.xlen - origin.xlen, ylen: it.ylen - origin.ylen };
+				var resize = [d.xlen, d.ylen];
+				console.log(d.xlen);
+				//if ((it.angle > -30 && it.angle < 30) || it.angle > 150 || it.angle < -150 ) {
+				//	resize[1] = 0;
+				//} else if ((it.angle > 60 && it.angle < 120) || (it.angle < -60 && it.angle > -120)) {
+				//	resize[0] = 1;
+				//} 
 				target.rotate2({ angle: d.angle, pos: d.pos, resize: resize, center: center });
 			}
 		}

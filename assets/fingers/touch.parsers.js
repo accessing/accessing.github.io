@@ -43,9 +43,11 @@ function zoomParser() {
 
 		// Relative position from the element
 		var rpos = [(a.rpos[0] + b.rpos[0]) / 2, (a.rpos[1] + b.rpos[1]) / 2];
-		var len = Math.sqrt((ar[0] - br[0]) * (ar[0] - br[0]) + (ar[1] - br[1]) * (ar[1] - br[1]))
+		var xlen = ar[0] - br[0];
+		var ylen = ar[1] - br[1];
+		var len = Math.sqrt(xlen * xlen + ylen * ylen);
 		var angle = getAngle(ar, br);
-		return { pos: pos, rpos: rpos, len: len, angle: angle };
+		return { pos: pos, rpos: rpos, len: len, angle: angle, xlen: Math.abs(xlen), ylen: Math.abs(ylen) };
 	}
 
 	var r = {
@@ -68,13 +70,13 @@ function zoomParser() {
 				debugger;
 			}
 			if (curt.length == 1 && olast && (acts(olast, 'zooming') || acts(olast, 'zoomstart'))) {
-				return { act: 'zoomend', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle };
+				return { act: 'zoomend', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle, xlen: point.xlen, ylen: point.ylen };
 			} else if (curt.length == 2 && (acts(curt[0], 'touchend') || acts(curt[1], 'touchend'))) {
-				return { act: 'zoomend', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle };
+				return { act: 'zoomend', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle, xlen: point.xlen, ylen: point.ylen };
 			} else if (curt.length == 2 && (!olast || (!acts(olast, 'zooming') && !acts(olast, 'zoomstart')))) {
-				return { act: 'zoomstart', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle };
+				return { act: 'zoomstart', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle, xlen: point.xlen, ylen: point.ylen };
 			} else if (curt.length == 2) {
-				return { act: 'zooming', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle };
+				return { act: 'zooming', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle, xlen:point.xlen, ylen:point.ylen };
 			}
 			//console.log('evt not match');
 			return false;

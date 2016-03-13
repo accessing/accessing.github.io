@@ -1,0 +1,24 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+	<meta charset="utf-8"/>
+	<script src="/assets/common/wind.js"></script>
+</head>
+<body>
+<script>
+	var tmp = Wind.compile('async', function() {
+		console.log('Begin');
+		$await(function() {
+			window.setTimeout(function() {
+				console.log('waiting');
+			}, 3000);
+		});
+		console.log('End');
+	});
+	console.clear();
+	console.log(tmp);
+</script>
+</body>
+</html>
