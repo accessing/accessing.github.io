@@ -47,6 +47,11 @@
 			fill: none;
 		}
 
+		.scene svg path.selected {
+			color: white;
+			stroke: white;
+		}
+
 		.scene .node {
 			border-radius: 6px;
 			position: absolute;
@@ -67,152 +72,30 @@
 		.scene .label {
 			position: absolute;
 			color: silver;
+			cursor: pointer;
+		}
+
+		.scene .label.selected {
+			color: white;
 		}
 
 	</style>
 
-	<script src="//cdn.mindexpress.cn/assets/common/common.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/common/debug.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/common/jquery.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/joy/joy.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/joy/joy.dom.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/recognizer.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/touch.parsers.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/touch.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/transform/rotator.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/touchable.js"></script>
+	<script src="/assets/common/common.js"></script>
+	<script src="/assets/common/debug.js"></script>
+	<script src="/assets/common/jquery.js"></script>
+	<script src="/assets/joy/joy.js"></script>
+	<script src="/assets/joy/joy.dom.js"></script>
+	<script src="/assets/fingers/recognizer.js"></script>
+	<script src="/assets/fingers/touch.parsers.js"></script>
+	<script src="/assets/fingers/touch.js"></script>
+	<script src="/assets/transform/rotator.js"></script>
+	<script src="/assets/fingers/touchable.js"></script>
+	<script src="/assets/mind/scene.js"></script>
 	<script>   
-		function createnode(c) {
-			var json = {
-				tag: 'div',
-				className: 'node noselect',
-				setval: function (data) {
-					this.innerText = data;
-					this.textContent = data;
-				},
-				getval: function () {
-					return this.innerText || this.textContent;
-				}
-			};
-			var el = joy.jbuilder(json);
-			el.$scene$ = c.scene;
-			el.style.left = c.it.rpos[0] - 36 + 'px';
-			el.style.top = c.it.rpos[1] - 16 + 'px';
-			el.style.width = '70px';
-			el.style.height = '32px';
-			el.setval('Node');
-			return el;
-		}
-		function initscene() {
-			var snodes = [];
-			var hits = [];
-			var hnodes = [];
-			var links = [];
-			var target = $('#scene')[0];
-			target.style.width = '100000px';
-			target.style.height = '100000px';
-			target.style.left = '-50000px';
-			target.style.top = '-50000px';
-			target.iscene = true;
-
-			var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-			svg.$evtignore$ = true;
-			target.$svg = svg;
-			target.appendChild(svg);
-			target.addlink = function(sp, tp) {
-				var mp = [(sp[0] + tp[0]) / 2, (sp[1] + tp[1]) / 2];
-				var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-				path.setAttributeNS(null, 'd', 'M' + sp[0] + ',' + sp[1] + ' L' + tp[0] + ',' + tp[1]);
-				links.add(path);
-				this.$svg.appendChild(path);
-
-				var json = {
-					tag: 'div',
-					className: 'label',
-					style: {
-						left: mp[0] + 'px',
-						top: mp[1] + 'px'
-					},
-					$:'Link'
-				}
-
-				var el = joy.jbuilder(json);
-				this.appendChild(el);
-			};
-			target.addnode = function(it) {
-				var node = createnode({ it: it, scene: this });
-				hnodes.add(node);
-				if (hnodes.length > 12) {
-					hnodes.splice(0, 1);
-				}
-				this.appendChild(node);
-				touchable(node, {
-					mode: 'zsizing',
-					touched: function (it) {
-						hits.add(it);
-						if (hits.length > 12) {
-							hits.splice(0, 1);
-						}
-						target.selnode(node);
-					},
-					dbltouched: function (it) {
-						if (snodes.length > 0 && hits.length > 1) {
-							var sp = getrpos(hits[hits.length - 2].pos, target);
-							var tp = getrpos(it.pos, target);
-							target.addlink(sp, tp);
-						}
-					}
-				});
-			};
-
-			target.selnode = function (el) {
-				if (!el || $(el).hasClass('selected') || snodes.length > 0) {
-					for (var i = 0; i < snodes.length; i++) {
-						var n = snodes[i];
-						$(n).removeClass('selected');
-					}
-					snodes.clear();
-				}
-				if (el) {
-					$(el).addClass('selected');
-					touchtarget(el);
-					snodes.add(el);
-				}
-			};
-
-			target.delnode = function(el) {
-				var nodes = el ? [el] : snodes;
-				if (nodes.length > 0) {
-					for (var i = 0; i < nodes.length; i++) {
-						destroy(nodes[i]);
-					}
-				}
-				if (!el) {
-					snodes.clear();
-				}
-			};
-
-			touchable(target, {
-				rel: target,
-				norotate: false,
-				touched: function (it, el) {
-					var el = bypos(it);
-					if (el.iscene) {
-						if (snodes.length > 0) {
-							target.selnode();
-						} else {
-							target.addnode(it);
-						}
-					} else {
-						target.selnode(el);
-
-					}
-				}
-			});
-			return target;
-		}
+		
 		$(function () {
-			var scene = initscene();
+			var scene = initscene({ id: 'scene' });
 			document.oncontextmenu = function (event) {
 				return false;
 			};

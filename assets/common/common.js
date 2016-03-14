@@ -419,7 +419,24 @@ function fromJson(s) {
 		return eval('(' + s + ')');
 	}
 }
-
+function p2e(pos, el) {
+	var rlt = [];
+	el.onmouseover = function(event) {
+		rlt[0] = event.offsetX;
+		rlt[1] = event.offsetY;
+	}
+	simulate(el, 'mouseover', pos);
+	return rlt;
+}
+function p2c(el) {
+	var rc = el.getBoundingClientRect();
+	var rlt = [rc.left, rc.top];
+	return rlt;
+}
+function ebp(pos) {
+	var el = document.elementFromPoint(pos[0], pos[1]);
+	return el;
+}
 function simulate(element, eventName, pos) {
 	function extend(destination, source) {
 		for (var property in source)
