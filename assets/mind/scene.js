@@ -41,6 +41,21 @@
 	};
 	var el = joy.jbuilder(json);
 	el.$scene$ = c.scene;
+	el.$assist$ = {
+		edit: {
+			name: 'Edit',
+			cmd: function() {
+				console.log(el)
+			}
+		},
+		remove: {
+			name: 'Remove',
+			cmd: function() {
+				var scene = el.$scene$;
+				scene.delnode(el);
+			}
+		}
+	};
 	el.links = [];
 	el.style.left = c.it.rpos[0] - 36 + 'px';
 	el.style.top = c.it.rpos[1] - 16 + 'px';
@@ -120,6 +135,22 @@ function initscene(c) {
 
 		var el = joy.jbuilder(json);
 		el.$path = path;
+		el.$assist$ = {
+			edit: {
+				name: 'Edit',
+				cmd: function() {
+					console.log(el)
+				}
+			},
+			remove: {
+				name: 'Remove',
+				cmd: function() {
+					var scene = el.$scene$;
+					scene.delnode(el);
+				}
+			}
+		};
+		el.$scene$ = target;
 		el.dispose = function() {
 			this.$path.dispose();
 		}
@@ -147,6 +178,48 @@ function initscene(c) {
 		path.$na = na;
 		path.$nb = nb;
 	};
+	target.getContainer = function(name) {
+		var container = this['$' + name + '$'];
+		if (!container) {
+			var json = {
+				tag: 'div',
+				className: 'assist',
+				style: { display: 'none' },
+				show: function (data) {
+					this.innerHTML = '';
+					for (var i in data) {
+						var item = data[i];
+						var json = {
+							tag: 'div',
+							className: 'btn',
+							onclick: function (event) {
+								$(this).addClass('selected');
+								item.cmd();
+							},
+							$: item.name
+						};
+						var div = joy.jbuilder(json);
+						this.appendChild(div);
+					}
+					$(this).show();
+				}, hide: function () {
+					$(this).hide();
+				}
+			}
+			container = joy.jbuilder(json);
+			document.body.appendChild(container);
+			this.$assist$ = container;
+		}
+		return container;
+	};
+	target.showAssist = function (el) {
+		var container = this.getContainer('assist');
+		container.show(el.$assist$);
+	};
+	target.hideAssist = function() {
+		var container = this.getContainer('assist');
+		container.hide();
+	}
 	target.addnode = function (it) {
 		var node = createnode({ it: it, scene: this });
 		hnodes.add(node);
@@ -179,9 +252,11 @@ function initscene(c) {
 				//$(n).removeClass('selected');
 			}
 			snodes.clear();
+			target.hideAssist();
 		}
 		if (el) {
 			el.selected();
+			target.showAssist(el);
 			if (!el.islabel) {
 				touchtarget(el);
 			}
@@ -215,6 +290,7 @@ function initscene(c) {
 				i--;
 			}
 		}
+		target.hideAssist();
 	};
 
 	touchable(target, {
