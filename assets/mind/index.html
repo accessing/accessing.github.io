@@ -60,13 +60,18 @@
 			border-radius: 6px;
 			position: absolute;
 			padding: 0px 8px 0px 8px;
-			cursor: pointer;
 			text-align: left;
 			background: #d77f3d;
 			border: solid 1px #a52a2a;
-			color: black;
+		}
+		.scene .node .content {
 			line-height: 30px;
 		}
+		.scene .node, .scene .node .content {
+			cursor: pointer;
+			color: black;
+		}
+
 
 		.scene .node.selected {
 			border: solid 2px white;
@@ -128,10 +133,11 @@
 			top: 12px;
 			left: 12px;
 			right: 12px;
-			bottom: 48px;
+			height: 80px;
 			padding: 4px;
 			width: 90%;
-			white-space: nowrap;
+			overflow: auto;
+			white-space: pre-line;
 			border-bottom: solid 1px silver;
 		}
 		.node-editor .bsave {

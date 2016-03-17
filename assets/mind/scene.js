@@ -47,9 +47,10 @@ function createnode(c) {
 		tag: 'div',
 		className: 'node noselect',
 		isnode: true,
+		$: { tag: 'div', $evtignore$:true, className:'content', alias: 'content' },
 		setval: function (data) {
-			this.innerText = data;
-			this.textContent = data;
+			this.$content.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+			this.$data$ = data;
 
 			var pw = parseFloat(this.astyle(['width']));
 			var ph = parseFloat(this.astyle(['height']));
@@ -73,7 +74,7 @@ function createnode(c) {
 			}
 		},
 		getval: function () {
-			return this.innerText || this.textContent;
+			return this.$data$;
 		},
 		setlink: function (pos, path) {
 			var p = document.createElement('div');
@@ -173,11 +174,11 @@ function initscene(c) {
 				top: mp[1] + 'px'
 			},
 			getval: function() {
-				return this.innerText || this.textContent;
+				return this.$data$;
 			},
 			setval: function(data) {
-				this.innerText = data;
-				this.textContent = data;
+				this.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+				this.$data$ = data;
 			},
 			islabel: true,
 			selected: function() {

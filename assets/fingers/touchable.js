@@ -134,7 +134,7 @@
 			var center = target.$cpt$;
 			if (origin) {
 				var d = { pos: [it.pos[0] - origin.pos[0], it.pos[1] - origin.pos[1]], len: it.len - origin.len, angle: 0, xlen: it.xlen - origin.xlen, ylen: it.ylen - origin.ylen };
-				var resize = [d.xlen, d.ylen];
+				var resize = (d.xlen || d.ylen) ? [d.xlen, d.ylen] : null;
 				target.rotate2({ angle: d.angle, pos: d.pos, resize: resize, center: center });
 				if (target.zchange) {
 					target.zchange(it);
