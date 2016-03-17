@@ -1,4 +1,48 @@
-﻿function createnode(c) {
+﻿function assist(el) {
+	return {
+		edit: {
+			name: 'Edit',
+			cmd: function () {
+				var json = {
+					tag: 'div',
+					className: 'node-editor',
+					activate: function () {
+						this.$box.focus();
+					},
+					$: [
+						{
+							tag: 'div',
+							className: 'bclose',
+							$: 'X',
+							onclick: function(event) {
+								overlay();
+							}
+						}, { tag: 'textarea', className: 'area', alias: 'box', $: el.getval() }, {
+							tag: 'button',
+							className: 'bsave',
+							$: 'Update',
+							onclick: function(event) {
+								var tb = this.$root.$box;
+								el.setval(tb.value);
+								overlay();
+							},
+						}
+					]
+				}
+				var editor = joy.jbuilder(json);
+				overlay({ style: { background: '#274289' }, $: editor });
+			}
+		},
+		remove: {
+			name: 'Remove',
+			cmd: function () {
+				var scene = el.$scene$;
+				scene.delnode(el);
+			}
+		}
+	};
+}
+function createnode(c) {
 	var json = {
 		tag: 'div',
 		className: 'node noselect',
@@ -6,6 +50,27 @@
 		setval: function (data) {
 			this.innerText = data;
 			this.textContent = data;
+
+			var pw = parseFloat(this.astyle(['width']));
+			var ph = parseFloat(this.astyle(['height']));
+
+			this.style.width = '';
+			this.style.height = '';
+
+			var aw = parseFloat(this.astyle(['width']));
+			var ah = parseFloat(this.astyle(['height']));
+
+			if (pw < aw) {
+				this.style.width = aw + 'px';
+			} else {
+				this.style.width = pw + 'px';
+			}
+
+			if (ph < ah) {
+				this.style.height = ah + 'px';
+			} else {
+				this.style.height = ph + 'px';
+			}
 		},
 		getval: function () {
 			return this.innerText || this.textContent;
@@ -41,23 +106,9 @@
 	};
 	var el = joy.jbuilder(json);
 	el.$scene$ = c.scene;
-	el.$assist$ = {
-		edit: {
-			name: 'Edit',
-			cmd: function() {
-				console.log(el)
-			}
-		},
-		remove: {
-			name: 'Remove',
-			cmd: function() {
-				var scene = el.$scene$;
-				scene.delnode(el);
-			}
-		}
-	};
+	el.$assist$ = assist(el);
 	el.links = [];
-	el.style.left = c.it.rpos[0] - 36 + 'px';
+	el.style.left = c.it.rpos[0] - 28 + 'px';
 	el.style.top = c.it.rpos[1] - 16 + 'px';
 	el.style.width = '70px';
 	el.style.height = '32px';
@@ -121,6 +172,13 @@ function initscene(c) {
 				left: mp[0] + 'px',
 				top: mp[1] + 'px'
 			},
+			getval: function() {
+				return this.innerText || this.textContent;
+			},
+			setval: function(data) {
+				this.innerText = data;
+				this.textContent = data;
+			},
 			islabel: true,
 			selected: function() {
 				$(this).addClass('selected');
@@ -135,21 +193,7 @@ function initscene(c) {
 
 		var el = joy.jbuilder(json);
 		el.$path = path;
-		el.$assist$ = {
-			edit: {
-				name: 'Edit',
-				cmd: function() {
-					console.log(el)
-				}
-			},
-			remove: {
-				name: 'Remove',
-				cmd: function() {
-					var scene = el.$scene$;
-					scene.delnode(el);
-				}
-			}
-		};
+		el.$assist$ = assist(el);
 		el.$scene$ = target;
 		el.dispose = function() {
 			this.$path.dispose();
@@ -192,9 +236,10 @@ function initscene(c) {
 						var json = {
 							tag: 'div',
 							className: 'btn',
+							bag:item,
 							onclick: function (event) {
 								$(this).addClass('selected');
-								item.cmd();
+								this.bag.cmd();
 							},
 							$: item.name
 						};

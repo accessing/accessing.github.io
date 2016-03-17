@@ -380,9 +380,12 @@ function overlay(c) {
 	} else {
 		oel = el.oel;
 	}
-
+	if (!c) {
+		el.hide();
+		return;
+	}
 	if (c && c.style) {
-		
+		joy.extend(oel.style, c.style);
 	}
 
 	if (!c || !c.hide) {
@@ -394,6 +397,12 @@ function overlay(c) {
 	}
 
 	oel.innerHTML = '';
+	if (c && c.$) {
+		oel.appendChild(c.$);
+		if (c.$.activate) {
+			c.$.activate();
+		}
+	}
 	return oel;
 }
 
