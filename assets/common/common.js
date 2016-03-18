@@ -442,8 +442,34 @@ function p2c(el) {
 	var rlt = [rc.left, rc.top];
 	return rlt;
 }
-function ebp(pos) {
-	var el = document.elementFromPoint(pos[0], pos[1]);
+function ebp(pos, c) {
+	var list = [];
+	while (true) {
+		var el = document.elementFromPoint(pos[0], pos[1]);
+		if (!c) {
+			break;
+		}
+		if (c.hasp && el[c.hasp]) {
+			break;
+		}
+		if (c.nop && !el[c.nop]) {
+			break;
+		}
+		if (c.noa && !el.getAttribute(c.noa)) {
+			break;
+		}
+		if (el == document.body) {
+			el = null;
+			break;
+		}
+		list.add(el);
+		el.style.display = 'none';
+	}
+	for (var i = 0; i < list.length; i++) {
+		var it = list[i];
+		it.style.display = '';
+	}
+	list = null;
 	return el;
 }
 function simulate(element, eventName, pos) {

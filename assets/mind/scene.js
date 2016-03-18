@@ -212,8 +212,8 @@ function initscene(c) {
 
 		this.appendChild(el);
 
-		var na = ebp(a.pos);
-		var nb = ebp(b.pos);
+		var na = ebp(a.pos, { nop: '$evtignore$' });
+		var nb = ebp(b.pos, { nop: '$evtignore$' });
 		var rap = p2e(a.pos, na);
 		var rbp = p2e(b.pos, nb);
 		var pa = na.setlink(rap, path);
