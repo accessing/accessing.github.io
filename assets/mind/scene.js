@@ -111,7 +111,7 @@ function createnode(c) {
 	el.links = [];
 	el.style.left = c.it.rpos[0] - 28 + 'px';
 	el.style.top = c.it.rpos[1] - 16 + 'px';
-	el.style.width = '70px';
+	el.style.width = '50px';
 	el.style.height = '32px';
 	el.setval('Node');
 	return el;
@@ -188,8 +188,7 @@ function initscene(c) {
 			deselected: function() {
 				$(this).removeClass('selected');
 				$(this.$path).attr('class', '');
-			},
-			$: 'Link'
+			}
 		}
 
 		var el = joy.jbuilder(json);
@@ -199,6 +198,7 @@ function initscene(c) {
 		el.dispose = function() {
 			this.$path.dispose();
 		}
+		el.setval('Link');
 		if (isMobile.any()) {
 			el.ontouchend = function(event) {
 				target.selnode(this);

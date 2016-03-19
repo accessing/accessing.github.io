@@ -20,10 +20,23 @@
     margin:-75px 0 0 -200px;
 	left: 50%;
 	top: 50%;
-    border-left:solid 2px silver;
-    border-top:solid 2px silver;
-    border-right:solid 2px gray;
-    border-bottom:solid 2px gray;
+    border-left:solid 1px silver;
+    border-top:solid 1px silver;
+    border-right:solid 1px gray;
+    border-bottom:solid 1px gray;
     background:#E5E8ED;
 	z-index: 999999;
+}
+
+@media (max-width:400px) {
+	.overlaybox {
+		position: fixed;
+		top: 0px;
+		left: 0px;
+		right: 0px;
+		min-height: 150px;
+		border-radius: 0px;
+		margin: 0px;
+	    min-width:initial;
+	}
 }
