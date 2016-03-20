@@ -163,7 +163,7 @@
 	</style>
 
 	<script src="//cdn.mindexpress.cn/assets/common/common.js"></script>
-	<script src="/assets/common/upload.js"></script>
+	<script src="//cdn.mindexpress.cn/assets/common/upload.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/common/debug.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/common/jquery.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/joy/joy.js"></script>
@@ -173,7 +173,7 @@
 	<script src="//cdn.mindexpress.cn/assets/fingers/touch.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/transform/rotator.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/fingers/touchable.js"></script>
-	<script src="/assets/mind/scene.js"></script>
+	<script src="//cdn.mindexpress.cn/assets/mind/scene.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/common/toastr.js"></script>
 	<script>   
 		$(function () {
@@ -196,9 +196,13 @@
 				toastr.info('Loading, please wait ...');
 				get('/mr/load/' + $('#tname').val(), null, function (o) {
 					toastr.clear();
-					toastr.success('Load completed');
-					console.log(o);
-					scene.setval(o);
+					if (o.success) {
+						toastr.success('Load completed');
+						console.log(o);
+						scene.setval(o);
+					} else {
+						toastr.error(o.errormsg);
+					}
 				}, function (e) {
 					toastr.error(e.responseText);
 				});
@@ -207,7 +211,11 @@
 				var json = scene.getval();
 				console.log(json);
 				post('/mr/save', { fname: $('#tname').val(), text: json }, function (o) {
-					toastr.success('Save completed');
+					if (!o.success) {
+						toastr.error(o.errormsg);
+					} else {
+						toastr.success('Save completed');
+					}
 				});
 			});
 
