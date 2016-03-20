@@ -46,6 +46,7 @@ function createnode(c) {
 	var json = {
 		tag: 'div',
 		className: 'node noselect',
+		$id: joy.uid('node'),
 		isnode: true,
 		$: { tag: 'div', $evtignore$:true, className:'content', alias: 'content' },
 		setval: function (data) {
@@ -75,6 +76,10 @@ function createnode(c) {
 		},
 		getval: function () {
 			return this.$data$;
+		},
+		getstate: function() {
+			var rc = { uid:this.$id, val: this.getval(), pos: [parseFloat(this.style.left), parseFloat(this.style.top)], size: [parseFloat(this.style.width), parseFloat(this.style.height)] };
+			return rc;
 		},
 		setlink: function (pos, path) {
 			var p = document.createElement('div');
@@ -109,14 +114,104 @@ function createnode(c) {
 	el.$scene$ = c.scene;
 	el.$assist$ = assist(el);
 	el.links = [];
-	el.style.left = c.it.rpos[0] - 28 + 'px';
-	el.style.top = c.it.rpos[1] - 16 + 'px';
+	var ox = c.it.rpos[0];
+	var oy = c.it.rpos[1];
+	if (!c.isload) {
+		ox -= 28;
+		oy -= 16;
+	}
+	el.style.left = ox + 'px';
+	el.style.top = oy + 'px';
 	el.style.width = '50px';
 	el.style.height = '32px';
 	el.setval('Node');
 	return el;
 }
+function createpath(sp, tp, target) {
+	var mp = [(sp[0] + tp[0]) / 2, (sp[1] + tp[1]) / 2];
+	var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+	path.setAttributeNS(null, 'd', 'M' + sp[0] + ',' + sp[1] + ' L' + tp[0] + ',' + tp[1]);
+	path.setAttributeNS(null, 'class', 'link');
+	path.update = function () {
+		var ta = this.$a;
+		var tb = this.$b;
+		var pa = p2c(ta);
+		var pb = p2c(tb);
+		var sp = p2e(pa, target);
+		var tp = p2e(pb, target);
+		var mp = [(sp[0] + tp[0]) / 2, (sp[1] + tp[1]) / 2]
+		this.setAttributeNS(null, 'd', 'M' + sp[0] + ',' + sp[1] + ' L' + tp[0] + ',' + tp[1]);
+		this.$label.style.left = mp[0] + 'px';
+		this.$label.style.top = mp[1] + 'px';
+	}
+	path.dispose = function () {
+		var a = this.$a;
+		var b = this.$b;
+		var l = this.$label;
+		this.isdisposed = true;
+		destroy(a);
+		destroy(b);
+		destroy(l);
+		destroy(this);
+	}
+	path.getstate = function () {
+		var ia = this.$na.$id;
+		var ib = this.$nb.$id;
 
+		var oa = [parseFloat(this.$a.style.left), parseFloat(this.$a.style.top)];
+		var ob = [parseFloat(this.$b.style.left), parseFloat(this.$b.style.top)];
+
+		var rc = { uid: this.$id, val: this.$label.getval(), pa: oa, pb: ob, ia: ia, ib: ib };
+		return rc;
+	};
+	target.$svg.appendChild(path);
+
+	var json = {
+		tag: 'div',
+		className: 'label',
+		style: {
+			left: mp[0] + 'px',
+			top: mp[1] + 'px'
+		},
+		getval: function () {
+			return this.$data$;
+		},
+		setval: function (data) {
+			this.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+			this.$data$ = data;
+		},
+		islabel: true,
+		selected: function () {
+			$(this).addClass('selected');
+			$(this.$path).attr('class', 'selected');
+		},
+		deselected: function () {
+			$(this).removeClass('selected');
+			$(this.$path).attr('class', '');
+		}
+	}
+
+	var el = joy.jbuilder(json);
+	el.$path = path;
+	el.$assist$ = assist(el);
+	el.$scene$ = target;
+	el.dispose = function () {
+		this.$path.dispose();
+	}
+	el.setval('Link');
+	if (isMobile.any()) {
+		el.ontouchend = function (event) {
+			target.selnode(this);
+		}
+	} else {
+		el.onmouseup = function (event) {
+			target.selnode(this);
+		}
+	}
+	path.$label = el;
+
+	return path;
+}
 function initscene(c) {
 	var snodes = [];
 	var hits = [];
@@ -133,6 +228,35 @@ function initscene(c) {
 	svg.$evtignore$ = true;
 	target.$svg = svg;
 	target.appendChild(svg);
+	target.setlink = function(link) {
+		function getnode(name) {
+			for (var i = 0; i < hnodes.length; i++) {
+				var n = hnodes[i];
+				if (n.$id == name) {
+					return n;
+				}
+			}
+			return null;
+		}
+
+		var ea = getnode(link.ia);
+		var eb = getnode(link.ib);
+		//var oa = 
+		var sp = [parseFloat(ea.style.left) + link.pa[0], parseFloat(ea.style.top) + link.pa[1]];
+		var tp = [parseFloat(eb.style.left) + link.pb[0], parseFloat(eb.style.top) + link.pb[1]];
+		var path = createpath(sp, tp, this);
+
+		path.$na = ea;
+		path.$nb = eb;
+		path.$a = ea.setlink(link.pa, path);
+		path.$b = eb.setlink(link.pb, path);
+		path.$id = link.uid;
+		links.add(path);
+
+		var label = path.$label;
+		label.setval(link.val);
+		this.appendChild(label);
+	};
 	target.addlink = function (a, b) {
 		var sp = p2e(a.pos, target);
 		var tp = p2e(b.pos, target);
@@ -163,6 +287,16 @@ function initscene(c) {
 			destroy(l);
 			destroy(this);
 		}
+		path.getstate = function () {
+			var ia = this.$na.$id;
+			var ib = this.$nb.$id;
+
+			var oa = [parseFloat(this.$a.style.left), parseFloat(this.$a.style.top)];
+			var ob = [parseFloat(this.$b.style.left), parseFloat(this.$b.style.top)];
+
+			var rc = { uid: this.$id, val: this.$label.getval(), pa: oa, pb: ob, ia: ia, ib: ib };
+			return rc;
+		};
 		links.add(path);
 		this.$svg.appendChild(path);
 
@@ -218,10 +352,12 @@ function initscene(c) {
 		var rbp = p2e(b.pos, nb);
 		var pa = na.setlink(rap, path);
 		var pb = nb.setlink(rbp, path);
+		path.$id = joy.uid('path');
 		path.$a = pa;
 		path.$b = pb;
 		path.$na = na;
 		path.$nb = nb;
+		return path.$label;
 	};
 	target.getContainer = function(name) {
 		var container = this['$' + name + '$'];
@@ -267,11 +403,9 @@ function initscene(c) {
 		container.hide();
 	}
 	target.addnode = function (it) {
-		var node = createnode({ it: it, scene: this });
+		var node = createnode({ it: it, scene: this, isload: it.isload });
 		hnodes.add(node);
-		if (hnodes.length > 12) {
-			hnodes.splice(0, 1);
-		}
+
 		this.appendChild(node);
 		touchable(node, {
 			mode: 'zsizing',
@@ -288,6 +422,7 @@ function initscene(c) {
 				}
 			}
 		});
+		return node;
 	};
 
 	target.selnode = function (el) {
@@ -338,6 +473,57 @@ function initscene(c) {
 		}
 		target.hideAssist();
 	};
+
+	target.getval = function () {
+		var d = { size: [parseFloat(this.style.width), parseFloat(this.style.height)], nodes: [], links: [] };
+		for (var i = 0; i < hnodes.length; i++) {
+			var n = hnodes[i];
+			if (!n.isdisposed) {
+				var s = n.getstate();
+				d.nodes.add(s);
+			}
+		}
+		for (var i = 0; i < links.length; i++) {
+			var n = links[i];
+			if (!n.isdisposed) {
+				var s = n.getstate();
+				d.links.add(s);
+			}
+		}
+		var r = JSON.stringify(d);
+		return r;
+	};
+
+	target.setval = function (data) {
+		snodes.clear();
+		for (var i = 0; i < links.length; i++) {
+			var l = links[i];
+			l.dispose();
+		}
+		target.$svg.innerHTML = '';
+		for (var i = 0; i < hnodes.length; i++) {
+			var n = hnodes[i];
+			n.dispose();
+		}
+		hnodes.clear();
+		links.clear();
+		this.appendChild(svg);
+
+		for (var i = 0; i < data.nodes.length; i++) {
+			var n = data.nodes[i];
+			var el = this.addnode({ rpos: n.pos, isload: true });
+			el.$id = n.uid;
+			el.style.width = n.size[0] + 'px';
+			el.style.height = n.size[1] + 'px';
+			el.setval(n.val);
+			this.appendChild(el);
+		}
+		for (var i = 0; i < data.links.length; i++) {
+			var l = data.links[i];
+			this.setlink(l);
+		}
+		touchtarget(this);
+	}
 
 	touchable(target, {
 		rel: target,

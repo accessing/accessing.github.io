@@ -57,20 +57,23 @@
 					var t = typeof (data);
 					var rlt = t == 'string' ? fromJson(data) : data;
 					successcb(rlt);
-					//if ((rlt.error || rlt.IsNoException === false) && errorcb) {
-					//	errorcb(rlt);
-					//} else {
-					//	if (rlt.success === true) {
-					//		successcb(rlt.result);
-					//	} else {
-					//		successcb(rlt);
-					//	}
-					//}
 				}
 			},
-			error: function(data) {
-				if (errorcb) {
-					errorcb(data);
+			error: function (data) {
+				if (data.status == 200 && data.responseText) {
+					console.log('AjaxResume: ' + data.responseText);
+					if (successcb) {
+						var d = data.responseText;
+						if (d.indexOf('{') == 0) {
+							d = fromJson(d);
+						}
+						successcb(d);
+					}
+				} else {
+					console.log('AjaxError: ' + data.responseText);
+					if (errorcb) {
+						errorcb(data);
+					}
 				}
 			}
 		});

@@ -8,6 +8,7 @@
 
 	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/reset.css" type="text/css" />
 	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/overlay.css" type="text/css" />
+	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/toastr.css" type="text/css" />
 
 	<style>
 		div * {
@@ -94,6 +95,10 @@
 			width: 48px;
 			margin-top: -24px;
 		}
+		.assist.left {
+			right: initial;
+			left: 0px;
+		}
 		.assist .btn {
 			font: 10px arial;
 			line-height: 24px;
@@ -149,9 +154,16 @@
 			background: silver;
 			color: black;
 		}
+		.idea-name {
+			padding: 4px;
+		}
+		.idea-name input[type=text] {
+			border-bottom: solid 1px silver;
+		}
 	</style>
 
 	<script src="//cdn.mindexpress.cn/assets/common/common.js"></script>
+	<script src="/assets/common/upload.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/common/debug.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/common/jquery.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/joy/joy.js"></script>
@@ -161,24 +173,57 @@
 	<script src="//cdn.mindexpress.cn/assets/fingers/touch.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/transform/rotator.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/fingers/touchable.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/mind/scene.js"></script>
+	<script src="/assets/mind/scene.js"></script>
+	<script src="//cdn.mindexpress.cn/assets/common/toastr.js"></script>
 	<script>   
 		$(function () {
 			var scene = initscene({ id: 'scene' });
+
 			document.oncontextmenu = function (event) {
 				return false;
 			};
+
 			document.onkeyup = function(event) {
 				if (event.keyCode == 46) {
 					scene.delnode();
 				}
 			}
+
+			window.title = $('#tname').val();
+			document.title = $('#tname').val();
+
+			$('#bload').click(function () {
+				toastr.info('Loading, please wait ...');
+				get('/mr/load/' + $('#tname').val(), null, function (o) {
+					toastr.clear();
+					toastr.success('Load completed');
+					console.log(o);
+					scene.setval(o);
+				}, function (e) {
+					toastr.error(e.responseText);
+				});
+			});
+			$('#bsave').click(function () {
+				var json = scene.getval();
+				console.log(json);
+				post('/mr/save', { fname: $('#tname').val(), text: json }, function (o) {
+					toastr.success('Save completed');
+				});
+			});
+
 		});
 	</script>
 </head>
 <body>
-<img class="brand transparent-35" src="//cdn.mindexpress.cn/assets/mr/res/home_bg.png" />
+<img class="brand transparent-35" src="//cdn.mindexpress.cn/assets/mr/res/home_bg.png"/>
 <div id="scene" class="scene">
+</div>
+<div class="fixed left-top idea-name">
+	<input id="tname" type="text" value="Idea Name" />
+</div>
+<div class="assist left">
+	<div class="btn" id="bload">Load</div>
+	<div class="btn" id="bsave">Save</div>
 </div>
 </body>
 </html>
