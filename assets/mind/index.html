@@ -160,6 +160,10 @@
 		.idea-name input[type=text] {
 			border-bottom: solid 1px silver;
 		}
+
+div.login {
+	padding: 4px;
+}
 	</style>
 
 	<script src="//cdn.mindexpress.cn/assets/common/common.js"></script>
@@ -218,8 +222,37 @@
 					}
 				});
 			});
-
+			checklogin();
 		});
+		function checklogin() {
+			function setinfo(o) {
+				$('#qqinfo').show();
+				$('#qquid').html(o.result.name);
+			}
+			$('#bqqsignin').click(function () {
+				get('://mindexpress.cn/qqlogin/verify', null, function (o) {
+					if (o.success) {
+						setinfo(o);
+					} else {
+						$('#bqqsignin').show();
+					}
+				});
+				$('#bqqsignin').hide();
+			});
+			$('#bqqsignout').click(function () {
+				get('://mindexpress.cn/qqlogin/signout', null, function (o) {
+					$('#qqinfo').hide();
+					$('#bqqsignin').show();
+				});
+			});
+			get('://mindexpress.cn/qqlogin/check', null, function (o) {
+				if (o.success) {
+					setinfo(o);
+				} else {
+					$('#bqqsignin').show();
+				}
+			});
+		}
 	</script>
 </head>
 <body>
@@ -232,6 +265,13 @@
 <div class="assist left">
 	<div class="btn" id="bload">Load</div>
 	<div class="btn" id="bsave">Save</div>
+</div>
+
+<div class="login fixed align-right right-top">
+	<a id="bqqsignin" style="display: none;" href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101288663&redirect_uri=http://mindexpress.cn/qqlogin&scope=get_user_info" target="_blank">
+		<img src="//cdn.mindexpress.cn/assets/account/img/Connect_logo_7.png" />
+	</a>
+	<div id="qqinfo" style="display:none;">Welcome&nbsp;<span id="qquid"></span>&nbsp;&nbsp;<a id="bqqsignout" href="#">Sign Out</a></div>
 </div>
 </body>
 </html>
