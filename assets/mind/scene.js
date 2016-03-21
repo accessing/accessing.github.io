@@ -61,7 +61,6 @@ function createnode(c) {
 
 			var aw = parseFloat(this.astyle(['width']));
 			var ah = parseFloat(this.astyle(['height']));
-
 			if (pw < aw) {
 				this.style.width = aw + 'px';
 			} else {
@@ -404,9 +403,6 @@ function initscene(c) {
 	}
 	target.addnode = function (it) {
 		var node = createnode({ it: it, scene: this, isload: it.isload });
-		hnodes.add(node);
-
-		this.appendChild(node);
 		touchable(node, {
 			mode: 'zsizing',
 			touched: function (it) {
@@ -422,6 +418,11 @@ function initscene(c) {
 				}
 			}
 		});
+		hnodes.add(node);
+
+		this.appendChild(node);
+		
+		
 		return node;
 	};
 

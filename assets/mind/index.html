@@ -197,35 +197,44 @@ div.login {
 			document.title = $('#tname').val();
 
 			$('#bload').click(function () {
-				toastr.info('Loading, please wait ...');
-				get('/mr/load/' + $('#tname').val(), null, function (o) {
-					toastr.clear();
-					if (o.success) {
-						toastr.success('Load completed');
-						console.log(o);
-						scene.setval(o);
-					} else {
-						toastr.error(o.errormsg);
-					}
-				}, function (e) {
-					toastr.error(e.responseText);
-				});
+				if (login) {
+					toastr.info('Loading, please wait ...');
+					get('/mr/load/' + $('#tname').val(), null, function(o) {
+						if (o.success === false) {
+							toastr.error(o.errormsg);
+						} else {
+							toastr.success('Load completed');
+							console.log(o);
+							scene.setval(o);
+						}
+					}, function(e) {
+						toastr.error(e.responseText);
+					});
+				} else {
+					toastr.info('You have not signed in yet, cannot continue');
+				}
 			});
 			$('#bsave').click(function () {
-				var json = scene.getval();
-				console.log(json);
-				post('/mr/save', { fname: $('#tname').val(), text: json }, function (o) {
-					if (!o.success) {
-						toastr.error(o.errormsg);
-					} else {
-						toastr.success('Save completed');
-					}
-				});
+				if (login) {
+					var json = scene.getval();
+					console.log(json);
+					post('/mr/save', { fname: $('#tname').val(), text: json }, function(o) {
+						if (!o.success) {
+							toastr.error(o.errormsg);
+						} else {
+							toastr.success('Save completed');
+						}
+					});
+				} else {
+					toastr.info('You have not signed in yet, cannot continue');
+				}
 			});
 			checklogin();
 		});
+		var login = false;
 		function checklogin() {
 			function setinfo(o) {
+				login = true;
 				$('#qqinfo').show();
 				$('#qquid').html(o.result.name);
 			}
@@ -234,6 +243,7 @@ div.login {
 					if (o.success) {
 						setinfo(o);
 					} else {
+						login = false;
 						$('#bqqsignin').show();
 					}
 				});
@@ -241,6 +251,7 @@ div.login {
 			});
 			$('#bqqsignout').click(function () {
 				get('://mindexpress.cn/qqlogin/signout', null, function (o) {
+					login = false;
 					$('#qqinfo').hide();
 					$('#bqqsignin').show();
 				});
@@ -249,6 +260,7 @@ div.login {
 				if (o.success) {
 					setinfo(o);
 				} else {
+					login = false;
 					$('#bqqsignin').show();
 				}
 			});
