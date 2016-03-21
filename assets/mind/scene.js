@@ -403,6 +403,8 @@ function initscene(c) {
 	}
 	target.addnode = function (it) {
 		var node = createnode({ it: it, scene: this, isload: it.isload });
+		hnodes.add(node);
+		this.appendChild(node);
 		touchable(node, {
 			mode: 'zsizing',
 			touched: function (it) {
@@ -418,11 +420,6 @@ function initscene(c) {
 				}
 			}
 		});
-		hnodes.add(node);
-
-		this.appendChild(node);
-		
-		
 		return node;
 	};
 

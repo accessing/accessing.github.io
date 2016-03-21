@@ -3,8 +3,12 @@
 		var rc = target.getBoundingClientRect();
 		target.style.left = target.astyle(['left']);
 		target.style.top = target.astyle(['top']);
-		target.style.width = target.astyle(['width']);
-		target.style.height = target.astyle(['height']);
+		if (!target.style.width) {
+			target.style.width = target.astyle(['width']);
+		}
+		if (!target.style.height) {
+			target.style.height = target.astyle(['height']);
+		}
 		target.$rot$ = {
 			origin: { center: [rc.width / 2, rc.height / 2], angle: 0, scale: [1, 1], pos: [parseFloat(target.style.left), parseFloat(target.style.top)], sz: [parseFloat(target.style.width), parseFloat(target.style.height)] },
 			cmt: { center: [rc.width / 2, rc.height / 2], angle: 0, scale: [1, 1], pos: [parseFloat(target.style.left), parseFloat(target.style.top)], sz: [parseFloat(target.style.width), parseFloat(target.style.height)] },
