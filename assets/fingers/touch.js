@@ -228,7 +228,7 @@
 			//event.preventDefault();
 			event.stopPropagation();
 			if (isSafari) {
-				event.preventDefault();
+				//event.preventDefault();
 			}
 		};
 		nel.ontouchmove = function (event) {
@@ -248,7 +248,7 @@
 			//event.preventDefault();
 			event.stopPropagation();
 			if (isSafari) {
-				event.preventDefault();
+				//event.preventDefault();
 			}
 		};
 	//}
