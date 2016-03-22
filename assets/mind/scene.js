@@ -1,5 +1,17 @@
 ﻿function assist(el) {
 	return {
+		front: {
+			name: 'Front',
+			cmd: function() {
+				el.$scene$.z(el, true);
+			}
+		},
+		back: {
+			name: 'Back',
+			cmd: function () {
+				el.$scene$.z(el);
+			}
+		},
 		edit: {
 			name: 'Edit',
 			cmd: function () {
@@ -77,7 +89,7 @@ function createnode(c) {
 			return this.$data$;
 		},
 		getstate: function() {
-			var rc = { uid:this.$id, val: this.getval(), pos: [parseFloat(this.style.left), parseFloat(this.style.top)], size: [parseFloat(this.style.width), parseFloat(this.style.height)] };
+			var rc = { uid:this.$id, val: this.getval(), zindex: parseInt(this.style.zIndex), pos: [parseFloat(this.style.left), parseFloat(this.style.top)], size: [parseFloat(this.style.width), parseFloat(this.style.height)] };
 			return rc;
 		},
 		setlink: function (pos, path) {
@@ -160,7 +172,7 @@ function createpath(sp, tp, target) {
 		var oa = [parseFloat(this.$a.style.left), parseFloat(this.$a.style.top)];
 		var ob = [parseFloat(this.$b.style.left), parseFloat(this.$b.style.top)];
 
-		var rc = { uid: this.$id, val: this.$label.getval(), pa: oa, pb: ob, ia: ia, ib: ib };
+		var rc = { uid: this.$id, val: this.$label.getval(), zindex: parseInt(this.$label.style.zIndex), pa: oa, pb: ob, ia: ia, ib: ib };
 		return rc;
 	};
 	target.$svg.appendChild(path);
@@ -521,6 +533,26 @@ function initscene(c) {
 			this.setlink(l);
 		}
 		touchtarget(this);
+	}
+
+	target.z = function (nd, isfront) {
+		var min = 0, max = 0;
+		for (var i = 0; i < hnodes.length; i++) {
+			var item = hnodes[i];
+			var x = parseInt(item.style.zIndex);
+			if (x < min) {
+				min = x;
+			}
+			if (x > max) {
+				max = x;
+			}
+		}
+		if (isfront) {
+			nd.style.zIndex = max + 1;
+		} else {
+			nd.style.zIndex = min - 1;
+		}
+		//nd.setval('index=' + nd.style.zIndex);
 	}
 
 	touchable(target, {

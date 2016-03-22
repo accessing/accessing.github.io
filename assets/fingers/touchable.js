@@ -189,7 +189,6 @@
 						touchtarget(el);
 					}
 				}
-
 			},
 			dbltouched: function (it) {
 				var el = getbypos(it);
