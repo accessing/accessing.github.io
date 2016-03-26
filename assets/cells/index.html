@@ -5,6 +5,7 @@
 	<meta charset="utf-8" />
 	<link rel="shortcut icon" type="image/jpeg" href="//cdn.mindexpress.cn/assets/icons/methane.jpg" media="screen"/>
 	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/reset.css" type="text/css"/>
+	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/cells/cells.css" type="text/css" />
 	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/toastr.css" type="text/css" />
 	<style>
 * {
@@ -55,73 +56,7 @@ button:hover {
 	overflow: auto;
 }
 
-div.boxer {
-	display: table;
-	border: solid 2px #555;
-	border-radius: 0px;
-	padding: 6px;
-	/*border-collapse: collapse;*/
-}
 
-div.boxer .box-row {
-	display: table-row;
-}
-
-div.boxer .box-row .box {
-	display: table-cell;
-	text-align: left;
-	vertical-align: top;
-	border: solid 1px black;
-	cursor: pointer;
-}
-
-div.boxer .box-row .box .vbox {
-	min-width: 24px;
-	min-height: 24px;
-	line-height: 24px;
-	padding:0 4px 0 4px;
-	border: none;
-	white-space: nowrap;
-}
-
-div.boxer .box-row .box .ext {
-	padding: 6px;
-}
-
-div.boxer .box.dirty, div.boxer .box.dirty .box.dirty {
-	border: dashed 1px #555;
-	background-color: #222;
-}
-div.boxer .box.dirty .box{
-	border: solid 1px #222;
-}
-
-div.boxer .box.wall {
-	min-width: 24px;
-}
-
-div.boxer .box-row.head .box, div.boxer .box.wall {
-	border: solid 1px #333;
-	background-color: #222;
-	text-align: center;
-	vert-align: middle;
-}
-
-div.boxer .box:hover, div.boxer .box:hover.highlight {
-	/*border: solid 1px green;*/
-}
-
-div.boxer .box.selected {
-	border: solid 1px #008080;
-}
-
-div.boxer .box.selected > .vbox, div.boxer .box.selected.highlight > .vbox {
-	background-color: #444;
-}
-
-div.boxer .box.highlight {
-	/*border: solid 1px lightblue;*/
-}
 div.login {
 	padding: 4px;
 }

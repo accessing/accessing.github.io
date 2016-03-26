@@ -12,7 +12,7 @@
 .overlaybox{
     position:fixed;
     min-width:400px;
-    min-height:150px;
+    min-height:300px;
     border-radius:12px;
     overflow-x:hidden;
     overflow-y:auto;

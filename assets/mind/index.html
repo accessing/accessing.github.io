@@ -8,162 +8,12 @@
 
 	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/reset.css" type="text/css" />
 	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/overlay.css" type="text/css" />
+	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/mind/mind.css" type="text/css" />
+	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/cells/cells.css" type="text/css" />
 	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/toastr.css" type="text/css" />
 
 	<style>
-		div * {
-			color: white;
-		}
 
-		body {
-			overflow: hidden;
-			background: linear-gradient(#274289, #1e2b51); 
-		}
-
-		img.brand {
-			position: fixed;
-			left: 50%;
-			top: 50%;
-			width: 600px;
-			height: 450px;
-			margin-left: -300px;
-			margin-top: -225px;
-		}
-
-		.scene {
-			position: fixed;
-			cursor: crosshair;
-
-			background: none;
-			border: solid 1px silver;
-			background: none;
-		}
-
-		.scene svg {
-			cursor: crosshair;
-			width: 100%;
-			height: 100%;
-			background: none;
-		}
-
-		.scene svg path {
-			color: silver;
-			stroke: silver;
-			fill: none;
-		}
-
-		.scene svg path.selected {
-			color: white;
-			stroke: white;
-		}
-
-		.scene .node {
-			border-radius: 6px;
-			position: absolute;
-			padding: 0px 8px 0px 8px;
-			text-align: left;
-			background: #d77f3d;
-			border: solid 1px #a52a2a;
-		}
-		.scene .node .content {
-			line-height: 30px;
-		}
-		.scene .node, .scene .node .content {
-			cursor: pointer;
-			color: black;
-		}
-
-
-		.scene .node.selected {
-			border: solid 2px white;
-			line-height: 28px;
-		}
-
-		.scene .label {
-			position: absolute;
-			color: silver;
-			cursor: pointer;
-		}
-
-		.scene .label.selected {
-			color: white;
-		}
-		.assist {
-			position: fixed;
-			right: 0px;
-			top: 50%;
-			width: 48px;
-			margin-top: -24px;
-		}
-		.assist.left {
-			right: initial;
-			left: 0px;
-		}
-		.assist .btn {
-			font: 10px arial;
-			line-height: 24px;
-			color: black;
-			text-align: center;
-			padding: 4px;
-			margin-top: 4px;
-			cursor: pointer;
-
-			border: solid 1px gray;
-			background: silver;
-		}
-		.node-editor {
-			position: absolute;
-			top: 0px;
-			left: 0px;
-			bottom: 0px;
-			right: 0px;
-			padding: 4px;
-		}
-		.node-editor .bclose {
-			position: absolute;
-			right: 4px;
-			top: 4px;
-			width: 24px;
-			height: 24px;
-			border-radius: 12px;
-			font: 12px arial;
-			line-height: 24px;
-			text-align: center;
-			cursor: pointer;
-			border: solid 1px silver;
-			color: silver;
-		}
-		.node-editor .area {
-			position: absolute;
-			top: 12px;
-			left: 12px;
-			right: 12px;
-			height: 80px;
-			padding: 4px;
-			width: 90%;
-			overflow: auto;
-			white-space: pre-line;
-			border-bottom: solid 1px silver;
-		}
-		.node-editor .bsave {
-			position: absolute;
-			bottom: 12px;
-			right: 12px;
-			padding: 4px;
-			border: solid 1px gray;
-			background: silver;
-			color: black;
-		}
-		.idea-name {
-			padding: 4px;
-		}
-		.idea-name input[type=text] {
-			border-bottom: solid 1px silver;
-		}
-
-div.login {
-	padding: 4px;
-}
 	</style>
 
 	<script src="//cdn.mindexpress.cn/assets/common/common.js"></script>
@@ -178,6 +28,7 @@ div.login {
 	<script src="//cdn.mindexpress.cn/assets/transform/rotator.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/fingers/touchable.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/mind/scene.js"></script>
+	<script src="//cdn.mindexpress.cn/assets/cells/cells.js"></script>
 	<script src="//cdn.mindexpress.cn/assets/common/toastr.js"></script>
 	<script>   
 		$(function () {

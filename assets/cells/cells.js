@@ -40,9 +40,11 @@
 				$(el).addClass('highlight');
 			});
 			var v = cell.getval();
-			cfg.editor.setval(v.text == '&nbsp;' ? '' : v.text);
-			cfg.editor.focus();
-			cfg.editor.setSelectionRange(0, cfg.editor.value.length);
+			if (cfg.editor) {
+				cfg.editor.setval(v.text == '&nbsp;' ? '' : v.text);
+				cfg.editor.focus();
+				cfg.editor.setSelectionRange(0, cfg.editor.value.length);
+			}
 			cfg.activetb = cell.$row$.$table$;
 		}
 
@@ -140,7 +142,9 @@
 					}
 				},
 				onclick: function (event) {
-					this.$vbox.activate();
+					if (!cfg.readonly) {
+						this.$vbox.activate();
+					}
 					event.preventDefault();
 					event.stopPropagation();
 					return false;
@@ -156,7 +160,9 @@
 							}
 						},
 						onclick: function (event) {
-							this.activate();
+							if (!cfg.readonly) {
+								this.activate();
+							}
 							event.preventDefault();
 							event.stopPropagation();
 							return false;
@@ -328,7 +334,7 @@
 				}
 				return r;
 			}, setdata: function (data) {
-				if (!data) {
+				if (!data || !data.size) {
 					return;
 				}
 				this.newRow(data.size.rows, data.size.cols);
@@ -546,59 +552,61 @@
 			}
 		};
 
-		var editor = cfg.editor;
-		editor.onkeydown = function (event) {
-			var el = cfg.activetb;
-			if (event.keyCode == 9) {
-				el.setval(this.value);
-				this.value = '';
-				el.moveright();
-				event.preventDefault();
-			} else if (this.value.length < 1 || event.ctrlKey) {
-				if (event.keyCode == 38) {
-					el.moveup();
-					event.preventDefault();
-				} else if (event.keyCode == 40) {
-					el.movebelow();
-					event.preventDefault();
-				} else if (event.keyCode == 37) {
-					el.moveleft();
-					event.preventDefault();
-				} else if (event.keyCode == 39) {
+		if (cfg.editor) {
+			var editor = cfg.editor;
+			editor.onkeydown = function(event) {
+				var el = cfg.activetb;
+				if (event.keyCode == 9) {
+					el.setval(this.value);
+					this.value = '';
 					el.moveright();
 					event.preventDefault();
-				} else if (event.keyCode == 36) {
-					el.moveleft(true);
-					event.preventDefault();
-				} else if (event.keyCode == 35) {
-					el.moveright(true);
-					event.preventDefault();
-				} else if (event.keyCode == 33) {
-					el.moveup(true);
-					event.preventDefault();
-				} else if (event.keyCode == 34) {
-					el.movebelow(true);
-					event.preventDefault();
+				} else if (this.value.length < 1 || event.ctrlKey) {
+					if (event.keyCode == 38) {
+						el.moveup();
+						event.preventDefault();
+					} else if (event.keyCode == 40) {
+						el.movebelow();
+						event.preventDefault();
+					} else if (event.keyCode == 37) {
+						el.moveleft();
+						event.preventDefault();
+					} else if (event.keyCode == 39) {
+						el.moveright();
+						event.preventDefault();
+					} else if (event.keyCode == 36) {
+						el.moveleft(true);
+						event.preventDefault();
+					} else if (event.keyCode == 35) {
+						el.moveright(true);
+						event.preventDefault();
+					} else if (event.keyCode == 33) {
+						el.moveup(true);
+						event.preventDefault();
+					} else if (event.keyCode == 34) {
+						el.movebelow(true);
+						event.preventDefault();
+					}
 				}
-			}
-		};
+			};
 
-		editor.onkeyup = function (event) {
-			var el = cfg.activetb;
-			if (event.keyCode == 27) {
-				this.value = '';
-			} else if (event.keyCode == 13) {
-				el.setval(this.value);
-				this.value = '';
-				el.movebelow();
-			} else {
-				el.setval(this.value);
-			}
-		};
+			editor.onkeyup = function(event) {
+				var el = cfg.activetb;
+				if (event.keyCode == 27) {
+					this.value = '';
+				} else if (event.keyCode == 13) {
+					el.setval(this.value);
+					this.value = '';
+					el.movebelow();
+				} else {
+					el.setval(this.value);
+				}
+			};
 
-		editor.setval = function (text) {
-			this.value = text;
-		};
+			editor.setval = function(text) {
+				this.value = text;
+			};
+		}
 		return el;
 	}
 
@@ -606,12 +614,14 @@
 		var vtb = table(settings);
 		settings.activetb = vtb;
 		var json = d; // || { "size": { "rows": 6, "cols": 12 }, "rows": [{ "index": 0, "cells": [{ "index": 0, "data": { "text": "This is test" } }] }, { "index": 1, "cells": [{ "index": 1, "data": { "text": "Another test", "ext": { "size": { "rows": 3, "cols": 3 }, "rows": [{ "index": 0, "cells": [{ "index": 0, "data": { "text": "Inside the spawn" } }] }, { "index": 1, "cells": [{ "index": 1, "data": { "text": "Middle of spawn" } }] }, { "index": 2, "cells": [{ "index": 2, "data": { "text": "Third spawn", "ext": { "size": { "rows": 3, "cols": 3 }, "rows": [{ "index": 1, "cells": [{ "index": 1, "data": { "text": "Center of third spawn" } }] }] } } }] }] } } }] }] };
-		if (json) {
+		if (json && json.size) {
 			settings.activetb.setdata(json);
 		} else {
-			settings.activetb.newRow(6, 12);
+			settings.activetb.newRow(1, 1);
 		}
-		settings.activetb.select(1, 1);
+		if (!settings.readonly) {
+			settings.activetb.select(0, 0);
+		}
 		settings.scene.append(vtb);
 		return vtb;
 	}

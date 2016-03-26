@@ -18,31 +18,39 @@
 				var json = {
 					tag: 'div',
 					className: 'node-editor',
-					activate: function () {
+					activate: function() {
 						this.$box.focus();
+						this.$box.select();
+						var settings = { activetb: null, editor: this.$box, scene: this.$view };
+						var data = el.$data$;
+						var vtb = newtable(settings, data);
+						this.$cells = vtb;
 					},
 					$: [
 						{
 							tag: 'div',
-							className: 'bclose',
+							className: 'btn bclose',
 							$: 'X',
 							onclick: function(event) {
 								overlay();
 							}
-						}, { tag: 'textarea', className: 'area', alias: 'box', $: el.getval() }, {
+						}, {
+							tag: 'input', className: 'edit', alias: 'box', type:'text'
+						}, { tag: 'div', alias: 'view', className:'view' }, {
 							tag: 'button',
-							className: 'bsave',
+							className: 'btn bsave',
 							$: 'Update',
 							onclick: function(event) {
-								var tb = this.$root.$box;
-								el.setval(tb.value);
+								var cells = this.$root.$cells;
+								var data = cells.getdata();
+								el.setval(data, { type: 'cells' });
 								overlay();
 							},
 						}
 					]
-				}
+				};
 				var editor = joy.jbuilder(json);
-				overlay({ style: { background: '#274289' }, $: editor });
+				overlay({ style: { background: 'black' }, $: editor });
 			}
 		},
 		remove: {
@@ -60,9 +68,29 @@ function createnode(c) {
 		className: 'node noselect',
 		$id: joy.uid('node'),
 		isnode: true,
-		$: { tag: 'div', $evtignore$:true, className:'content', alias: 'content' },
-		setval: function (data) {
-			this.$content.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+		$: { tag: 'div', $evtignore$: true, className: 'content', alias: 'content' },
+		setval: function (data, options) {
+			if (!options) {
+				options = { type: 'text' };
+			}
+			if (!data) {
+				this.$content.innerHTML = '';
+				return;
+			}
+
+			if (options.type == 'text') {
+				this.$content.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+			} else if (options.type == 'cells') {
+				var settings = { scene: this.$content, readonly: true };
+				var vtb = newtable(settings, data);
+				//vtb.setdata(data);
+				this.$content.innerHTML = '';
+				this.$content.appendChild(vtb);
+			} else {
+				console.log('Type unknown: ' + options.type);
+				return;
+			}
+
 			this.$data$ = data;
 
 			var pw = parseFloat(this.astyle(['width']));
