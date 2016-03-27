@@ -546,13 +546,12 @@
 		};
 
 		var el = joy.jbuilder(json);
-		document.onkeyup = function (event) {
-			//console.log(document.activeElement);
+		document.addEventListener('keyup', function(event) {
 			var cell = getactive();
 			if (cell && event.keyCode == 46 && document.activeElement.tagName != 'input') {
 				cell.clear();
 			}
-		};
+		});
 
 		if (cfg.editor) {
 			var editor = cfg.editor;

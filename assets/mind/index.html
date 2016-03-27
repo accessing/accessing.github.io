@@ -65,11 +65,11 @@
 				return false;
 			};
 
-			document.onkeyup = function(event) {
+			document.addEventListener('keyup', function(event) {
 				if (event.keyCode == 46) {
 					scene.delnode();
 				}
-			}
+			});
 
 			$('#bload').click(function () {
 				if (login) {
@@ -111,7 +111,7 @@
 		});
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		var login = true;
+		var login = false;
 		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 		function checklogin() {
