@@ -4,7 +4,6 @@
 			tag: 'div',
 			className: 'node-editor',
 			activate: function () {
-				//debugger;
 				this.$box.focus();
 				this.$box.select();
 				var settings = { activetb: null, editor: this.$box, scene: this.$view };
@@ -29,7 +28,7 @@
 					tag: 'button',
 					className: 'btn bsave',
 					$: 'Update',
-					onclick: function(event) {
+					onclick: function (event) {
 						var cells = this.$root.$cells;
 						var data = cells.getdata();
 						el.setval(data);
@@ -85,7 +84,6 @@
 		edit: {
 			name: 'Edit',
 			cmd: function () {
-				//debugger;
 				var json = editors[el.editor];
 				var editor = joy.jbuilder(json);
 				overlay({ style: { background: 'black' }, $: editor });
@@ -467,6 +465,7 @@ function initscene(c) {
 							$: item.name
 						};
 						var div = joy.jbuilder(json);
+						div.$evtrap$ = true;
 						this.appendChild(div);
 					}
 					$(this).show();
