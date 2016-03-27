@@ -107,9 +107,7 @@ function applycontent(el, data) {
 		el.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
 	} else if (type == 'cells') {
 		var settings = { scene: el, readonly: true };
-		var vtb = newtable(settings, data);
-		el.innerHTML = '';
-		el.appendChild(vtb);
+		newtable(settings, data);
 	} else {
 		console.log('Type unknown: ' + type);
 		return;
@@ -133,12 +131,16 @@ function createnode(c) {
 			this.$data$ = data;
 			var pw = parseFloat(this.astyle(['width']));
 			var ph = parseFloat(this.astyle(['height']));
-
 			this.style.width = '';
 			this.style.height = '';
-
 			var aw = parseFloat(this.astyle(['width']));
 			var ah = parseFloat(this.astyle(['height']));
+			if (isIE) {
+				var rc = this.getBoundingClientRect();
+				if (aw < rc.width) {
+					aw = rc.width;
+				}
+			}
 
 			if (pw < aw) {
 				this.style.width = aw + 'px';

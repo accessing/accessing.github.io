@@ -99,6 +99,7 @@
 					} else {
 						setext.call(this, data);
 					}
+
 				},
 				clear: function () {
 					this.setval('');
@@ -623,7 +624,8 @@
 		if (!settings.readonly) {
 			settings.activetb.select(0, 0);
 		}
-		settings.scene.append(vtb);
+		settings.scene.innerHTML = '';
+		settings.scene.appendChild(vtb);
 		return vtb;
 	}
 
