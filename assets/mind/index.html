@@ -6,32 +6,60 @@
 
 	<title>Idea</title>
 
-	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/reset.css" type="text/css" />
-	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/overlay.css" type="text/css" />
-	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/mind/mind.css" type="text/css" />
-	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/cells/cells.css" type="text/css" />
-	<link rel="stylesheet" href="//cdn.mindexpress.cn/assets/common/toastr.css" type="text/css" />
+	<link  href="/assets/common/reset.css" type="text/css" rel="stylesheet" />
+	<link  href="/assets/common/overlay.css" type="text/css" rel="stylesheet" />
+	<link  href="/assets/mind/mind.css" type="text/css" rel="stylesheet" />
+	<link  href="/assets/cells/cells.css" type="text/css" rel="stylesheet" />
+	<link  href="/assets/common/toastr.css" type="text/css" rel="stylesheet" />
 
-	<style>
-
-	</style>
-
-	<script src="//cdn.mindexpress.cn/assets/common/common.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/common/upload.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/common/debug.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/common/jquery.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/joy/joy.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/joy/joy.dom.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/recognizer.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/touch.parsers.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/touch.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/transform/rotator.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/touchable.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/mind/scene.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/cells/cells.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/common/toastr.js"></script>
+	<script src="/assets/common/common.js"></script>
+	<script src="/assets/common/upload.js"></script>
+	<script src="/assets/common/debug.js"></script>
+	<script src="/assets/common/jquery.js"></script>
+	<script src="/assets/data/watch.js"></script>
+	<script src="/assets/joy/joy.js"></script>
+	<script src="/assets/joy/joy.dom.js"></script>
+	<script src="/assets/fingers/recognizer.js"></script>
+	<script src="/assets/fingers/touch.parsers.js"></script>
+	<script src="/assets/fingers/touch.js"></script>
+	<script src="/assets/transform/rotator.js"></script>
+	<script src="/assets/fingers/touchable.js"></script>
+	<script src="/assets/mind/scene.js"></script>
+	<script src="/assets/cells/cells.js"></script>
+	<script src="/assets/common/toastr.js"></script>
 	<script>   
 		$(function () {
+			var dat = { title: 'Idea' };
+			watch(dat, {
+				name: 'title',
+				init: function (p, c) {
+					function vchange(event) {
+						//console.log(event.keyCode);
+						if (!event.keyCode) {
+							p[c.name] = this.value;
+						} else if (!event.altKey && !event.ctrlKey) {
+							if (event.keyCode >= 33 && event.keyCode <= 40 || event.keyCode == 16) {
+								// do nothing
+							} else if (event.keyCode == 46 || event.keyCode == 8) {
+
+							} else {
+								p[c.name] = this.value;
+							}
+						}
+					}
+
+					var el = document.getElementById('tname');
+					el.onkeyup = vchange;
+					el.onchange = vchange;
+					el.onblur = vchange;
+				}, change: function (model, property, value, origin) {
+					var el = document.getElementById('tname');
+					el.value = value;
+					window.title = value;
+					document.title = value;
+				}
+			})
+
 			var scene = initscene({ id: 'scene' });
 
 			document.oncontextmenu = function (event) {
@@ -43,9 +71,6 @@
 					scene.delnode();
 				}
 			}
-
-			window.title = $('#tname').val();
-			document.title = $('#tname').val();
 
 			$('#bload').click(function () {
 				if (login) {
@@ -82,7 +107,11 @@
 			});
 			checklogin();
 		});
-		var login = false;
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		var login = true;
+		/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		function checklogin() {
 			function setinfo(o) {
 				login = true;

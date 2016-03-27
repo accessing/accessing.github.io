@@ -1,4 +1,74 @@
 ﻿function assist(el) {
+	var editors = {
+		node: {
+			tag: 'div',
+			className: 'node-editor',
+			activate: function () {
+				//debugger;
+				this.$box.focus();
+				this.$box.select();
+				var settings = { activetb: null, editor: this.$box, scene: this.$view };
+				var data = el.$data$;
+				var vtb = newtable(settings, data);
+				this.$cells = vtb;
+			},
+			$: [
+				{
+					tag: 'div',
+					className: 'btn bclose',
+					$: 'X',
+					onclick: function(event) {
+						overlay();
+					}
+				}, {
+					tag: 'input',
+					className: 'edit',
+					alias: 'box',
+					type: 'text'
+				}, { tag: 'div', alias: 'view', className: 'view' }, {
+					tag: 'button',
+					className: 'btn bsave',
+					$: 'Update',
+					onclick: function(event) {
+						var cells = this.$root.$cells;
+						var data = cells.getdata();
+						el.setval(data);
+						overlay();
+					}
+				}
+			]
+		},
+		link: {
+			tag: 'div',
+			className: 'link node-editor',
+			activate: function() {
+				var data = el.$data$;
+				this.$box.value = data;
+				this.$box.focus();
+				this.$box.select();
+			},
+			$: [
+				{
+					tag: 'div',
+					className: 'btn bclose',
+					$: 'X',
+					onclick: function(event) {
+						overlay();
+					}
+				}, { tag: 'div', alias: 'view', className: 'view', $: { tag: 'textarea', className: 'area', alias: 'box' } },
+				{
+					tag: 'button',
+					className: 'btn bsave',
+					$: 'Update',
+					onclick: function(event) {
+						var data = this.$root.$box.value;
+						el.setval(data);
+						overlay();
+					}
+				}
+			]
+		}
+	};
 	return {
 		front: {
 			name: 'Front',
@@ -15,40 +85,8 @@
 		edit: {
 			name: 'Edit',
 			cmd: function () {
-				var json = {
-					tag: 'div',
-					className: 'node-editor',
-					activate: function() {
-						this.$box.focus();
-						this.$box.select();
-						var settings = { activetb: null, editor: this.$box, scene: this.$view };
-						var data = el.$data$;
-						var vtb = newtable(settings, data);
-						this.$cells = vtb;
-					},
-					$: [
-						{
-							tag: 'div',
-							className: 'btn bclose',
-							$: 'X',
-							onclick: function(event) {
-								overlay();
-							}
-						}, {
-							tag: 'input', className: 'edit', alias: 'box', type:'text'
-						}, { tag: 'div', alias: 'view', className:'view' }, {
-							tag: 'button',
-							className: 'btn bsave',
-							$: 'Update',
-							onclick: function(event) {
-								var cells = this.$root.$cells;
-								var data = cells.getdata();
-								el.setval(data, { type: 'cells' });
-								overlay();
-							},
-						}
-					]
-				};
+				//debugger;
+				var json = editors[el.editor];
 				var editor = joy.jbuilder(json);
 				overlay({ style: { background: 'black' }, $: editor });
 			}
@@ -62,6 +100,22 @@
 		}
 	};
 }
+function applycontent(el, data) {
+	var t = typeof (data);
+	var type = data.type || 'text';
+	if (type == 'text') {
+		el.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+	} else if (type == 'cells') {
+		var settings = { scene: el, readonly: true };
+		var vtb = newtable(settings, data);
+		el.innerHTML = '';
+		el.appendChild(vtb);
+	} else {
+		console.log('Type unknown: ' + type);
+		return;
+	}
+
+}
 function createnode(c) {
 	var json = {
 		tag: 'div',
@@ -69,30 +123,14 @@ function createnode(c) {
 		$id: joy.uid('node'),
 		isnode: true,
 		$: { tag: 'div', $evtignore$: true, className: 'content', alias: 'content' },
-		setval: function (data, options) {
-			if (!options) {
-				options = { type: 'text' };
-			}
+		setval: function (data) {
 			if (!data) {
 				this.$content.innerHTML = '';
 				return;
 			}
 
-			if (options.type == 'text') {
-				this.$content.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
-			} else if (options.type == 'cells') {
-				var settings = { scene: this.$content, readonly: true };
-				var vtb = newtable(settings, data);
-				//vtb.setdata(data);
-				this.$content.innerHTML = '';
-				this.$content.appendChild(vtb);
-			} else {
-				console.log('Type unknown: ' + options.type);
-				return;
-			}
-
+			applycontent(this.$content, data);
 			this.$data$ = data;
-
 			var pw = parseFloat(this.astyle(['width']));
 			var ph = parseFloat(this.astyle(['height']));
 
@@ -101,6 +139,7 @@ function createnode(c) {
 
 			var aw = parseFloat(this.astyle(['width']));
 			var ah = parseFloat(this.astyle(['height']));
+
 			if (pw < aw) {
 				this.style.width = aw + 'px';
 			} else {
@@ -117,7 +156,7 @@ function createnode(c) {
 			return this.$data$;
 		},
 		getstate: function() {
-			var rc = { uid:this.$id, val: this.getval(), zindex: parseInt(this.style.zIndex), pos: [parseFloat(this.style.left), parseFloat(this.style.top)], size: [parseFloat(this.style.width), parseFloat(this.style.height)] };
+			var rc = { uid:this.$id, val: this.getval(), editor: this.editor, zindex: parseInt(this.style.zIndex), pos: [parseFloat(this.style.left), parseFloat(this.style.top)], size: [parseFloat(this.style.width), parseFloat(this.style.height)] };
 			return rc;
 		},
 		setlink: function (pos, path) {
@@ -152,6 +191,7 @@ function createnode(c) {
 	var el = joy.jbuilder(json);
 	el.$scene$ = c.scene;
 	el.$assist$ = assist(el);
+	el.editor = 'node';
 	el.links = [];
 	var ox = c.it.rpos[0];
 	var oy = c.it.rpos[1];
@@ -200,7 +240,7 @@ function createpath(sp, tp, target) {
 		var oa = [parseFloat(this.$a.style.left), parseFloat(this.$a.style.top)];
 		var ob = [parseFloat(this.$b.style.left), parseFloat(this.$b.style.top)];
 
-		var rc = { uid: this.$id, val: this.$label.getval(), zindex: parseInt(this.$label.style.zIndex), pa: oa, pb: ob, ia: ia, ib: ib };
+		var rc = { uid: this.$id, editor: this.$label.editor, val: this.$label.getval(), zindex: parseInt(this.$label.style.zIndex), pa: oa, pb: ob, ia: ia, ib: ib };
 		return rc;
 	};
 	target.$svg.appendChild(path);
@@ -293,6 +333,7 @@ function initscene(c) {
 		links.add(path);
 
 		var label = path.$label;
+		label.editor = link.editor;
 		label.setval(link.val);
 		this.appendChild(label);
 	};
@@ -368,6 +409,7 @@ function initscene(c) {
 		el.$path = path;
 		el.$assist$ = assist(el);
 		el.$scene$ = target;
+		el.editor = 'link';
 		el.dispose = function() {
 			this.$path.dispose();
 		}
@@ -545,15 +587,16 @@ function initscene(c) {
 		}
 		hnodes.clear();
 		links.clear();
-		this.appendChild(svg);
+		//this.appendChild(svg);
 
 		for (var i = 0; i < data.nodes.length; i++) {
 			var n = data.nodes[i];
 			var el = this.addnode({ rpos: n.pos, isload: true });
 			el.$id = n.uid;
+			el.editor = n.editor;
 			el.style.width = n.size[0] + 'px';
 			el.style.height = n.size[1] + 'px';
-			el.setval(n.val);
+			el.setval(n.val, { type: n.type });
 			this.appendChild(el);
 		}
 		for (var i = 0; i < data.links.length; i++) {

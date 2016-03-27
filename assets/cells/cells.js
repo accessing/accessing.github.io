@@ -316,6 +316,7 @@
 				return rows;
 			}, getdata: function () {
 				var r = {
+					type:'cells',
 					size: { rows: 0, cols: 0 },
 					rows: []
 				};
