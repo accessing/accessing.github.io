@@ -151,6 +151,7 @@
 		if (!cfg) {
 			cfg = { rel: document.body };
 		}
+		target.$evtrap$ = true;
 		Rotator(target);
 		target.$rel$ = cfg.rel;
 		target.$tcfg$ = cfg;
@@ -221,7 +222,7 @@
 		var el = null;
 		while (true) {
 			el = document.elementFromPoint(it.pos[0], it.pos[1]);
-			if (el.$evtignore$) {
+			if (el.$evtignore$ || !el.$evtrap$) {
 				list.add(el);
 				$(el).hide();
 			} else {

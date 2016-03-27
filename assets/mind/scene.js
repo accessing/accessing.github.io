@@ -333,6 +333,8 @@ function initscene(c) {
 		links.add(path);
 
 		var label = path.$label;
+		label.$evtrap$ = true;
+		label.style.zIndex = link.zindex;
 		label.editor = link.editor;
 		label.setval(link.val);
 		this.appendChild(label);
@@ -374,7 +376,7 @@ function initscene(c) {
 			var oa = [parseFloat(this.$a.style.left), parseFloat(this.$a.style.top)];
 			var ob = [parseFloat(this.$b.style.left), parseFloat(this.$b.style.top)];
 
-			var rc = { uid: this.$id, val: this.$label.getval(), pa: oa, pb: ob, ia: ia, ib: ib };
+			var rc = { uid: this.$id, editor: this.$label.editor, zindex: parseInt(this.$label.style.zIndex), val: this.$label.getval(), pa: oa, pb: ob, ia: ia, ib: ib };
 			return rc;
 		};
 		links.add(path);
@@ -408,6 +410,7 @@ function initscene(c) {
 		var el = joy.jbuilder(json);
 		el.$path = path;
 		el.$assist$ = assist(el);
+		el.$evtrap$ = true;
 		el.$scene$ = target;
 		el.editor = 'link';
 		el.dispose = function() {
@@ -470,6 +473,7 @@ function initscene(c) {
 				}
 			}
 			container = joy.jbuilder(json);
+			container.$evtrap$ = true;
 			document.body.appendChild(container);
 			this.$assist$ = container;
 		}
@@ -596,6 +600,7 @@ function initscene(c) {
 			el.editor = n.editor;
 			el.style.width = n.size[0] + 'px';
 			el.style.height = n.size[1] + 'px';
+			el.style.zIndex = n.zindex;
 			el.setval(n.val, { type: n.type });
 			this.appendChild(el);
 		}

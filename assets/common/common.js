@@ -365,6 +365,7 @@ function overlay(c) {
 
 	if (!el) {
 		el = document.createElement('div');
+		el.$evtrap$ = true;
 		el.className = 'overlay';
 		oel = document.createElement('div');
 		oel.className = 'overlaybox';
