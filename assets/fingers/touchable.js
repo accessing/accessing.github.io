@@ -222,7 +222,7 @@
 		var el = null;
 		while (true) {
 			el = document.elementFromPoint(it.pos[0], it.pos[1]);
-			if (el.$evtignore$ || !el.$evtrap$) {
+			if (el.$evtignore$ || (!el.$evtrap$ && !el.getAttribute('evtrap'))) {
 				list.add(el);
 				$(el).hide();
 			} else {
