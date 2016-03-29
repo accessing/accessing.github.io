@@ -430,8 +430,8 @@ function initscene(c) {
 
 		this.appendChild(el);
 
-		var na = ebp(a.pos, { hasp: '$evtrap$' });
-		var nb = ebp(b.pos, { hasp: '$evtrap$' });
+		var na = ebp(a.pos, { hasp: '$evtrap$', hasa: 'evtrap' });
+		var nb = ebp(b.pos, { hasp: '$evtrap$', hasa: 'evtrap' });
 		var rap = p2e(a.pos, na);
 		var rbp = p2e(b.pos, nb);
 		var pa = na.setlink(rap, path);

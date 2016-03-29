@@ -453,6 +453,9 @@ function ebp(pos, c) {
 		if (c.hasp && el[c.hasp]) {
 			break;
 		}
+		if (c.hasa && el.getAttribute(c.hasa)) {
+			break;
+		}
 		if (c.nop && !el[c.nop]) {
 			break;
 		}
