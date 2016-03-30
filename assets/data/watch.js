@@ -33,9 +33,10 @@
 		watchlist[watchlist.length] = h;
 		return h;
 	}
+
 	function getforward(c) {
 		var el = null;
-		if (c.forward) {
+		if (c && c.forward) {
 			var t = typeof (c.forward);
 			if (t == 'string') {
 				el = document.getElementById(c.forward);
@@ -47,6 +48,7 @@
 		}
 		return el;
 	}
+
 	var dhandler = {
 		typechange: function (p, c) {
 			function evtchange(event) {
@@ -72,33 +74,33 @@
 			}
 		}, attrchange: function (p, c) {
 			// select the target node
-			var target = getforward(c);
+			var args = (c && c.args) ? c.args.init : {};
+			var target = getforward(args);
 			if (target) {
-				var args = c.args ? c.args.init : null;
-				if (args) {
+				if (args.forward) {
 					target.addEventListener(args.evt, function (event) {
 						this.setAttribute(args.prop, this[args.prop]);
-						//console.log(this.value);
 					});
+					// create an observer instance
+					var observer = new MutationObserver(function (mutations) {
+						mutations.forEach(function (mutation) {
+							if (mutation.type == 'attributes') {
+								var target = mutation.target;
+								p[c.name] = target.getAttribute(mutation.attributeName);
+							}
+						});
+					});
+
+					// configuration of the observer:
+					var config = { attributes: true, childList: true, characterData: true };
+
+					target.setAttribute(args.prop, p[c.name]);
+					// pass in the target node, as well as the observer options
+					observer.observe(target, config);
+
+					// later, you can stop observing
+					//observer.disconnect();
 				}
-				// create an observer instance
-				var observer = new MutationObserver(function (mutations) {
-					mutations.forEach(function (mutation) {
-						if (mutation.type == 'attributes') {
-							var target = mutation.target;
-							p[c.name] = target.getAttribute(mutation.attributeName);
-						}
-					});
-				});
-
-				// configuration of the observer:
-				var config = { attributes: true, childList: true, characterData: true };
-
-				// pass in the target node, as well as the observer options
-				observer.observe(target, config);
-
-				// later, you can stop observing
-				//observer.disconnect();
 			} else {
 				console.log('Forward target missing');
 			}

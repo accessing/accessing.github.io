@@ -32,6 +32,7 @@
 			watch(dat, {
 				name: 'title',
 				init: 'attrchange',
+				args: { init: { forward:'tname', evt: 'input', prop: 'value' } },
 				change: function (model, property, value, origin) {
 					var el = document.getElementById('tname');
 					el.value = value;
