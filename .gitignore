@@ -3,3 +3,4 @@ obj
 bin
 *.user
 assets/cells/temp.txt
+.svn
