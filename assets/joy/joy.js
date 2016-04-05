@@ -31,8 +31,9 @@
 			var r = List();
 			r.$isdoms$ = true;
 			for (var i = 0; i < json.length; i++) {
-				var jitem = json[i];
-				var ri = jbuilder(jitem, c, cs);
+			    var jitem = json[i];
+			    debugger;   //jbuilder(jitem, c, cs);
+				var ri = jbuilder(jitem, cs, c);
 				r.add(ri);
 			}
 			return r;

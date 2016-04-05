@@ -117,6 +117,9 @@ function createnode(c) {
 		tag: 'div',
 		className: 'node noselect',
 		$id: joy.uid('node'),
+		$scene$: c.scene,
+		editor: 'node',
+        links: [],
 		isnode: true,
 		$: { tag: 'div', $evtignore$: true, className: 'content', alias: 'content' },
 		setval: function (data) {
@@ -188,11 +191,13 @@ function createnode(c) {
 			$(this).removeClass('selected');
 		}
 	};
+
 	var el = joy.jbuilder(json);
-	el.$scene$ = c.scene;
+	//el.$scene$ = c.scene;
 	el.$assist$ = assist(el);
-	el.editor = 'node';
-	el.links = [];
+	//el.editor = 'node';
+    //el.links = [];
+
 	var ox = c.it.rpos[0];
 	var oy = c.it.rpos[1];
 	if (!c.isload) {
@@ -207,7 +212,14 @@ function createnode(c) {
 	return el;
 }
 function createpath(sp, tp, target) {
-	var mp = [(sp[0] + tp[0]) / 2, (sp[1] + tp[1]) / 2];
+    var mp = [(sp[0] + tp[0]) / 2, (sp[1] + tp[1]) / 2];
+    var svg = {
+        svg: 'path',
+        d: 'M' + sp[0] + ',' + sp[1] + ' L' + tp[0] + ',' + tp[1],
+        className: 'link'
+    };
+
+    //var path = joy.jbuilder(svg);
 	var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 	path.setAttributeNS(null, 'd', 'M' + sp[0] + ',' + sp[1] + ' L' + tp[0] + ',' + tp[1]);
 	path.setAttributeNS(null, 'class', 'link');
