@@ -176,8 +176,8 @@
         	if (this[n]) {
         		el = this[n](j, c);
         	} else {
-        		el = this.createEl(n);
-        		joy.extend(el, j, { setAttr: htmlSetAttr });
+        	    el = this.createEl(n);
+        		joy.extend(el, j, { setAttr: htmlSetAttr, excludes: { } });
         	}
         	return el;
         }

@@ -77,7 +77,7 @@
 			color: white;
 		}
 
-		.node div.boxer, .node div.boxer div.box, .node div.boxer .box.dirty, .node div.boxer .box .vbox {
+		.node div.boxer, .node div.boxer div.box, .node div.boxer .box.dirty {
 			border: none;
 			background-color: transparent;
 			color: black;
@@ -106,6 +106,7 @@
 			border: solid 1px gray;
 			background: silver;
 		}
+
 		.node-editor {
 			position: absolute;
 			top: 0px;
@@ -114,6 +115,24 @@
 			right: 0px;
 			padding: 4px;
 		}
+        .node-editor .cmdbar{
+            height:48px;
+            width:100%;
+        }
+        .node-editor .cmdbar .btn{
+            float:left;
+			font: 10px arial;
+			line-height: 24px;
+			color: black;
+			text-align: center;
+			padding: 4px 8px 4px 8px;
+			margin: 4px 4px 4px 0px;
+			cursor: pointer;
+
+			border: solid 1px gray;
+            border-radius:0px;
+			background: silver;
+        }
 		.node-editor .edit {
 			position: absolute;
 			top: 12px;

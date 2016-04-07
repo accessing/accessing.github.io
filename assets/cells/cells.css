@@ -65,3 +65,9 @@ div.boxer .box.selected > .vbox, div.boxer .box.selected.highlight > .vbox {
 div.boxer .box.highlight {
 	/*border: solid 1px lightblue;*/
 }
+
+.node div.boxer *, .node div.boxer .box *, .node div.boxer .box.dirty *{
+    border: none !important;
+    background-color: transparent !important;
+    color: black !important;
+}

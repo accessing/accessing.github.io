@@ -8,7 +8,7 @@
 				this.$box.select();
 				var settings = { activetb: null, editor: this.$box, scene: this.$view };
 				var data = el.$data$;
-				var vtb = newtable(settings, data);
+				var vtb = newtable(settings, data, { showeditor: true });
 				this.$cells = vtb;
 			},
 			$: [
@@ -29,7 +29,7 @@
 					className: 'btn bsave',
 					$: 'Update',
 					onclick: function (event) {
-						var cells = this.$root.$cells;
+						var cells = this.$root.$cells.$table$;
 						var data = cells.getdata();
 						el.setval(data);
 						overlay();
@@ -113,90 +113,87 @@ function applycontent(el, data) {
 
 }
 function createnode(c) {
-	var json = {
-		tag: 'div',
-		className: 'node noselect',
-		$id: joy.uid('node'),
-		$scene$: c.scene,
-		editor: 'node',
-        links: [],
-		isnode: true,
-		$: { tag: 'div', $evtignore$: true, className: 'content', alias: 'content' },
-		setval: function (data) {
-			if (!data) {
-				this.$content.innerHTML = '';
-				return;
-			}
+    var json = {
+        tag: 'div',
+        className: 'node noselect',
+        $id: joy.uid('node'),
+        isnode: true,
+        $: { tag: 'div', $evtignore$: true, className: 'content', alias: 'content' },
+        setval: function (data) {
+            if (!data) {
+                this.$content.innerHTML = '';
+                return;
+            }
 
-			applycontent(this.$content, data);
-			this.$data$ = data;
-			var pw = parseFloat(this.astyle(['width']));
-			var ph = parseFloat(this.astyle(['height']));
-			this.style.width = '';
-			this.style.height = '';
-			var aw = parseFloat(this.astyle(['width']));
-			var ah = parseFloat(this.astyle(['height']));
-			if (isIE) {
-				var rc = this.getBoundingClientRect();
-				if (aw < rc.width) {
-					aw = rc.width;
-				}
-			}
+            applycontent(this.$content, data);
+            this.$data$ = data;
+            var pw = parseFloat(this.astyle(['width']));
+            var ph = parseFloat(this.astyle(['height']));
+            this.style.width = '';
+            this.style.height = '';
+            var aw = parseFloat(this.astyle(['width']));
+            var ah = parseFloat(this.astyle(['height']));
+            if (isIE) {
+                var rc = this.getBoundingClientRect();
+                if (aw < rc.width) {
+                    aw = rc.width;
+                }
+            }
 
-			if (pw < aw) {
-				this.style.width = aw + 'px';
-			} else {
-				this.style.width = pw + 'px';
-			}
+            if (pw < aw) {
+                this.style.width = aw + 'px';
+            } else {
+                this.style.width = pw + 'px';
+            }
 
-			if (ph < ah) {
-				this.style.height = ah + 'px';
-			} else {
-				this.style.height = ph + 'px';
-			}
-		},
-		getval: function () {
-			return this.$data$;
-		},
-		getstate: function() {
-			var rc = { uid:this.$id, val: this.getval(), editor: this.editor, zindex: parseInt(this.style.zIndex), pos: [parseFloat(this.style.left), parseFloat(this.style.top)], size: [parseFloat(this.style.width), parseFloat(this.style.height)] };
-			return rc;
-		},
-		setlink: function (pos, path) {
-			var p = document.createElement('div');
-			p.style.width = '0px';
-			p.style.height = '0px';
-			p.style.background = 'red';
-			p.style.position = 'absolute';
-			p.style.left = pos[0] + 'px';
-			p.style.top = pos[1] + 'px';
-			p.$evtignore$ = true;
-			this.appendChild(p);
-			this.links.add(path);
-			return p;
-		}, zchange: function (it) {
-			for (var i = 0; i < this.links.length; i++) {
-				this.links[i].update();
-			}
-		}, dispose: function () {
-			for (var i = 0; i < this.links.length; i++) {
-				var l = this.links[i];
-				l.dispose();
-			}
-			this.isdisposed = true;
-			destroy(this);
-		}, selected: function() {
-			$(this).addClass('selected');
-		}, deselected: function() {
-			$(this).removeClass('selected');
-		}
-	};
+            if (ph < ah) {
+                this.style.height = ah + 'px';
+            } else {
+                this.style.height = ph + 'px';
+            }
+        },
+        getval: function () {
+            return this.$data$;
+        },
+        getstate: function () {
+            var rc = { uid: this.$id, val: this.getval(), editor: this.editor, zindex: parseInt(this.style.zIndex), pos: [parseFloat(this.style.left), parseFloat(this.style.top)], size: [parseFloat(this.style.width), parseFloat(this.style.height)] };
+            return rc;
+        },
+        setlink: function (pos, path) {
+            var p = document.createElement('div');
+            p.style.width = '0px';
+            p.style.height = '0px';
+            p.style.background = 'red';
+            p.style.position = 'absolute';
+            p.style.left = pos[0] + 'px';
+            p.style.top = pos[1] + 'px';
+            p.$evtignore$ = true;
+            this.appendChild(p);
+            this.links.add(path);
+            return p;
+        }, zchange: function (it) {
+            for (var i = 0; i < this.links.length; i++) {
+                this.links[i].update();
+            }
+        }, dispose: function () {
+            for (var i = 0; i < this.links.length; i++) {
+                var l = this.links[i];
+                l.dispose();
+            }
+            this.isdisposed = true;
+            destroy(this);
+        }, selected: function () {
+            $(this).addClass('selected');
+        }, deselected: function () {
+            $(this).removeClass('selected');
+        }
+    };
 
-	var el = joy.jbuilder(json);
-	//el.$scene$ = c.scene;
+    var el = joy.jbuilder(json);
+	el.$scene$ = c.scene;
 	el.$assist$ = assist(el);
-	//el.editor = 'node';
-    //el.links = [];
+	el.editor = 'node';
+    el.links = [];
 
 	var ox = c.it.rpos[0];
 	var oy = c.it.rpos[1];

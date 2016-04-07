@@ -260,7 +260,7 @@
 	//      excludes: { xxx: true } // exclude the xxx field
 	//  }
 	function merge(o, c, ec, eid, cfg) {
-		if (!o) {
+		if (!o || c.nodeName || c.tagName) {
 			//debugger;
 			return;
 		}
@@ -292,7 +292,7 @@
 						// Call objmerge
 						ec(o, c, i, eid, cfg);
 					} else {
-						if (cfg && cfg.setAttr && typeof (c[i]) != 'function' && typeof (c[i]) != 'boolean') {
+					    if (cfg && cfg.setAttr && typeof (c[i]) != 'function' && typeof (c[i]) != 'boolean' && typeof (c[i]) != 'object') {
 							cfg.setAttr(o, i, c[i]);
 						} else {
 							o[i] = c[i];
@@ -300,6 +300,7 @@
 					}
 				} catch (e) {
 					console.log(i);
+					console.log(e);
 					debugger;
 				}
 			}
@@ -334,6 +335,9 @@
 	//      excludes: { xxx: true } // exclude the xxx field
 	//  }
 	function objmerge(o, c, i, eid, cfg) {
+	    if (c.tagName || c.nodeName) {
+	        return;
+	    }
 		if (i) {
 			if (!o[i]) {
 				o[i] = {};

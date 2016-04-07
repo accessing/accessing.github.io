@@ -610,10 +610,65 @@
 		}
 		return el;
 	}
-
-	function newtable(settings, d) {
+	function tableditor(settings) {
+	    if (!settings) {
+	        return null;
+	    }
+	    var json = {
+	        tag: 'div',
+	        className: 'cells-container',
+	        $: [
+                {
+                    tag: 'div', alias: 'cmdbar', className: 'cmdbar', setcmd: function (settings, data) {
+                        var json = {
+                            tag: 'div',
+                            className: 'btn',
+                            setval: function (val) {
+                                this.innerHTML = val.name;
+                                this.onclick = function (event) {
+                                    val.cmd(settings.activetb);
+                                }
+                            }
+                        };
+                        this.innerHTML = '';
+                        for (var i = 0; i < data.length; i++) {
+                            var item = data[i];
+                            var btn = joy.jbuilder(json);
+                            btn.setval(item);
+                            this.appendChild(btn);
+                        }
+                    }
+                },
+                { tag: 'div', alias: 'area', className: 'area' }
+	        ]
+	    };
+	    var el = joy.jbuilder(json);
+	    el.$table$ = settings.activetb;
+	    el.$cmdbar.setcmd(settings, [
+            { name: '+Row', cmd: function (tb) { tb.addabove(); } },
+            { name: 'Row+', cmd: function (tb) { tb.addbelow(); } },
+            { name: '+Col', cmd: function (tb) { tb.addleft(); } },
+            { name: 'Col+', cmd: function (tb) { tb.addright(); } },
+            {
+                name: 'Split', cmd: function (tb) {
+                    var cell = tb.select();
+                    var tbl = cell.spawn();
+                    settings.activetb = tbl;
+                }
+            },
+            { name: '-Row', cmd: function (tb) { tb.delrow(); } },
+            { name: '-Col', cmd: function (tb) { tb.delcol(); } },
+	    ])
+	    el.$area.appendChild(settings.activetb);
+	    return el;
+	}
+	function newtable(settings, d, c) {
+	    if (!c) {
+	        c = {};
+	    }
 		var vtb = table(settings);
 		settings.activetb = vtb;
+
 		var json = d; // || { "size": { "rows": 6, "cols": 12 }, "rows": [{ "index": 0, "cells": [{ "index": 0, "data": { "text": "This is test" } }] }, { "index": 1, "cells": [{ "index": 1, "data": { "text": "Another test", "ext": { "size": { "rows": 3, "cols": 3 }, "rows": [{ "index": 0, "cells": [{ "index": 0, "data": { "text": "Inside the spawn" } }] }, { "index": 1, "cells": [{ "index": 1, "data": { "text": "Middle of spawn" } }] }, { "index": 2, "cells": [{ "index": 2, "data": { "text": "Third spawn", "ext": { "size": { "rows": 3, "cols": 3 }, "rows": [{ "index": 1, "cells": [{ "index": 1, "data": { "text": "Center of third spawn" } }] }] } } }] }] } } }] }] };
 		if (json && json.size) {
 			settings.activetb.setdata(json);
@@ -624,8 +679,14 @@
 			settings.activetb.select(0, 0);
 		}
 		settings.scene.innerHTML = '';
-		settings.scene.appendChild(vtb);
-		return vtb;
+		if (c.showeditor) {
+		    var editor = tableditor(settings);
+		    settings.scene.appendChild(editor);
+		    return editor;
+		} else {
+		    settings.scene.appendChild(vtb);
+		    return vtb;
+		}
 	}
 
 	window.table = table;
