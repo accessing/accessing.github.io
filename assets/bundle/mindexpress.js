@@ -14142,10 +14142,12 @@ function createpath(sp, tp, target) {
 		delete this.$assist$;
 		delete this.$scene$;
 		delete this.$na;
-		delete this.$nb;
+		delete this.$nb;			  
 		var a = this.$a;
 		var b = this.$b;
 		var l = this.$label;
+		delete l.$scene$;
+		delete l.$assist$;
 		this.isdisposed = true;
 		destroy(a);
 		destroy(b);
