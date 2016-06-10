@@ -236,7 +236,8 @@ function createpath(sp, tp, target) {
 		this.$label.style.top = mp[1] + 'px';
 	}
 	path.dispose = function () {
-		debugger;
+		delete this.$assist$;
+		delete this.$scene$;
 		delete this.$na;
 		delete this.$nb;
 		var a = this.$a;
@@ -375,8 +376,8 @@ function initscene(c) {
 			this.$label.style.top = mp[1] + 'px';
 		}
 		path.dispose = function () {
-			debugger;
-
+			delete this.$assist$;
+			delete this.$scene$;
 			delete this.$na;
 			delete this.$nb;
 			var a = this.$a;
