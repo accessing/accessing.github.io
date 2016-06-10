@@ -1,4 +1,45 @@
-﻿// Opera 8.0+
+﻿
+Element.prototype.astyle = function actualStyle(props) {
+	var el = this;
+	var compStyle = window.getComputedStyle(el, null);
+	for (var i = 0; i < props.length; i++) {
+		var style = compStyle[props[i]];
+		if (style != null) {
+			return style;
+		}
+	}
+	return null;
+};
+
+function destroy(element) {
+	if (element.dispose && !element.$disposing$) {
+		element.$disposing$ = true;
+		element.dispose();
+	}
+	var destroyer = document.body.$destroyer$;
+	if (!destroyer) {
+		destroyer = document.createElement('div');
+		document.body.$destroyer$ = destroyer;
+	}
+	destroyer.appendChild(element);
+	element.destroying = true;
+	for (var i in element) {
+		if (i.startsWith('$', 0) && i.indexOf('$root') < 0 && i.indexOf('$parent') < 0 && i.indexOf('$group') < 0) {
+			console.log('Disposing:' + i);
+			var item = element[i];
+			if (item && item.tagName) {
+				var ch = element[i];
+				if (!ch.destroying) {
+					destroy(ch);
+				}
+			}
+			delete item;
+		}
+	}
+	element.destroying = false;
+	destroyer.innerHTML = '';
+}
+// Opera 8.0+
 var isOpera = (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0;
 // Firefox 1.0+
 var isFirefox = typeof InstallTrigger !== 'undefined';
@@ -12,7 +53,6 @@ var isEdge = !isIE && !!window.StyleMedia;
 var isChrome = !!window.chrome && !!window.chrome.webstore;
 // Blink engine detection
 var isBlink = (isChrome || isOpera) && !!window.CSS;
-
 var isMobile = {
 	Android: function () {
 		var r = navigator.userAgent.match(/Android/i);
@@ -53,7 +93,6 @@ var isMobile = {
 		return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
 	}
 };
-
 String.prototype.format = function () {
 	var args = arguments;
 	var s = this;
@@ -128,18 +167,6 @@ Date.prototype.pattern = function (fmt) {
 	return fmt;
 };
 
-Element.prototype.astyle = function actualStyle(props) {
-	var el = this;
-	var compStyle = window.getComputedStyle(el, null);
-	for (var i = 0; i < props.length; i++) {
-		var style = compStyle[props[i]];
-		if (style != null) {
-			return style;
-		}
-	}
-	return null;
-};
-
 Date.prototype.diff = function (d) {
 	var t = d || new Date();
 	var s = this;
@@ -206,13 +233,6 @@ function List(destroyer) {
 	return a;
 }
 
-function destroy(el) {
-	var div = document.body.$destroyer$ || document.createElement('div');
-	div.appendChild(el);
-	div.innerHTML = '';
-	document.body.$destroyer$ = div;
-}
-
 function Dict(destroyer) {
 	var o = {};
 	o.exist = function (key) {
@@ -249,172 +269,6 @@ function attr(el, name, val) {
 	}
 }
 
-function rs(el, prop) {
-	if (document.defaultView && document.defaultView.getComputedStyle) {
-		return document.defaultView.getComputedStyle(el, null)[prop];
-	} else if (el.currentStyle) {
-		return el.currentStyle[prop];
-	} else {
-		return el.style[prop];
-	}
-}
-
-(function () {
-	var topindex = 0;
-	window.nextdepth = function () {
-		return ++topindex;
-	};
-
-	function initel(element) {
-		element.style.zIndex = nextdepth();
-		element.depth = function () {
-			var el = this;
-			try {
-				var z = rs(el, 'z-index');
-				if (isNaN(z)) {
-					return depth(el.parentNode);
-				}
-				console.log(el.tagName);
-				return parseInt(z);
-			} catch (e) {
-				console.log(e);
-				return -1;
-			}
-		}
-	}
-
-	function initdepth(el) {
-		if (!el) {
-			el = document;
-		}
-		initel(el);
-		var all = el.getElementsByTagName('*');
-		for (var i = 0; i < all.length; i++) {
-			var element = all[i];
-			initel(element);
-		}
-	}
-
-	function depth(el) {
-		initdepth(el);
-	}
-
-	window.depth = depth;
-})();
-
-function rc(o, rel) {
-	if (!o) {
-		console.log('Null reference (rect)');
-		return {};
-	}
-
-	if (o.getBoundingClientRect) {
-		var r = o.getBoundingClientRect();
-		var rr = { top: r.top, left: r.left, bottom: r.bottom, right: r.right, width: r.right - r.left, height: r.bottom - r.top, depth: depth(o) };
-		if (rel) {
-			var rrr = rel;
-			if (rel.getBoundingClientRect) {
-				rrr = rel.getBoundingClientRect();
-			}
-			rr.top -= rrr.top;
-			rr.left -= rrr.left;
-		}
-		rr.point2in = function (pos) {
-			var x = pos[0];
-			var y = pos[1];
-			if (x < this.left || y < this.top || x > this.right || y > this.bottom) {
-				return false;
-			}
-			return true;
-		};
-		return rr;
-	}
-	console.log('getBoundingClientRect missing');
-	return {};
-}
-
-function within(q, target, act) {
-	if (q && q.length > 0) {
-		var tcs = q[q.length - 1];
-		if (tcs.length > 0) {
-			for (var i = 0; i < tcs.length; i++) {
-				var ei = tcs[i];
-				return ei.act == act && document.elementFromPoint(ei.pos[0], ei.pos[1]) == target;
-			}
-		}
-	}
-	return false;
-}
-
-function centerscreen(el) {
-	var re = el.getBoundingClientRect();
-	var wd = $(document).width();
-	var hd = $(document).height();
-	var we = re.right - re.left;
-	var he = re.bottom - re.top;
-	var left = (wd - we) / 2;
-	var top = (hd - he) / 2;
-	el.style.left = left + 'px';
-	el.style.top = top + 'px';
-	return el;
-}
-
-function overlay(c) {
-	var el = document.body.$overlayel$;
-	var oel = null;
-
-	if (!el) {
-		el = document.createElement('div');
-		el.$evtrap$ = true;
-		el.className = 'overlay';
-		oel = document.createElement('div');
-		oel.className = 'overlaybox';
-		el.oel = oel;
-		el.hide = function () {
-			var oel = this.oel;
-			$(oel).hide();
-			$(this).hide();
-		};
-		document.body.appendChild(el);
-		document.body.appendChild(oel);
-		document.body.$overlayel$ = el;
-	} else {
-		oel = el.oel;
-	}
-	if (!c) {
-		el.hide();
-		return;
-	}
-	if (c && c.style) {
-		joy.extend(oel.style, c.style);
-	}
-
-	if (!c || !c.hide) {
-		$(el).show();
-		$(oel).show();
-	} else {
-		$(el).hide();
-		$(oel).hide();
-	}
-
-	oel.innerHTML = '';
-	if (c && c.$) {
-		oel.appendChild(c.$);
-		if (c.$.activate) {
-			c.$.activate();
-		}
-	}
-	return oel;
-}
-
-function datestr(d) {
-	if (!d) {
-		d = new Date();
-	}
-	var s = d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate();
-	return s;
-}
-
 function fromJson(s) {
 	if (!s) {
 		return {};
@@ -431,7 +285,7 @@ function fromJson(s) {
 }
 function p2e(pos, el) {
 	var rlt = [];
-	el.onmouseover = function(event) {
+	el.onmouseover = function (event) {
 		rlt[0] = event.offsetX;
 		rlt[1] = event.offsetY;
 	}
@@ -534,4 +388,3 @@ function simulate(element, eventName, pos) {
 	}
 	return element;
 }
-

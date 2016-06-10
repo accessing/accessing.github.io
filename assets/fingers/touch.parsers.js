@@ -76,7 +76,7 @@ function zoomParser() {
 			} else if (curt.length == 2 && (!olast || (!acts(olast, 'zooming') && !acts(olast, 'zoomstart')))) {
 				return { act: 'zoomstart', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle, xlen: point.xlen, ylen: point.ylen };
 			} else if (curt.length == 2) {
-				return { act: 'zooming', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle, xlen:point.xlen, ylen:point.ylen };
+				return { act: 'zooming', pos: point.pos, rpos: point.rpos, time: new Date(), len: point.len, angle: point.angle, xlen: point.xlen, ylen: point.ylen };
 			}
 			//console.log('evt not match');
 			return false;

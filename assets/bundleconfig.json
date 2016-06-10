@@ -1,0 +1,68 @@
+[
+	{
+		"outputFileName": "bundle/mindexpress.css",
+		"inputFiles": [
+			"common/reset.css",
+			"common/overlay.css",
+			"mind/mind.css",
+			"cells/cells.css",
+			"common/toastr.css"
+		]
+	},
+	{
+		"outputFileName": "bundle/mindexpress.js",
+		"inputFiles": [
+			"common/common.js",
+			"common/overlay.js",
+			"common/upload.js",
+			"common/debug.js",
+			"common/jquery.js",
+			"data/watch.js",
+			"joy/joy.js",
+			"joy/joy.dom.js",
+			"joy/joy.svg.js",
+			"fingers/recognizer.js",
+			"fingers/touch.parsers.js",
+			"fingers/touch.js",
+			"fingers/rotator.js",
+			"fingers/touchable.js",
+			"mind/scene.js",
+			"cells/cells.js",
+			"common/toastr.js"
+		]
+	},
+	{
+		"outputFileName": "bundle/shell.css",
+		"inputFiles": [
+			"joy/joy.css",
+			"bootstrap/bootstrap.css",
+			"xui/xui.css",
+			"toastr/toastr.css"
+		]
+	},
+	{
+		"outputFileName": "bundle/shell.js",
+		"inputFiles": [
+			"common/common.js",
+			"common/jquery.js",
+			"bootstrap/bootstrap.js",
+			"joy/joy.js",
+			"joy/joy.dom.js",
+			"joy/joy.svg.js",
+			"xui/controls.js",
+			"xui/popup.js",
+			"xui/cover.js",
+			"toastr/toastr.js"
+		]
+	},
+	{
+		"outputFileName": "bundle/fingers.js",
+		"inputFiles": [
+			"fingers/recognizer.js",
+			"fingers/touch.parsers.js",
+			"fingers/touch.js",
+			"fingers/rotator.js",
+			"fingers/touchable.js"
+		]
+	}
+]

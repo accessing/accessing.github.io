@@ -176,6 +176,9 @@ function createnode(c) {
                 this.links[i].update();
             }
         }, dispose: function () {
+        	delete this.$assist$;
+        	delete this.$scene$;
+        	delete this.$rel$;
             for (var i = 0; i < this.links.length; i++) {
                 var l = this.links[i];
                 l.dispose();
@@ -233,6 +236,9 @@ function createpath(sp, tp, target) {
 		this.$label.style.top = mp[1] + 'px';
 	}
 	path.dispose = function () {
+		debugger;
+		delete this.$na;
+		delete this.$nb;
 		var a = this.$a;
 		var b = this.$b;
 		var l = this.$label;
@@ -369,6 +375,10 @@ function initscene(c) {
 			this.$label.style.top = mp[1] + 'px';
 		}
 		path.dispose = function () {
+			debugger;
+
+			delete this.$na;
+			delete this.$nb;
 			var a = this.$a;
 			var b = this.$b;
 			var l = this.$label;
@@ -422,7 +432,10 @@ function initscene(c) {
 		el.$evtrap$ = true;
 		el.$scene$ = target;
 		el.editor = 'link';
-		el.dispose = function() {
+		el.dispose = function () {
+			delete this.$rel$;
+			delete this.$assist$;
+			delete this.$scene$;
 			this.$path.dispose();
 		}
 		el.setval('Link');

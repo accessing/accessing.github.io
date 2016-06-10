@@ -526,3 +526,9 @@ html, body{
 .transparent-75 {
 	opacity: 0.75;
 }
+
+@media (max-width: 767px) {
+  * {
+    font:1em arial;
+  }
+}

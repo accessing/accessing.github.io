@@ -1,4 +1,4 @@
-﻿var joy = function () {
+﻿(function () {
 	var curtid = 0;
 	var mergeprop = '$merge$';
 	function bindCusor(r, ced, cs) {
@@ -31,8 +31,8 @@
 			var r = List();
 			r.$isdoms$ = true;
 			for (var i = 0; i < json.length; i++) {
-			    var jitem = json[i];
-			    debugger;   //jbuilder(jitem, c, cs);
+				var jitem = json[i];
+				debugger;   //jbuilder(jitem, c, cs);
 				var ri = jbuilder(jitem, cs, c);
 				r.add(ri);
 			}
@@ -260,6 +260,9 @@
 	//      excludes: { xxx: true } // exclude the xxx field
 	//  }
 	function merge(o, c, ec, eid, cfg) {
+		if (!c) {
+			debugger;
+		}
 		if (!o || c.nodeName || c.tagName) {
 			//debugger;
 			return;
@@ -292,7 +295,7 @@
 						// Call objmerge
 						ec(o, c, i, eid, cfg);
 					} else {
-					    if (cfg && cfg.setAttr && typeof (c[i]) != 'function' && typeof (c[i]) != 'boolean' && typeof (c[i]) != 'object') {
+						if (cfg && cfg.setAttr && typeof (c[i]) != 'function' && typeof (c[i]) != 'boolean' && typeof (c[i]) != 'object') {
 							cfg.setAttr(o, i, c[i]);
 						} else {
 							o[i] = c[i];
@@ -335,9 +338,9 @@
 	//      excludes: { xxx: true } // exclude the xxx field
 	//  }
 	function objmerge(o, c, i, eid, cfg) {
-	    if (c.tagName || c.nodeName) {
-	        return;
-	    }
+		if (c.tagName || c.nodeName) {
+			return;
+		}
 		if (i) {
 			if (!o[i]) {
 				o[i] = {};
@@ -420,5 +423,5 @@
         , fbuilder: fbuilder
         , jbuilder: jbuilder
 	};
-	return joyrlt;
-}();
+	window.joy = joyrlt;
+})();

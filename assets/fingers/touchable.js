@@ -1,4 +1,4 @@
-﻿(function() {
+﻿(function () {
 	function rpoint(event) {
 		var pt = [0, 0];
 		pt[0] = event.offsetX;
@@ -100,12 +100,30 @@
 		return drect;
 	}
 	function getarget() {
-		return window.$touchTarget$;
+		var el = window.$touchTarget$;
+		if (el.$target$) {
+			el = el.$target$();
+		}
+		return el;
 	}
 	function touchtarget(target) {
 		window.$touchTarget$ = target;
 	}
 	function touchable(target, cfg) {
+		function tstart(it, el) {
+			if (el && el.istouchable && el.istouchable()) {
+				calcrel(it);
+				var target = el.$target$ ? el.$target$() : el;
+				var cfg = target.$tcfg$;
+				var rel = target.$rel$;
+				if (!cfg.touched || !cfg.touched(it, el)) {
+					touchtarget(el);
+					zstart({ pos: it.pos }, target);
+					behaviors[target.$mode$](it, target);
+					target.commitStatus();
+				}
+			}
+		}
 		function zstart(it, target) {
 			var rc = target.getBoundingClientRect();
 			var origin = it;
@@ -151,26 +169,28 @@
 		if (!cfg) {
 			cfg = { rel: document.body };
 		}
+		var evtarget = target;
 		target.$evtrap$ = true;
+		target.$mode$ = cfg.mode || 'zooming';
+		target.istouchable = function () {
+			return this.$mode$;
+		}
+		if (target.$target$) {
+			target = target.$target$();
+		}
+		target.$mode$ = cfg.mode || 'zooming';
 		Rotator(target);
 		target.$rel$ = cfg.rel;
 		target.$tcfg$ = cfg;
 		target.$og$ = null;
 		target.$cpt$ = [0, 0];
-		target.$mode$ = cfg.mode || 'zooming';
-		target.istouchable = function() {
-			return this.$mode$;
-		}
-		touchtarget(target);
+		touchtarget(evtarget);
 		function calcrel(it) {
 			var target = getarget();
-			target.onmouseover = function(event) {
+			target.onmouseover = function (event) {
 				it.rpos = rpoint(event);
 			}
 			simulate(target, 'mouseover', it.pos);
-			//var rel = target.$rel$;
-			//it.rpos[0] = it.pos[0] - parseFloat(target.style.left);
-			//it.rpos[1] = it.pos[1] - parseFloat(target.style.top);
 			return it;
 		}
 
@@ -178,21 +198,16 @@
 			target: document,
 			rel: cfg.rel || document.body
 		}).on({
-			touched: function(it) {
+			touched: function (it) {
+				console.log(it);
 				var el = getbypos(it);
-				//console.log(el.istouchable());
-				if (el && el.istouchable && el.istouchable()) {
-					calcrel(it);
-					var target = el; //getarget();
-					var cfg = target.$tcfg$;
-					var rel = target.$rel$;
-					if (!cfg.touched || !cfg.touched(it, el)) {
-						touchtarget(el);
-					}
-				}
+				tstart(it, el);
 			},
 			dbltouched: function (it) {
 				var el = getbypos(it);
+				if (el.$target$) {
+					el = el.$target$();
+				}
 				if (el && el.istouchable()) {
 					calcrel(it);
 					if (cfg.dbltouched) {
@@ -200,28 +215,41 @@
 					}
 				}
 			},
-			zoomstart: function(it) {
+			zoomstart: function (it) {
 				calcrel(it);
 				var target = getarget();
-				zstart(it, target);
+				if (target) {
+					zstart(it, target);
+				}
 			},
-			zooming: function(it) {
+			zooming: function (it) {
 				calcrel(it);
 				var target = getarget();
-				behaviors[target.$mode$](it, target);
+				if (target) {
+					behaviors[target.$mode$](it, target);
+				}
 			},
-			zoomend: function(it) {
+			zoomend: function (it) {
 				calcrel(it);
 				var target = getarget();
-				target.commitStatus();
+				if (target) {
+					target.commitStatus();
+				}
 			}
 		});
+		if (cfg.activate) {
+			var tmp = target.getBoundingClientRect();
+			tstart({ act: 'touched', pos: [tmp.left + tmp.width / 2, tmp.top + tmp.height / 2], rpos: [tmp.width / 2, tmp.height / 2], time: new Date() }, target);
+		}
 	}
 	function getbypos(it) {
 		var list = [];
 		var el = null;
 		while (true) {
 			el = document.elementFromPoint(it.pos[0], it.pos[1]);
+			if (el.tagName.toLowerCase() == 'body' || el.tagName.toLowerCase() == 'html') {
+				break;
+			}
 			if (el.$evtignore$ || (!el.$evtrap$ && !el.getAttribute('evtrap'))) {
 				list.add(el);
 				$(el).hide();

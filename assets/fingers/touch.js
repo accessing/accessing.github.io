@@ -130,7 +130,7 @@
 	qel.md = false;
 	qel.zooming = false;
 	if (!isMobile.any()) {
-		qel.onmousemove = function(event) {
+		qel.onmousemove = function (event) {
 			if (!qel.zooming) {
 				if (qel.md) {
 					rg.parse([{ act: 'touchmove', pos: [event.clientX, event.clientY], rpos: [event.clientX, event.clientY], time: new Date() }]);
@@ -146,7 +146,7 @@
 			}
 		};
 
-		qel.onmousedown = function(event) {
+		qel.onmousedown = function (event) {
 			qel.md = true;
 			if (event.button == 0) {
 				qel.zooming = false;
@@ -169,7 +169,7 @@
 			}
 		};
 
-		qel.onmouseup = function(event) {
+		qel.onmouseup = function (event) {
 			qel.md = false;
 			qel.zooming = false;
 			qel.of = false;
@@ -221,39 +221,39 @@
 	//for (var i = 0; i < qel.length; i++) {
 	//	var nel = qel[i];
 	var nel = qel;
-		nel.ontouchstart = function (event) {
-			var ths = getouches(event);
-			var q = mtouchevt('touchstart', ths, { rel: rel });
-			rg.parse(q);
+	nel.ontouchstart = function (event) {
+		var ths = getouches(event);
+		var q = mtouchevt('touchstart', ths, { rel: rel });
+		rg.parse(q);
+		//event.preventDefault();
+		event.stopPropagation();
+		if (isSafari) {
 			//event.preventDefault();
-			event.stopPropagation();
-			if (isSafari) {
-				//event.preventDefault();
-			}
-		};
-		nel.ontouchmove = function (event) {
-			var ths = getouches(event);
-			var q = mtouchevt('touchmove', ths, { rel: rel });
-			rg.parse(q);
+		}
+	};
+	nel.ontouchmove = function (event) {
+		var ths = getouches(event);
+		var q = mtouchevt('touchmove', ths, { rel: rel });
+		rg.parse(q);
+		//event.preventDefault();
+		event.stopPropagation();
+		if (isSafari) {
+			event.preventDefault();
+		}
+	};
+	nel.ontouchend = function (event) {
+		var ths = getouches(event);
+		var q = mtouchevt('touchend', ths, { rel: rel });
+		rg.parse(q);
+		//event.preventDefault();
+		event.stopPropagation();
+		if (isSafari) {
 			//event.preventDefault();
-			event.stopPropagation();
-			if (isSafari) {
-				event.preventDefault();
-			}
-		};
-		nel.ontouchend = function (event) {
-			var ths = getouches(event);
-			var q = mtouchevt('touchend', ths, { rel: rel });
-			rg.parse(q);
-			//event.preventDefault();
-			event.stopPropagation();
-			if (isSafari) {
-				//event.preventDefault();
-			}
-		};
+		}
+	};
 	//}
 	return {
-		on:function(c) {
+		on: function (c) {
 			for (var i in c) {
 				handlers[i] = c[i];
 			}

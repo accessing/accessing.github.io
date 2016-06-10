@@ -6,34 +6,39 @@
 
 	<title>Idea</title>
 
-	<link  href="//cdn.mindexpress.cn/assets/common/reset.css" type="text/css" rel="stylesheet" />
-	<link  href="//cdn.mindexpress.cn/assets/common/overlay.css" type="text/css" rel="stylesheet" />
-    <link  href="//cdn.mindexpress.cn/assets/mind/mind.css" type="text/css" rel="stylesheet" />
-	<link  href="//cdn.mindexpress.cn/assets/cells/cells.css" type="text/css" rel="stylesheet" />
-	<link  href="//cdn.mindexpress.cn/assets/common/toastr.css" type="text/css" rel="stylesheet" />
-	<script src="//cdn.mindexpress.cn/assets/common/common.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/common/upload.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/common/debug.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/common/jquery.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/data/watch.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/joy/joy.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/joy/joy.dom.js"></script>
-    <script src="//cdn.mindexpress.cn/assets/joy/joy.svg.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/recognizer.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/touch.parsers.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/touch.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/transform/rotator.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/fingers/touchable.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/mind/scene.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/cells/cells.js"></script>
-	<script src="//cdn.mindexpress.cn/assets/common/toastr.js"></script>
-	<script>   
+	<!--<link  href="/assets/common/reset.css" type="text/css" rel="stylesheet" />
+	<link  href="/assets/common/overlay.css" type="text/css" rel="stylesheet" />
+	<link  href="/assets/mind/mind.css" type="text/css" rel="stylesheet" />
+	<link  href="/assets/cells/cells.css" type="text/css" rel="stylesheet" />
+	<link  href="/assets/common/toastr.css" type="text/css" rel="stylesheet" />
+	<script src="/assets/common/common.js"></script>
+	<script src="/assets/common/upload.js"></script>
+	<script src="/assets/common/debug.js"></script>
+	<script src="/assets/common/jquery.js"></script>
+	<script src="/assets/data/watch.js"></script>
+	<script src="/assets/joy/joy.js"></script>
+	<script src="/assets/joy/joy.dom.js"></script>
+	<script src="/assets/joy/joy.svg.js"></script>
+	<script src="/assets/fingers/recognizer.js"></script>
+	<script src="/assets/fingers/touch.parsers.js"></script>
+	<script src="/assets/fingers/touch.js"></script>
+	<script src="/assets/transform/rotator.js"></script>
+	<script src="/assets/fingers/touchable.js"></script>
+	<script src="/assets/mind/scene.js"></script>
+	<script src="/assets/cells/cells.js"></script>
+	<script src="/assets/common/toastr.js"></script>-->
+
+
+	<link  href="/assets/bundle/mindexpress.css" type="text/css" rel="stylesheet" />
+	<script src="/assets/bundle/mindexpress.js"></script>
+
+	<script>
 		$(function () {
 			var dat = { title: 'Idea' };
 			watch(dat, {
 				name: 'title',
 				init: 'attrchange',
-				args: { init: { forward:'tname', evt: 'input', prop: 'value' } },
+				args: { init: { forward: 'tname', evt: 'input', prop: 'value' } },
 				change: function (model, property, value, origin) {
 					var el = document.getElementById('tname');
 					el.value = value;
@@ -48,7 +53,7 @@
 				return false;
 			};
 
-			document.addEventListener('keyup', function(event) {
+			document.addEventListener('keyup', function (event) {
 				if (event.keyCode == 46) {
 					scene.delnode();
 				}
@@ -57,14 +62,14 @@
 			$('#bload').click(function () {
 				if (login) {
 					toastr.info('Loading, please wait ...');
-					get('/mr/load/' + $('#tname').val(), null, function(o) {
+					get('/mr/load/' + $('#tname').val(), null, function (o) {
 						if (o.success === false) {
 							toastr.error(o.errormsg);
 						} else {
 							toastr.success('Load completed');
 							scene.setval(o);
 						}
-					}, function(e) {
+					}, function (e) {
 						toastr.error(e.responseText);
 					});
 				} else {
@@ -75,7 +80,7 @@
 				if (login) {
 					var json = scene.getval();
 					console.log(json);
-					post('/mr/save', { fname: $('#tname').val(), text: json }, function(o) {
+					post('/mr/save', { fname: $('#tname').val(), text: json }, function (o) {
 						if (!o.success) {
 							toastr.error(o.errormsg);
 						} else {
@@ -133,22 +138,22 @@
 	</script>
 </head>
 <body>
-<img class="brand transparent-35" src="//cdn.mindexpress.cn/assets/mr/res/home_bg.png"/>
-<div id="scene" class="scene">
-</div>
-<div class="fixed left-top idea-name">
-	<input id="tname" evtrap="true" type="text" value="Idea Name" />
-</div>
-<div class="assist left">
-	<div class="btn" id="bload">Load</div>
-	<div class="btn" id="bsave">Save</div>
-</div>
+	<img class="brand transparent-35" src="//cdn.mindexpress.cn/assets/mr/res/home_bg.png" />
+	<div id="scene" class="scene">
+	</div>
+	<div class="fixed left-top idea-name">
+		<input id="tname" evtrap="true" type="text" value="Idea Name" />
+	</div>
+	<div class="assist left">
+		<div class="btn" id="bload">Load</div>
+		<div class="btn" id="bsave">Save</div>
+	</div>
 
-<div class="login fixed align-right right-top" evtrap="true">
-	<a id="bqqsignin" style="display: none;" href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101288663&redirect_uri=http://mindexpress.cn/qqlogin&scope=get_user_info" target="_blank">
-		<img evtrap="true" src="//cdn.mindexpress.cn/assets/account/img/Connect_logo_7.png" />
-	</a>
-	<div id="qqinfo" style="display:none;">Welcome&nbsp;<span id="qquid"></span>&nbsp;&nbsp;<a id="bqqsignout" href="#">Sign Out</a></div>
-</div>
+	<div class="login fixed align-right right-top" evtrap="true">
+		<a id="bqqsignin" style="display: none;" href="https://graph.qq.com/oauth2.0/authorize?response_type=code&client_id=101288663&redirect_uri=http://mindexpress.cn/qqlogin&scope=get_user_info" target="_blank">
+			<img evtrap="true" src="//cdn.mindexpress.cn/assets/account/img/Connect_logo_7.png" />
+		</a>
+		<div id="qqinfo" style="display:none;">Welcome&nbsp;<span id="qquid"></span>&nbsp;&nbsp;<a id="bqqsignout" href="#">Sign Out</a></div>
+	</div>
 </body>
 </html>
