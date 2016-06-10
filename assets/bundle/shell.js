@@ -25,6 +25,9 @@ function destroy(element) {
 	for (var i in element) {
 		if (i.startsWith('$', 0) && i.indexOf('$root') < 0 && i.indexOf('$parent') < 0 && i.indexOf('$group') < 0) {
 			console.log('Disposing:' + i);
+			if (i == '$scene$' || i == '$assist$') {
+				debugger;
+			}
 			var item = element[i];
 			if (item && item.tagName) {
 				var ch = element[i];
