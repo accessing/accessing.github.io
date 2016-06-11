@@ -20,8 +20,10 @@
 }
 
 @media (max-width:#{$sz-phone-p}){
-	min-width:200px;
-	min-height:150px;
+	#{$root} .popup.form{
+		min-width:200px;
+		min-height:150px;
+	}
 }
 
 #{$root} .popup.form .caption{

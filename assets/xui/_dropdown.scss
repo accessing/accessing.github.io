@@ -14,8 +14,6 @@
 }
 #{$root} .dropdown .toggle .caret-container{
   position:absolute;
-  /*float:right;
-  margin-top:8px;*/
   top:0;
   right:0;
   height:100%;
@@ -24,10 +22,9 @@
   text-align:center;
   cursor:pointer;
 }
+
 #{$root} .dropdown .toggle .caret.right{
   position:absolute;
-  /*float:right;
-  margin-top:8px;*/
   top:1em;
   right:.5em;
 
