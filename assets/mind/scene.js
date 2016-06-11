@@ -16,7 +16,7 @@
 					tag: 'div',
 					className: 'btn bclose',
 					$: 'X',
-					onclick: function(event) {
+					onclick: function (event) {
 						overlay();
 					}
 				}, {
@@ -40,32 +40,12 @@
 		link: {
 			tag: 'div',
 			className: 'link node-editor',
-			activate: function() {
-				var data = el.$data$;
-				this.$box.value = data;
-				this.$box.focus();
-				this.$box.select();
-			},
-			$: [
-				{
-					tag: 'div',
-					className: 'btn bclose',
-					$: 'X',
-					onclick: function(event) {
-						overlay();
-					}
-				}, { tag: 'div', alias: 'view', className: 'view', $: { tag: 'textarea', className: 'area', alias: 'box' } },
-				{
-					tag: 'button',
-					className: 'btn bsave',
-					$: 'Update',
-					onclick: function(event) {
-						var data = this.$root.$box.value;
-						el.setval(data);
-						overlay();
-					}
-				}
-			]
+			activate: function () {
+				//var data = el.$data$;
+				//this.$box.value = data;
+				//this.$box.focus();
+				//this.$box.select();
+			}
 		}
 	};
 	return {
@@ -86,7 +66,48 @@
 			cmd: function () {
 				var json = editors[el.editor];
 				var editor = joy.jbuilder(json);
-				overlay({ style: { background: 'black' }, $: editor });
+				if (el.editor == 'node') {
+					overlay({ style: { background: 'black' }, $: editor });
+				} else {
+					var pup = joy.cover({
+						popup: {
+							ui: 'formPopup'
+						}
+					});
+					var edt = pup.setval({
+						title: 'Link Editor', content: {
+							tag: 'div', className: 'textbox-editor',
+							focus: function(){
+								this.$box.focus();
+								this.$box.select();
+							},
+							setval: function (val) {
+								$(this.$box).text(val);
+							}, $: [
+								{
+									tag: 'div', alias: 'view', className: 'view', $: {
+										tag:'div', className:'tarea',
+										$:{ tag: 'textarea', className: 'area', alias: 'box' }
+									}
+								},
+								{
+									tag: 'div', className:'barea', $: {
+										tag: 'button',
+										className: 'btn bsave',
+										$: 'Update',
+										onclick: function (event) {
+											var data = this.$root.$box.value;
+											el.setval(data);
+											joy.cover({ hide: true });
+										}
+									}
+								}
+							]
+						}
+					});
+					edt.setval(el.getval());
+					edt.focus();
+				}
 			}
 		},
 		remove: {
@@ -274,7 +295,11 @@ function createpath(sp, tp, target) {
 			return this.$data$;
 		},
 		setval: function (data) {
-			this.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+			if (!data || data.length == 0) {
+				this.innerHTML = "&nbsp;";
+			} else {
+				this.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+			}
 			this.$data$ = data;
 		},
 		islabel: true,
@@ -414,8 +439,12 @@ function initscene(c) {
 			getval: function() {
 				return this.$data$;
 			},
-			setval: function(data) {
-				this.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+			setval: function (data) {
+				if (!data || data.length == 0) {
+					this.innerHTML = "&nbsp;";
+				} else {
+					this.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+				}
 				this.$data$ = data;
 			},
 			islabel: true,

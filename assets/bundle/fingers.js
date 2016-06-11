@@ -887,7 +887,7 @@ function Rotator(target, options) {
 	}
 	function touchable(target, cfg) {
 		function tstart(it, el) {
-			if (el && el.istouchable && el.istouchable()) {
+			if (el && el.istouchable && el.istouchable() && el.$evtrap$) {
 				calcrel(it);
 				var target = el.$target$ ? el.$target$() : el;
 				var cfg = target.$tcfg$;

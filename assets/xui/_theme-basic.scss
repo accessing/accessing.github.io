@@ -27,10 +27,28 @@
 #{$root}.theme-basic .simple-menu-item:hover{
 	background-color:#EEE;
 }
+#{$root}.theme-basic .popup.form .caption{
+	color:black;
+}
 #{$root}.theme-basic .popup.form .btns .btn{
 	color:#999;
 }
 #{$root}.theme-basic .popup.form .btns .btn:hover{
 	color:#fff;
 	background:silver;
+}
+
+#{$root}.theme-basic .textbox-editor *{
+	color:black;
+}
+#{$root}.theme-basic .textbox-editor textarea{
+	border:solid 1px silver;
+}
+#{$root}.theme-basic .textbox-editor button{
+	border:solid 1px gray;
+	background:silver;
+}
+#{$root}.theme-basic .textbox-editor button:hover{
+	color:white;
+	background:gray;
 }

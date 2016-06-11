@@ -1,4 +1,5 @@
-﻿#{$root} .popup{
+﻿
+#{$root} .popup{
 	position:absolute;
 	top:50%;
 	left:50%;
@@ -14,6 +15,11 @@
 }
 
 #{$root} .popup.form{
+	min-width:400px;
+	min-height:300px;
+}
+
+@media (max-width:#{$sz-phone-p}){
 	min-width:200px;
 	min-height:150px;
 }
@@ -42,6 +48,7 @@
 	border-radius:24px;
 	text-align:center;
 	cursor:pointer;
+	float:right;
 }
 #{$root} .popup.form .btns .btn.bmax{
 	line-height:20px;
@@ -49,5 +56,21 @@
 #{$root} .popup.form .btns .btn:hover{
 }
 
-@media (max-width:#{$sz-phone-p}){
+#{$root}.theme-basic .textbox-editor .tarea{
+	position:absolute;
+	top:48px;
+	left:12px;
+	right:12px;
+	bottom:54px;
+}
+
+#{$root}.theme-basic .textbox-editor .tarea textarea{
+	width:100%;
+	height:100%;
+}
+
+#{$root}.theme-basic .textbox-editor .barea{
+	position:absolute;
+	right:12px;
+	bottom:12px;
 }

@@ -2,6 +2,10 @@
 $sz-phone-p:"480px";
 $sz-phone-l:"768px";
 
+#{$root}.theme-basic button{
+	padding:8px;
+	border-radius:4px;	
+}
 
 @import '_cover.scss';
 @import '_popup.scss';

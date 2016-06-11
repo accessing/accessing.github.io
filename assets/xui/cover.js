@@ -11,6 +11,7 @@
 	if (!ovl) {
 		ovl = document.createElement('div');
 		ovl.className = 'cover ';// + (fixed ? 'fixed' : '');
+		ovl.$evtrap$ = true;
 		target.$ovl$ = ovl;
 
 		var initpos = target.astyle(['position']);

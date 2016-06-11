@@ -69,9 +69,15 @@ joy.creators.ui.formPopup = function (ext) {
 				tag: 'div', alias: 'caption', className: 'caption', $target$: function () { return this.$root; }
 			}, {
 				tag: 'div', alias: 'bclose', className: 'btns', $: [
+
 					{
+						tag: 'div', className: 'btn bclose', onclick: function () {
+							this.$root.close();
+						}, $: '×'
+					}, {
 						tag: 'div', className: 'btn bmax', onclick: function () {
 							if (!this.$state$) {
+								this.$root.$evtrap$ = false;
 								this.$state$ = {
 									left: this.$root.style.left,
 									top: this.$root.style.top,
@@ -85,6 +91,7 @@ joy.creators.ui.formPopup = function (ext) {
 								this.$root.style.right = '0px';
 								this.$root.style.bottom = '0px';
 							} else {
+								this.$root.$evtrap$ = true;
 								this.$root.style.width = this.$state$.width;
 								this.$root.style.height = this.$state$.height;
 								this.$root.style.left = this.$state$.left;
@@ -94,11 +101,6 @@ joy.creators.ui.formPopup = function (ext) {
 								this.$state$ = null;
 							}
 						}, $: 'o'
-					},
-					{
-						tag: 'div', className: 'btn bclose', onclick: function () {
-							this.$root.close();
-						}, $: '×'
 					}
 				]
 			}, { tag: 'div', alias: 'body', className: 'body' }

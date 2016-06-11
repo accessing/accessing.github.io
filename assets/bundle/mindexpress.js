@@ -13043,6 +13043,7 @@ joy.cover = function (c) {
 	if (!ovl) {
 		ovl = document.createElement('div');
 		ovl.className = 'cover ';// + (fixed ? 'fixed' : '');
+		ovl.$evtrap$ = true;
 		target.$ovl$ = ovl;
 
 		var initpos = target.astyle(['position']);
@@ -13165,9 +13166,15 @@ joy.creators.ui.formPopup = function (ext) {
 				tag: 'div', alias: 'caption', className: 'caption', $target$: function () { return this.$root; }
 			}, {
 				tag: 'div', alias: 'bclose', className: 'btns', $: [
+
 					{
+						tag: 'div', className: 'btn bclose', onclick: function () {
+							this.$root.close();
+						}, $: '×'
+					}, {
 						tag: 'div', className: 'btn bmax', onclick: function () {
 							if (!this.$state$) {
+								this.$root.$evtrap$ = false;
 								this.$state$ = {
 									left: this.$root.style.left,
 									top: this.$root.style.top,
@@ -13181,6 +13188,7 @@ joy.creators.ui.formPopup = function (ext) {
 								this.$root.style.right = '0px';
 								this.$root.style.bottom = '0px';
 							} else {
+								this.$root.$evtrap$ = true;
 								this.$root.style.width = this.$state$.width;
 								this.$root.style.height = this.$state$.height;
 								this.$root.style.left = this.$state$.left;
@@ -13190,11 +13198,6 @@ joy.creators.ui.formPopup = function (ext) {
 								this.$state$ = null;
 							}
 						}, $: 'o'
-					},
-					{
-						tag: 'div', className: 'btn bclose', onclick: function () {
-							this.$root.close();
-						}, $: '×'
 					}
 				]
 			}, { tag: 'div', alias: 'body', className: 'body' }
@@ -14094,7 +14097,7 @@ function Rotator(target, options) {
 	}
 	function touchable(target, cfg) {
 		function tstart(it, el) {
-			if (el && el.istouchable && el.istouchable()) {
+			if (el && el.istouchable && el.istouchable() && el.$evtrap$) {
 				calcrel(it);
 				var target = el.$target$ ? el.$target$() : el;
 				var cfg = target.$tcfg$;
@@ -14279,7 +14282,7 @@ function assist(el) {
 					tag: 'div',
 					className: 'btn bclose',
 					$: 'X',
-					onclick: function(event) {
+					onclick: function (event) {
 						overlay();
 					}
 				}, {
@@ -14303,32 +14306,12 @@ function assist(el) {
 		link: {
 			tag: 'div',
 			className: 'link node-editor',
-			activate: function() {
-				var data = el.$data$;
-				this.$box.value = data;
-				this.$box.focus();
-				this.$box.select();
-			},
-			$: [
-				{
-					tag: 'div',
-					className: 'btn bclose',
-					$: 'X',
-					onclick: function(event) {
-						overlay();
-					}
-				}, { tag: 'div', alias: 'view', className: 'view', $: { tag: 'textarea', className: 'area', alias: 'box' } },
-				{
-					tag: 'button',
-					className: 'btn bsave',
-					$: 'Update',
-					onclick: function(event) {
-						var data = this.$root.$box.value;
-						el.setval(data);
-						overlay();
-					}
-				}
-			]
+			activate: function () {
+				//var data = el.$data$;
+				//this.$box.value = data;
+				//this.$box.focus();
+				//this.$box.select();
+			}
 		}
 	};
 	return {
@@ -14349,7 +14332,48 @@ function assist(el) {
 			cmd: function () {
 				var json = editors[el.editor];
 				var editor = joy.jbuilder(json);
-				overlay({ style: { background: 'black' }, $: editor });
+				if (el.editor == 'node') {
+					overlay({ style: { background: 'black' }, $: editor });
+				} else {
+					var pup = joy.cover({
+						popup: {
+							ui: 'formPopup'
+						}
+					});
+					var edt = pup.setval({
+						title: 'Link Editor', content: {
+							tag: 'div', className: 'textbox-editor',
+							focus: function(){
+								this.$box.focus();
+								this.$box.select();
+							},
+							setval: function (val) {
+								$(this.$box).text(val);
+							}, $: [
+								{
+									tag: 'div', alias: 'view', className: 'view', $: {
+										tag:'div', className:'tarea',
+										$:{ tag: 'textarea', className: 'area', alias: 'box' }
+									}
+								},
+								{
+									tag: 'div', className:'barea', $: {
+										tag: 'button',
+										className: 'btn bsave',
+										$: 'Update',
+										onclick: function (event) {
+											var data = this.$root.$box.value;
+											el.setval(data);
+											joy.cover({ hide: true });
+										}
+									}
+								}
+							]
+						}
+					});
+					edt.setval(el.getval());
+					edt.focus();
+				}
 			}
 		},
 		remove: {
@@ -14537,7 +14561,11 @@ function createpath(sp, tp, target) {
 			return this.$data$;
 		},
 		setval: function (data) {
-			this.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+			if (!data || data.length == 0) {
+				this.innerHTML = "&nbsp;";
+			} else {
+				this.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+			}
 			this.$data$ = data;
 		},
 		islabel: true,
@@ -14677,8 +14705,12 @@ function initscene(c) {
 			getval: function() {
 				return this.$data$;
 			},
-			setval: function(data) {
-				this.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+			setval: function (data) {
+				if (!data || data.length == 0) {
+					this.innerHTML = "&nbsp;";
+				} else {
+					this.innerHTML = data.replace(/</g, '&lt;').replace(/\n/g, '<br />');
+				}
 				this.$data$ = data;
 			},
 			islabel: true,
