@@ -6,6 +6,7 @@
 			"common/overlay.css",
 			"mind/mind.css",
 			"cells/cells.css",
+			"xui/xui.css",
 			"common/toastr.css"
 		]
 	},
@@ -21,6 +22,9 @@
 			"joy/joy.js",
 			"joy/joy.dom.js",
 			"joy/joy.svg.js",
+			"xui/controls.js",
+			"xui/cover.js",
+			"xui/popup.js",
 			"fingers/recognizer.js",
 			"fingers/touch.parsers.js",
 			"fingers/touch.js",
