@@ -4,38 +4,13 @@
 			tag: 'div',
 			className: 'node-editor',
 			activate: function () {
-				this.$box.focus();
-				this.$box.select();
-				var settings = { activetb: null, editor: this.$box, scene: this.$view };
-				var data = el.$data$;
-				var vtb = newtable(settings, data, { showeditor: true });
-				this.$cells = vtb;
-			},
-			$: [
-				{
-					tag: 'div',
-					className: 'btn bclose',
-					$: 'X',
-					onclick: function (event) {
-						overlay();
-					}
-				}, {
-					tag: 'input',
-					className: 'edit',
-					alias: 'box',
-					type: 'text'
-				}, { tag: 'div', alias: 'view', className: 'view' }, {
-					tag: 'button',
-					className: 'btn bsave',
-					$: 'Update',
-					onclick: function (event) {
-						var cells = this.$root.$cells.$table$;
-						var data = cells.getdata();
-						el.setval(data);
-						overlay();
-					}
-				}
-			]
+				//this.$box.focus();
+				//this.$box.select();
+				//var settings = { activetb: null, editor: this.$box, scene: this.$view };
+				//var data = el.$data$;
+				//var vtb = newtable(settings, data, { showeditor: true });
+				//this.$cells = vtb;
+			}
 		},
 		link: {
 			tag: 'div',
@@ -64,16 +39,44 @@
 		edit: {
 			name: 'Edit',
 			cmd: function () {
-				var json = editors[el.editor];
-				var editor = joy.jbuilder(json);
+				//var json = editors[el.editor];
+				//var editor = joy.jbuilder(json);
 				if (el.editor == 'node') {
-					overlay({ style: { background: 'black' }, $: editor });
-				} else {
-					var pup = joy.cover({
-						popup: {
-							ui: 'formPopup'
+					//overlay({ style: { background: 'black' }, $: editor });
+					var pup = joy.cover({ popup: { ui: 'formPopup' } });
+					var edt = pup.setval({
+						title: 'Node Editor', content: {
+							tag: 'div', className: 'cell-editor',
+							$: [
+								{
+									tag: 'input',
+									className: 'edit',
+									alias: 'box',
+									type: 'text'
+								},
+								{ tag: 'div', alias: 'view', className: 'view' },
+								{
+									tag: 'div', className: 'barea', $: {
+										tag: 'button',
+										className: 'btn bsave',
+										$: 'Update',
+										onclick: function (event) {
+											var cells = this.$root.$cells.$table$;
+											var data = cells.getdata();
+											el.setval(data);
+											joy.cover({ hide: true });
+										}
+									}
+								}
+							]
 						}
 					});
+					var settings = { activetb: null, editor: edt.$box, scene: edt.$view };
+					var data = el.$data$;
+					var vtb = newtable(settings, data, { showeditor: true });
+					edt.$cells = vtb;
+				} else {
+					var pup = joy.cover({ popup: { ui: 'formPopup' } });
 					var edt = pup.setval({
 						title: 'Link Editor', content: {
 							tag: 'div', className: 'textbox-editor',

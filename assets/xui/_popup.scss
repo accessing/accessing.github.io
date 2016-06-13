@@ -71,7 +71,7 @@
 	height:100%;
 }
 
-#{$root} .textbox-editor .barea{
+#{$root} .textbox-editor .barea, #{$root} .cell-editor .barea{
 	position:absolute;
 	right:12px;
 	bottom:12px;
