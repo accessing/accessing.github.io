@@ -58,20 +58,20 @@
 #{$root} .popup.form .btns .btn:hover{
 }
 
-#{$root}.theme-basic .textbox-editor .tarea{
+#{$root} .textbox-editor .tarea{
 	position:absolute;
 	top:48px;
-	left:12px;
+	left:16px;
 	right:12px;
 	bottom:54px;
 }
 
-#{$root}.theme-basic .textbox-editor .tarea textarea{
+#{$root} .textbox-editor .tarea textarea{
 	width:100%;
 	height:100%;
 }
 
-#{$root}.theme-basic .textbox-editor .barea{
+#{$root} .textbox-editor .barea{
 	position:absolute;
 	right:12px;
 	bottom:12px;

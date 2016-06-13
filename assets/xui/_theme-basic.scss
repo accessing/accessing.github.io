@@ -1,54 +1,48 @@
-﻿#{$root}.theme-basic .popup{
-	background:#fff;
-}
-#{$root}.theme-basic .cover{
-	background-color:black;
-}
-#{$root}.theme-basic .dropdown{
-	border:solid 1px silver;
-}
-#{$root}.theme-basic .dropdown .toggle{
-}
-#{$root}.theme-basic .dropdown .toggle input[type=text]{
-}
-#{$root}.theme-basic .dropdown .toggle .caret-container{
-}
-#{$root}.theme-basic .dropdown .toggle .caret.right{
-}
-#{$root}.theme-basic .simple-menu{
-	border:solid 1px silver;
-	background-color:#fff;
-}
-#{$root}.theme-basic .simple-menu-item{
-}
-#{$root}.theme-basic .simple-menu-item a{
-	color:black;
-}
-#{$root}.theme-basic .simple-menu-item:hover{
-	background-color:#EEE;
-}
-#{$root}.theme-basic .popup.form .caption{
-	color:black;
-}
-#{$root}.theme-basic .popup.form .btns .btn{
-	color:#999;
-}
-#{$root}.theme-basic .popup.form .btns .btn:hover{
-	color:#fff;
-	background:silver;
-}
+﻿@mixin theme($name, $color, $colorhover, $colorbtn, $bg, $bghover, $border, $borderOutline){
+	#{$root}.#{$name} btn, #{$root}.#{$name} button, #{$root}.#{$name} textarea, #{$root}.#{$name} .caption{
+		color:$color;
+	}
+	#{$root}.#{$name} .popup{
+		border:$borderOutline;
+		background:$bg;
+	}
+	#{$root}.#{$name} .cover{
+		background-color:black;
+	}
+	#{$root}.#{$name} .dropdown{
+		border:$border;
+	}
+	#{$root}.#{$name} .dropdown .toggle{
+	}
+	#{$root}.#{$name} .dropdown .toggle input[type=text]{
+	}
+	#{$root}.#{$name} .dropdown .toggle .caret-container{
+	}
+	#{$root}.#{$name} .dropdown .toggle .caret.right{
+	}
+	#{$root}.#{$name} .simple-menu{
+		border:$border;
+		background-color:$bg;
+	}
+	#{$root}.#{$name} .simple-menu-item{
 
-#{$root}.theme-basic .textbox-editor *{
-	color:black;
+	}
+	#{$root}.#{$name} .simple-menu-item a{
+		
+	}
+	#{$root}.#{$name} .simple-menu-item:hover{
+		background-color:$bghover;
+	}
+	#{$root}.#{$name} .popup.form .btns .btn{
+		color:$colorbtn;
+	}
+	#{$root}.#{$name} .popup.form .btns .btn:hover, #{$root}.#{$name} .popup.form button:hover{
+		color:$colorhover;
+		background:$bghover;
+	}
+	#{$root}.#{$name} .popup.form button{
+		border:$border;
+	}
 }
-#{$root}.theme-basic .textbox-editor textarea{
-	border:solid 1px silver;
-}
-#{$root}.theme-basic .textbox-editor button{
-	border:solid 1px gray;
-	background:silver;
-}
-#{$root}.theme-basic .textbox-editor button:hover{
-	color:white;
-	background:gray;
-}
+@include theme('theme-basic', #000, #fff, #999, #fff, #aaa, solid 1px silver, solid 1px silver);
+@include theme('theme-dark', #999, #fff, #999, #111, #333, solid 1px #999, solid 1px #eee);
