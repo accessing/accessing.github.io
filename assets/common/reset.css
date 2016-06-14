@@ -6,8 +6,7 @@
 
 /**
  * Remove default margin (opinionated).
- */			  
-
+ */
 body {
   margin: 0;
 }

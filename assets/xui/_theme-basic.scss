@@ -44,5 +44,5 @@
 		border:$border;
 	}
 }
-@include theme('theme-basic', #000, #fff, #999, #fff, #aaa, solid 1px silver, solid 1px silver);
-@include theme('theme-dark', #999, #fff, #999, #111, #333, solid 1px #999, solid 1px #eee);
+@include theme($name:'theme-basic', $color:#000, $colorhover:#fff, $colorbtn:#999, $bg:#fff, $bghover:#aaa, $border:solid 1px silver, $borderOutline:solid 1px silver);
+@include theme($name:'theme-dark', $color:#999, $colorhover:#fff, $colorbtn:#999, $bg:#111, $bghover:#333, $border:solid 1px #999, $borderOutline:solid 1px #eee);
